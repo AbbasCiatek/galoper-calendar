@@ -1,0 +1,2 @@
+
+export type Views = "day"|"week"|"month"|"year"|"agenda";
