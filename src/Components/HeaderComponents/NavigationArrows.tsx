@@ -1,44 +1,23 @@
+import {rangeDisplayer} from "@/Functions/RangeDisplayerFunction.ts";
 import {ChevronRightIcon, ChevronLeftIcon, } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {useContext} from "react";
-import ViewContext from "@/context.ts";
+import ViewContext, {DateContext} from "@/context.ts";
 import type {Views} from "@/types.ts";
-import {formatDate} from "date-fns";
 
 
 export default function NavigationArrows() {
-    const today =new Date();
     const view = useContext(ViewContext);
-    const handleLeftClick = () => {alert("left arrow click")}
-    const handleRightClick = () => {alert("right arrow click")}
-
-    //display week start->end
-    const rangeDisplayer = (view:Views)=>{
-        switch(view){
-            case "day":
-                return (<span className=" px-1 font-extralight">{formatDate(today,'MMM, dd yyyy ')}</span>)
-            case "agenda":
-                return (<span className=" px-1 font-extralight">{formatDate(today,"MMM, yyyy")}</span>)
-            case "week":
-                return (<span className=" px-1 font-extralight">{formatDate(today,"")}</span>)
-            case "month":
-                return (<span className=" px-1 font-extralight">{formatDate(today,"MMM, yyyy")}</span>)
-            case "year":
-                return (<span className=" px-1 font-extralight">{formatDate(today,"yyyy")}</span>)
-            default:
-                return (<span className=" px-1 font-extralight">{formatDate(today,"MMM, yyyy")}</span>)
-
-        }
-    };
-
-
+    const date:Date = useContext(DateContext);
+    const handleLeftClick = (view:Views,date:Date) => {alert(`left arrow click ${view} and ${date}`)}
+    const handleRightClick = (view:Views,date:Date) => {alert(`right arrow click ${view} and ${date}`)}
     return (
         <div>
-            <Button variant="secondary" size="icon" className="size-8 cursor-pointer " onClick={handleLeftClick} >
+            <Button variant="secondary" size="icon" className="size-8 cursor-pointer " onClick={()=>{handleLeftClick(view,date)}} >
                 <ChevronLeftIcon/>
             </Button>
-            {rangeDisplayer(view)}
-            <Button variant="secondary" size="icon" className="size-8 cursor-pointer " onClick={handleRightClick} >
+            <span className="text-gray-500" >{rangeDisplayer(view,date)}</span>
+            <Button variant="secondary" size="icon" className="size-8 cursor-pointer " onClick={()=>{handleRightClick(view,date)}} >
             <ChevronRightIcon />
             </Button>
         </div>
