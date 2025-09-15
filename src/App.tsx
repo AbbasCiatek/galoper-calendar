@@ -1,12 +1,12 @@
 import CalendarHeader from "@/Components/CalendarHeader.tsx";
-import ViewContext from "@/context.ts";
+import {CalendarContextProvider} from "@/context/contextComponent.tsx";
 
 function App() {
-  return (
-    <ViewContext value={"week"}>
-    <CalendarHeader />
-    </ViewContext>
-  )
+    return (
+        <CalendarContextProvider  >
+            <CalendarHeader />
+        </CalendarContextProvider>
+    )
 }
 
 export default App
