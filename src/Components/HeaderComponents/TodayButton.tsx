@@ -6,9 +6,10 @@ export default function TodayButton(){
 
     const {date,setDate} = useCalendar();
 
-    const handleClick = (date:Date,)=>{
+    const handleClick = (date:Date)=>{
     if(date !== today){
-        setDate(today);
+        date =today;
+        setDate(date);
         console.log(date);
     }
     };
