@@ -41,34 +41,34 @@ export default function ViewChanger(){
     };
 
     return (
-        <div className="flex gap-4 text-sm  text-gray-600 ">
+        <div className="flex gap-4 text-sm text-gray-500  ">
         <button className={clsx ("flex gap-2 active:scale-50 duration-500 ",
-            view==='agenda' && "mx-2"
+            view==='agenda' && "mx-2 text-black "
             )}
                 value="agenda">
             <CalendarRange className="size-5" onClick={()=> handleAgendaClick(view)} />
             {view==='agenda' && <span> Agenda </span>}
         </button>
             <button  className={clsx ("flex gap-2 active:scale-50 duration-500 ",
-                view==='day' && "mx-2"
+                view==='day' && "mx-2 text-black"
             )}  value='day' >
                 <ClipboardList className="size-5 "  onClick={()=>handleDayClick(view)}/>
                 {view==='day'  && <span> Day </span>}
             </button>
             <button  className={clsx ("flex gap-2 active:scale-50 duration-500 ",
-                view==='week' && "mx-2"
+                view==='week' && "mx-2 text-black"
             )}  value='week'  >
                 <Columns4  className="size-5 "  onClick={()=>handleWeekClick(view)}/>
                 {view==='week' && <span> Week </span>}
             </button>
             <button className={clsx ("flex gap-2 active:scale-50 duration-500 ",
-                view==='month' && "mx-2"
+                view==='month' && "mx-2 text-black"
             )}  value='month' >
                 <Grid3x3 className="size-5 "  onClick={()=>handleMonthClick(view)}  />
                 { view==='month' &&   <span> Month </span> }
             </button>
             <button  className={clsx ("flex gap-2 active:scale-50 duration-500 ",
-                view==='year' && "mx-2"
+                view==='year' && "mx-2 text-black"
             )}  value='year' >
                 <CalendarDays className="size-5 " onClick={()=>handleYearClick(view)} />
                 { view==='year' && <span> Year </span>}
