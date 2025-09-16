@@ -3,7 +3,8 @@ import daysInMonth, {
     numberOfDisplayedDaysOfNextMonth,
     numberOfDisplayedDaysOfPrevMonth
 } from "@/dateHelpers";
-import  {formatDate} from "date-fns";
+import {formatDate, isToday} from "date-fns";
+import {clsx} from "clsx";
 
 export default function MonthViewContainer({date}:{date:Date}) {
     const days= daysInMonth(date);
@@ -29,7 +30,7 @@ export default function MonthViewContainer({date}:{date:Date}) {
                 return (
                     <div
                         onClick={()=>handleBeforeDays(day)}
-                        className="border bg-gray-400 h-32 "
+                        className="border bg-gray-300 h-32 hover:bg-gray-400  "
                         key={`beforeMonth ${index}`}>
                             {formatDate(day,'d')}
                     </div>
@@ -38,7 +39,8 @@ export default function MonthViewContainer({date}:{date:Date}) {
 
 
             {days.daysInMonth.map((day,index) => {
-                return <div className="bg-gray-300 border h-32 "
+                return <div className={clsx(" border border-white h-32 ",
+                isToday(day) ?  "bg-cyan-200 hover:bg-cyan-300 ":"bg-gray-10 hover:bg-white ")}
                             key={`month ${index}`}
                             onClick={()=>handleClickedDate(day)}
                 >
@@ -48,7 +50,7 @@ export default function MonthViewContainer({date}:{date:Date}) {
             {daysNextMonthDisplayed.daysInMonth.slice(0,afterTheEndOfMonth).map((day,index) => {
             return <div
                 onClick={()=>handleAfterDays(day)}
-                className="border bg-gray-400 h-32 "
+                className="border bg-gray-300 h-32  hover:bg-gray-400"
                 key={`afterMonth ${index}`}
             >
                 {formatDate(day,'d')}
