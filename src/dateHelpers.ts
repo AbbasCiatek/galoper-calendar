@@ -4,13 +4,13 @@ export default function daysInMonth(date: Date){
     const firstDayOfMonth = startOfMonth(date);
     const lastDayOfMonth = endOfMonth(date);
     //the Start of the week is Monday
-    const indexOfDays =((getDay(firstDayOfMonth)+6)%7);
+    const indexOfFirstDay =((getDay(firstDayOfMonth)+6)%7);
     const daysInMonth = eachDayOfInterval({
         start:firstDayOfMonth,
         end:lastDayOfMonth,
     })
 
-    return {daysInMonth,indexOfDays};
+    return {daysInMonth,indexOfFirstDay};
 }
 
 export function  numberOfDisplayedDaysOfNextMonth(daysOfCurrentMonth:Date[],indexOfCurrentMonthInWeekdays:number) {
