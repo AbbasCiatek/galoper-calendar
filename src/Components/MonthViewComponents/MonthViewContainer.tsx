@@ -8,10 +8,10 @@ import {clsx} from "clsx";
 
 export default function MonthViewContainer({date}:{date:Date}) {
     const days= daysInMonth(date);
-    const afterTheEndOfMonth = numberOfDisplayedDaysOfNextMonth(days.daysInMonth,days.indexOfDays);
+    const nextMonthDaysDisplayed = numberOfDisplayedDaysOfNextMonth(days.daysInMonth,days.indexOfFirstDay);
     const daysNextMonthDisplayed =arrayOfDaysOfNextMonth(date);
     const daysPrevMonthDisplayed =arrayOfDaysOfPrevMonth(date);
-    const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(date,days.indexOfDays);
+    const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(date,days.indexOfFirstDay);
 
     const handleClickedDate = (date:Date) => {
         alert(date);
@@ -47,7 +47,7 @@ export default function MonthViewContainer({date}:{date:Date}) {
                     {formatDate(day,'d')}
                 </div>
             })}
-            {daysNextMonthDisplayed.daysInMonth.slice(0,afterTheEndOfMonth).map((day,index) => {
+            {daysNextMonthDisplayed.daysInMonth.slice(0,nextMonthDaysDisplayed).map((day,index) => {
             return <div
                 onClick={()=>handleAfterDays(day)}
                 className="border bg-gray-300 h-32  hover:bg-gray-400"
