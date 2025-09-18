@@ -1,16 +1,20 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {eachDayOfInterval, endOfWeek, formatDate, startOfWeek} from "date-fns";
 const hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+import WeekDaysDisplay from "@/Components/WeekComponents/WeekDaysDisplay.tsx";
+import WeekViewContainer from "@/Components/WeekComponents/WeekViewContainer.tsx";
 export default function WeekView({date}:{date:Date}) {
     const weekDays = eachDayOfInterval(
         {
             start:startOfWeek(date,{weekStartsOn:1}),
             end:endOfWeek(date,{weekStartsOn:1}),
         });
+
     return (
         <>
             <div className="flex flex-col ">
                 <div>
+                    <WeekDaysDisplay date={date}/>
                     {/*AllDayEventsDisplay*/}
 
                     {/* Week header */}
@@ -66,6 +70,8 @@ export default function WeekView({date}:{date:Date}) {
                         </div>
                     </div>
                 </ScrollArea>
+                </div>
+                <WeekViewContainer date={date} />
             </div>
         </>
     )
