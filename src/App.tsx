@@ -7,7 +7,7 @@ function App() {
         <CalendarContextProvider  >
             <div className="container m-auto mt-5">
             <CalendarHeader />
-                <WeekView/>
+                <WeekView date={date}/>
             </div>
         </CalendarContextProvider>
     )
