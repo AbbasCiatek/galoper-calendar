@@ -42,10 +42,10 @@ export default function AddEditEventDialog({
         defaultValues:{
             title: event ? event.title :"",
             description: event ? event.description :"",
-             isAllDay: event ? event.isAllDay : false,
+            isAllDay: event ? event.isAllDay : false,
             color: event ? event.color :"blue",
             startDate: startDateDefaults,
-           endDate: endDateDefaults,
+            endDate: endDateDefaults,
         }
     });
     const onSubmit:SubmitHandler<EventFormData> = (eventData:EventFormData) =>{
