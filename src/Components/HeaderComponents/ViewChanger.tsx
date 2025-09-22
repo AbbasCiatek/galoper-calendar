@@ -3,74 +3,62 @@ import {useCalendar} from "@/context/context.tsx";
 import type {Views} from "@/types.ts";
 import {CalendarDays, CalendarRange, ClipboardList, Columns4, Grid3x3} from "lucide-react";
 import {clsx} from "clsx";
+import  {useEffect} from "react";
 
 
 export default function ViewChanger(){
 
     const {view , setView} = useCalendar();
+    useEffect(() => {
+        const handleKey = (event: KeyboardEvent) => {
+            switch(event.key){
+                case 'a': handleViewClick("agenda"); break;
+                case 'd': handleViewClick("day"); break;
+                case 'w': handleViewClick("week"); break;
+                case 'm': handleViewClick("month"); break;
+                case 'y': handleViewClick("year"); break;
+            }
+        };
+        window.addEventListener("keyup", handleKey);
+        return () => window.removeEventListener("keyup", handleKey);
+    }, []);
 
-    const handleYearClick = (view:Views) => {
-        if (view !== "year") {
-            view = "year";
-            setView(view);
-        }
-    };
-    const handleMonthClick = (view:Views) => {
-        if (view !== "month") {
-            view = "month";
-            setView(view);
-        }
-    };
-    const handleWeekClick = (view:Views) => {
-        if (view !== "week") {
-            view = "week";
-            setView(view);
-        }
-    };
-    const handleDayClick = (view:Views) => {
-        if (view !== "day") {
-            view = "day";
-            setView(view);
-        }
-    };
-    const handleAgendaClick = (view:Views) => {
-        if (view !== "agenda") {
-            view = "agenda";
-            setView(view);
-        }
-    };
+
+    const handleViewClick = (view:Views)=>{
+        setView(prevView=>(prevView !== view ? view : prevView));
+    }
 
     return (
-        <div className="flex gap-4 text-sm text-gray-500  ">
+        <div className="flex gap-4 text-sm text-gray-500">
         <button className={clsx ("flex gap-2 active:scale-50 duration-500 ",
             view==='agenda' && "mx-2 text-black "
             )}
                 value="agenda">
-            <CalendarRange className="size-5" onClick={()=> handleAgendaClick(view)} />
+            <CalendarRange className="size-5" onClick={()=> handleViewClick("agenda")} />
             {view==='agenda' && <span> Agenda </span>}
         </button>
             <button  className={clsx ("flex gap-2 active:scale-50 duration-500 ",
                 view==='day' && "mx-2 text-black"
             )}  value='day' >
-                <ClipboardList className="size-5 "  onClick={()=>handleDayClick(view)}/>
+                <ClipboardList className="size-5 "  onClick={()=>handleViewClick("day")}/>
                 {view==='day'  && <span> Day </span>}
             </button>
             <button  className={clsx ("flex gap-2 active:scale-50 duration-500 ",
                 view==='week' && "mx-2 text-black"
             )}  value='week'  >
-                <Columns4  className="size-5 "  onClick={()=>handleWeekClick(view)}/>
+                <Columns4  className="size-5 "  onClick={()=>handleViewClick("week")}  />
                 {view==='week' && <span> Week </span>}
             </button>
             <button className={clsx ("flex gap-2 active:scale-50 duration-500 ",
                 view==='month' && "mx-2 text-black"
             )}  value='month' >
-                <Grid3x3 className="size-5 "  onClick={()=>handleMonthClick(view)}  />
+                <Grid3x3 className="size-5 "  onClick={()=>handleViewClick("month")}  />
                 { view==='month' &&   <span> Month </span> }
             </button>
             <button  className={clsx ("flex gap-2 active:scale-50 duration-500 ",
                 view==='year' && "mx-2 text-black"
             )}  value='year' >
-                <CalendarDays className="size-5 " onClick={()=>handleYearClick(view)} />
+                <CalendarDays className="size-5 " onClick={()=>handleViewClick("year")} />
                 { view==='year' && <span> Year </span>}
             </button>
         </div>
