@@ -12,6 +12,7 @@ export type Event = {
 export type Events = Event[];
 export type EventsStore = {
     events: Events;
+    getEventsByDateRange: (startDate:Date, endDate:Date) => Event[];
     addEvent: (event: Event) => void;
     editEvent: (id: string, edited: Partial<Event>) => void;
     removeEvent: (id: string) => void;
