@@ -1,5 +1,5 @@
 import {Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
-import {type ReactNode, useId, useState} from "react";
+import {type ReactNode, useState} from "react";
 import {DialogTitle} from "@radix-ui/react-dialog";
 import type {Event} from "@/types.ts";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
@@ -17,6 +17,7 @@ import {Select} from "@radix-ui/react-select";
 import {SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import { v4  } from 'uuid';
 // for all option (when clicking on a button, clicking on a time cell, or clicking on event edit button)
 
 type AddEventDialogProps = {
@@ -35,8 +36,9 @@ export default function AddEditEventDialog({
                                            }:AddEventDialogProps ) {
 
     const date = new Date(); // will be used for now but when implementing useCalendar hook get the date from it ...
-    const generatedId = useId();
-    const id = event ? event.id : generatedId;
+    const generatedfn = ()=>{return v4();}
+    const generatedId = generatedfn();
+    const id = event ? event.id : generatedId; 
     const [isOpen, setIsOpen] = useState(false);
     const onClose = () =>setIsOpen(false);
     const onToggle = () =>setIsOpen(!isOpen);
@@ -155,6 +157,7 @@ export default function AddEditEventDialog({
                                                 value={field.value}
                                                 onSelect={date => field.onChange(date as Date)}
                                                 data-invalid={fieldState.invalid}
+                                                startMonth={startDate}
                                             />
                                         </FormControl>
                                     </div>
@@ -258,7 +261,7 @@ export default function AddEditEventDialog({
                     </DialogClose>
 
                     <Button form="form-event" type="submit">
-                        Create Event
+                        {event ? `Save Changes` :`Create Event`}
                     </Button>
                 </DialogFooter>
             </DialogContent>

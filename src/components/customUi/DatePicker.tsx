@@ -11,9 +11,10 @@ type DatePickerProps = {
     id:string,
     value?: Date,
     onSelect:(date: Date) => void,
+    startMonth?:Date,
 }
 
-export default function DatePicker({id,value,onSelect} : DatePickerProps) {
+export default function DatePicker({id,value,onSelect,startMonth} : DatePickerProps) {
     
     const [open , setOpen] = useState(false);
     const defaultHours = (isDate(value)) ?   getHours(value) : getHours(new Date());
@@ -55,6 +56,7 @@ export default function DatePicker({id,value,onSelect} : DatePickerProps) {
                             mode="single"
                             selected={value}
                             captionLayout="label"
+                            startMonth={startMonth}
                             endMonth={new Date(9999,0)}
                             onSelect={handleSelectedDate}
                         />
