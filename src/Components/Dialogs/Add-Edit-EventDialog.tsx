@@ -36,9 +36,6 @@ export default function AddEditEventDialog({
                                            }:AddEventDialogProps ) {
 
     const date = new Date(); // will be used for now but when implementing useCalendar hook get the date from it ...
-    const generatedfn = ()=>{return v4();}
-    const generatedId = generatedfn();
-    const id = event ? event.id : generatedId; 
     const [isOpen, setIsOpen] = useState(false);
     const onClose = () =>setIsOpen(false);
     const onToggle = () =>setIsOpen(!isOpen);
@@ -61,8 +58,9 @@ export default function AddEditEventDialog({
     const onSubmit:SubmitHandler<EventFormData> = (eventData:EventFormData) =>{
        try {
            if(event){
-               editEvent(id,eventData);
+               editEvent(event.id,eventData);
            }else{
+                const id = v4();
                addEvent({id, ...eventData});
            }
            console.log("event", eventData);
