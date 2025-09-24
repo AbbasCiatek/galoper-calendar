@@ -46,7 +46,8 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
     })
     clippedEvents.sort((a, b) => a.start.getTime() - b.start.getTime());
     const placed: PositionedEvent[] = [];
-    clippedEvents.forEach(currentEvent => {
+    const lengthOfEvents =clippedEvents.length
+    clippedEvents.forEach((currentEvent,index) => {
         const overlapping = clippedEvents.filter(otherEvent =>
         otherEvent.start !== currentEvent.start &&
             areIntervalsOverlapping({
@@ -59,23 +60,10 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
         )
 
         const overlapCount = overlapping.length +1;
-        const width = 100 / overlapCount;
-        let columnIndex = 0;
-        while (
-            placed.some(p =>
-                areIntervalsOverlapping({ start: currentEvent.start, end: currentEvent.end }, { start:p.event.startDate, end:p.event.endDate }) &&
-                p.left === columnIndex * width &&
-                p.event.startDate.getTime() === currentEvent.start.getTime() &&
-                p.event.endDate.getTime() === currentEvent.end.getTime()
-            )
-            ){
-            columnIndex++;
-        }
-
+        const width =lengthOfEvents<15 ? 100 / overlapCount :50 / overlapCount;
         const top = (currentEvent.startMinutes / 1440) * 100;
         const height = (currentEvent.durationMinutes / 1440) * 100;
-        const left =  columnIndex *width/2;
-
+        const left = lengthOfEvents<15 ?  10*index : 20*index ;
         placed.push({ event: currentEvent.event, top, height, left, width });
     });
 

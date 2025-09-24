@@ -1,6 +1,7 @@
 import type {Events} from "@/types.ts";
 import {positionEventsWeekDayView} from "@/dateHelpers.ts";
 import EventDayBlock from "@/Components/DayViewComponents/EventDayBlock.tsx";
+import {backgroundFromColor} from "@/helpers.ts";
 
 type Props= {
     singleDayEvents: Events,
@@ -13,10 +14,13 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
 
     return (
         <>
-            {positioning.map(p=>(
+            {positioning.map(p=>{
+
+                const bgColor=backgroundFromColor(p.event.color);
+                return(
                 <div
                     key={p.event.id}
-                    className="absolute "
+                    className={` rounded-lg ${bgColor} text-xs text-white  absolute `}
                     style={{
                         top: `${p.top}%`,
                         height: `${p.height}%`,
@@ -26,7 +30,7 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
                 >
                     <EventDayBlock event={p.event}  />
                 </div>
-            ))}
+            )})}
         </>
     );
 }
