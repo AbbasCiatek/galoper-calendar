@@ -16,7 +16,7 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
             {positioning.map(p=>(
                 <div
                     key={p.event.id}
-                    className="absolute p-1"
+                    className="absolute "
                     style={{
                         top: `${p.top}%`,
                         height: `${p.height}%`,

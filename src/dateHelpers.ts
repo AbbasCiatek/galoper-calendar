@@ -74,7 +74,7 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
 
         const top = (currentEvent.startMinutes / 1440) * 100;
         const height = (currentEvent.durationMinutes / 1440) * 100;
-        const left =  columnIndex * width;
+        const left =  columnIndex *width/2;
 
         placed.push({ event: currentEvent.event, top, height, left, width });
     });

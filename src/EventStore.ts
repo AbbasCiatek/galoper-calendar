@@ -11,8 +11,8 @@ const useEventStore = create<EventsStore>()(
             getSingleDayEvents:(startDate:Date,endDate:Date)=>{
                 return get().events.filter((event) => {
                     if(areIntervalsOverlapping({
-                        start:event.startDate,
-                        end:event.endDate,
+                        start:new Date(event.startDate),
+                        end:new Date(event.endDate),
                     },{
                         start:startDate,
                         end:endDate,
@@ -23,8 +23,8 @@ const useEventStore = create<EventsStore>()(
             getMultipleDayEvents:(startDate:Date,endDate:Date)=>{
                 return get().events.filter((event) => {
                     if(areIntervalsOverlapping({
-                        start:event.startDate,
-                        end:event.endDate,
+                        start:new Date(event.startDate),
+                        end:new Date(event.endDate),
                     },{
                         start:startDate,
                         end:endDate,
@@ -37,8 +37,8 @@ const useEventStore = create<EventsStore>()(
 
                 return get().events.filter((event) => {
                     if(areIntervalsOverlapping({
-                        start:event.startDate,
-                        end:event.endDate,
+                        start:new Date(event.startDate),
+                        end:new Date(event.endDate),
                     },{
                         start:startDate,
                         end:endDate,
