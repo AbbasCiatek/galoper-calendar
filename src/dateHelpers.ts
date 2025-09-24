@@ -3,7 +3,6 @@ import {
     differenceInMinutes,
     eachDayOfInterval,
     endOfWeek,
-    intervalToDuration,
     startOfWeek
 } from "date-fns";
 import type {Event} from '@/types.ts'
@@ -48,27 +47,18 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
     clippedEvents.sort((a, b) => a.start.getTime() - b.start.getTime());
     const placed: PositionedEvent[] = [];
     clippedEvents.forEach(currentEvent => {
-        const equalOverlapping = clippedEvents.filter(otherEvent =>
-            otherEvent !== currentEvent &&
-            areIntervalsOverlapping(
-                {start:currentEvent.start, end:currentEvent.end},
-                {start:otherEvent.start, end:otherEvent.end},
-            )
-            &&
-            otherEvent.start === currentEvent.start
-            && otherEvent.end === currentEvent.end
-        )
-        const unequalOverlapping = clippedEvents.filter(otherEvent =>
-            otherEvent !== currentEvent &&
-            areIntervalsOverlapping(
-                {start:currentEvent.start, end:currentEvent.end},
-                {start:otherEvent.start, end:otherEvent.end},
-            )
-            &&
-            intervalToDuration({start:currentEvent.start, end:currentEvent.end}) >=intervalToDuration({start:otherEvent.start, end:otherEvent.end})
+        const overlapping = clippedEvents.filter(otherEvent =>
+        otherEvent.start !== currentEvent.start &&
+            areIntervalsOverlapping({
+                start: currentEvent.start,
+                end: currentEvent.end,
+            },{
+                start:otherEvent.start,
+                end:otherEvent.end,
+            })
         )
 
-        const overlapCount = equalOverlapping.length+unequalOverlapping.length+1;
+        const overlapCount = overlapping.length +1;
         const width = 100 / overlapCount;
         let columnIndex = 0;
         while (
@@ -84,7 +74,7 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
 
         const top = (currentEvent.startMinutes / 1440) * 100;
         const height = (currentEvent.durationMinutes / 1440) * 100;
-        const left = columnIndex * width;
+        const left =  columnIndex * width;
 
         placed.push({ event: currentEvent.event, top, height, left, width });
     });
