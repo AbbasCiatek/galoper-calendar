@@ -1,6 +1,6 @@
 import {Hours} from "@/helpers.ts";
 import {clsx} from "clsx";
-import { isToday, setHours, setMinutes} from "date-fns";
+import { isToday} from "date-fns";
 export default function TimeCells({day,view}:{day:Date,view:string} ) {
 
 
