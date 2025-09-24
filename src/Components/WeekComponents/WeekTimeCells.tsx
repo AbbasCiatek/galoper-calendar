@@ -1,10 +1,14 @@
 import {daysOfWeek} from "@/dateHelpers.ts";
 import {clsx} from "clsx";
-import {isToday} from "date-fns";
+import { isToday} from "date-fns";
 import TimeLine from "@/Components/WeeKDayViewCommonComponents/TimeLine.tsx";
 import TimeCells from "@/Components/WeeKDayViewCommonComponents/TimeCells.tsx";
 
+import EventPerDay from "@/Components/WeekComponents/EventPerDay.tsx";
+
 export default function WeekTimeCells({date}:{date:Date}){
+
+
     const view = "week";
     const weekDays = daysOfWeek(date);
     return (
@@ -15,6 +19,7 @@ export default function WeekTimeCells({date}:{date:Date}){
                         <div key={dayIndex} className={clsx("relative",
                                                     isToday(day) ? "bg-blue-100" : "bg-white",)}>
                                     <TimeCells day={day} view={view} />
+                            <EventPerDay day={day} />
                             {isToday(day) &&  <TimeLine/>}
                         </div>
                     );
