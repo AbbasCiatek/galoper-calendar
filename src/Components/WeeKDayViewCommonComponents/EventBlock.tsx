@@ -1,7 +1,7 @@
 import type {Event} from "@/types.ts";
 import {formatDate} from "date-fns";
 
-export default function EventWeekBlock({event}: { event:Event }) {
+export default function EventBlock({event}: { event:Event }) {
 
     return (
         <div >
