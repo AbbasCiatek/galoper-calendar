@@ -16,11 +16,13 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
         <>
             {positioning.map(p=>{
 
-                const bgColor=backgroundFromColor(p.event.color);
+                const styles=backgroundFromColor(p.event.color);
                 return(
                     <div
+                        role="button"
+                        tabIndex={0}
                         key={p.event.id}
-                        className={` rounded-lg ${bgColor} text-xs text-white  absolute overflow-hidden text-ellipsis `}
+                        className={`border-2 rounded-lg ${styles} text-xs  absolute overflow-hidden text-ellipsis `}
                         style={{
                             top: `${p.top}%`,
                             height: `${p.height}%`,

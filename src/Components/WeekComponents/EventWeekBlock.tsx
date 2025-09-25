@@ -5,7 +5,7 @@ export default function EventWeekBlock({event}: { event:Event }) {
 
     return (
         <div >
-            <div className="px-1">
+            <div className="truncate font-semibold">
                 {event.title}
             </div>
            <div className="px-1">
