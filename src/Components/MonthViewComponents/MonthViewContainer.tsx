@@ -3,7 +3,8 @@ import daysInMonth, {
     numberOfDisplayedDaysOfNextMonth,
     numberOfDisplayedDaysOfPrevMonth
 } from "@/dateHelpers";
-import  {formatDate} from "date-fns";
+import {formatDate, isMonday, isToday} from "date-fns";
+import {clsx} from "clsx";
 
 export default function MonthViewContainer({date}:{date:Date}) {
     const days= daysInMonth(date);
@@ -24,34 +25,44 @@ export default function MonthViewContainer({date}:{date:Date}) {
         alert(date);
     }
     return (
-        <>
+        < >
             {daysPrevMonthDisplayed.daysInMonth.splice(prevMonthDaysDisplayed).map((day,index) => {
                 return (
                     <div
                         onClick={()=>handleBeforeDays(day)}
+                        className={clsx("h-32  gap-1 border-l border-t",
+                            isMonday(date) && "border-l-0")}
                         className="border bg-gray-400 h-32 "
                         key={`beforeMonth ${index}`}>
-                            {formatDate(day,'d')}
+                        <div className="h-6 px-1 text-xs font-semibold lg:px-2 opacity-25">  {formatDate(day,'d')}</div>
+
                     </div>
                 )
             })}
 
 
             {days.daysInMonth.map((day,index) => {
+                return <div className={clsx("h-32  gap-1 border-l border-t",
+                    isMonday(date) && "border-l-0")}
                 return <div className="bg-gray-300 border h-32 "
                             key={`month ${index}`}
                             onClick={()=>handleClickedDate(day)}
                 >
-                    {formatDate(day,'d')}
+                    <div className={clsx("h-6 px-1 text-xs font-semibold lg:px-2",
+                        isToday(day) &&
+                        "flex w-6 translate-x-1 items-center justify-center rounded-full bg-primary px-0 font-bold text-primary-foreground")}>{formatDate(day,'d')}</div>
                 </div>
+
             })}
             {daysNextMonthDisplayed.daysInMonth.slice(0,afterTheEndOfMonth).map((day,index) => {
             return <div
                 onClick={()=>handleAfterDays(day)}
+                className={clsx("h-32  gap-1 border-l border-t",
+                    isMonday(date) && "border-l-0")}
                 className="border bg-gray-400 h-32 "
                 key={`afterMonth ${index}`}
             >
-                {formatDate(day,'d')}
+                <div className="h-6 px-1 text-xs font-semibold lg:px-2 opacity-25"> {formatDate(day,'d')}</div>
             </div>
         })}
 
