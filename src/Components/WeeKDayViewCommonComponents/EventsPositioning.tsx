@@ -20,7 +20,7 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
                 return(
                     <div
                         key={p.event.id}
-                        className={` rounded-lg ${bgColor} text-xs text-white  absolute `}
+                        className={` rounded-lg ${bgColor} text-xs text-white  absolute overflow-hidden text-ellipsis `}
                         style={{
                             top: `${p.top}%`,
                             height: `${p.height}%`,
