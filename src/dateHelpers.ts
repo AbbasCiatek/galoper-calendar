@@ -60,7 +60,7 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
         )
 
         const overlapCount = overlapping.length +1;
-        const width =lengthOfEvents<15 ? 150 / overlapCount :100 / overlapCount;
+        const width =lengthOfEvents<15 ? 100 / overlapCount :50 / overlapCount;
         const top = (currentEvent.startMinutes / 1440) * 100;
         const height = (currentEvent.durationMinutes / 1440) * 100;
         const left = lengthOfEvents<15 ?  10*index : 20*index ;
