@@ -29,7 +29,6 @@ export function clipEvent(event:Event , date:Date) {
     dayStart.setHours(0, 0, 0, 0);
     const dayEnd = new Date(date);
     dayEnd.setHours(23, 59, 59, 999);
-
     const start = event.startDate;
     const end = event.endDate;
 
