@@ -1,6 +1,6 @@
 import type {Events} from "@/types.ts";
 import {positionEventsWeekDayView} from "@/dateHelpers.ts";
-import EventWeekBlock from "@/Components/WeekComponents/EventWeekBlock.tsx";
+import EventBlock from "@/Components/WeeKDayViewCommonComponents/EventBlock.tsx";
 import {backgroundFromColor} from "@/helpers.ts";
 
 type Props= {
@@ -30,7 +30,7 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
                             width: `${p.width}%`,
                         }}
                     >
-                        <EventWeekBlock event={p.event}  />
+                        <EventBlock event={p.event}  />
                     </div>
                 )})}
         </>
