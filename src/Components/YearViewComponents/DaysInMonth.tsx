@@ -13,15 +13,15 @@ export default function DaysInMonth({month}:{month:Date}){
     return (
         <div className="border rounded-b-2xl grid grid-cols-7 gap-5 m-2 p-2 shadow-xl">
             {WeekDays.map((day)=>{
-                return <div className=" pb-4 font-bold text-sm text-gray-700 gap-2  "  key={day} >{day}</div>
+                return <div className=" pb-4 font-medium text-sm text-muted-foreground gap-2  "  key={day} >{day}</div>
             })}
             {Array.from({length:firstDayIndex-1}).map((_, index)=>{
                 return <div  key={index}  />
             })}
             {days.daysInMonth.map((day,index)=>{
                 return <div
-                    className={clsx("cursor-pointer hover:inset-shadow-sm text-center text-xs rounded-sm",
-                                isToday(day) ?"bg-emerald-300 hover:bg-emerald-400" :" hover:inset-shadow-gray-500 hover:bg-gray-200" )}
+                    className={clsx("cursor-pointer hover:inset-shadow-sm text-center text-xs font-bold  rounded-sm",
+                                isToday(day) ?"bg-black text-white " :" hover:inset-shadow-gray-500 hover:bg-gray-200" )}
                     key={index}
                     onClick={()=>handleDayClicked(day)}
                 >
