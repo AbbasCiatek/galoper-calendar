@@ -1,7 +1,7 @@
 import {WeekDays} from "@/helpers.ts";
 import { formatDate, isToday} from "date-fns";
-import daysInMonth from "@/Functions/daysInMonth.ts";
 import {clsx} from "clsx";
+import {daysInMonth} from "@/dateHelpers.ts";
 
 export default function DaysInMonth({month}:{month:Date}){
     const days = daysInMonth(month);
