@@ -3,8 +3,10 @@ import daysInMonth, {
     numberOfDisplayedDaysOfNextMonth,
     numberOfDisplayedDaysOfPrevMonth
 } from "@/dateHelpers";
-import {formatDate, isMonday, isToday} from "date-fns";
-import {clsx} from "clsx";
+import {endOfMonth, isSameDay, startOfMonth} from "date-fns";
+import useEventStore from "@/EventStore.ts";
+import type {Event} from "@/types.ts";
+import DayCell from "@/Components/MonthViewComponents/DayCell.tsx";
 
 export default function MonthViewContainer({date}:{date:Date}) {
     const days= daysInMonth(date);
@@ -12,18 +14,28 @@ export default function MonthViewContainer({date}:{date:Date}) {
     const daysNextMonthDisplayed =arrayOfDaysOfNextMonth(date);
     const daysPrevMonthDisplayed =arrayOfDaysOfPrevMonth(date);
     const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(date,days.indexOfDays);
+export default function MonthViewContainer({date}: { date: Date }) {
+    const days = daysInMonth(date);
+    const nextMonthDaysDisplayed = numberOfDisplayedDaysOfNextMonth(days.daysInMonth, days.indexOfFirstDay);
+    const daysNextMonthDisplayed = arrayOfDaysOfNextMonth(date);
+    const daysPrevMonthDisplayed = arrayOfDaysOfPrevMonth(date);
+    const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(date, days.indexOfFirstDay);
 
-    const handleClickedDate = (date:Date) => {
-        alert(date);
-    }
-   const handleBeforeDays = (date: Date) => {
-        //must trigger the arrow back
-       alert(date);
-   }
-   const handleAfterDays = (date:Date) => {
-        //must trigger the arrow next
-        alert(date);
-    }
+    const {getEventsByDateRange} = useEventStore();
+
+    const allMonthEvents: Event[] = getEventsByDateRange(startOfMonth(date), endOfMonth(date));
+
+    const singleDayEvents = allMonthEvents.filter((event) =>
+        isSameDay(new Date(event.startDate), new Date(event.endDate))
+    )
+    const multiDayEvents = allMonthEvents.filter((event) =>
+        !isSameDay(new Date(event.startDate), new Date(event.endDate))
+    )
+
+    const eventPositions = calculateMonthEventPositions(multiDayEvents, singleDayEvents, date);
+
+
+
     return (
         < >
             {daysPrevMonthDisplayed.daysInMonth.splice(prevMonthDaysDisplayed).map((day,index) => {
@@ -67,5 +79,19 @@ export default function MonthViewContainer({date}:{date:Date}) {
         })}
 
         </>
+        <div className="grid grid-cols-7 w-full h-full">
+            {/* Previous month trailing days */}
+            {daysPrevMonthDisplayed.daysInMonth.splice(prevMonthDaysDisplayed).map((day, index) => (
+                <DayCell key={`before-${index}`} day={day} isFaded={true}
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>))}
+            {/* Current month days */}
+            {days.daysInMonth.map((day, index) => (
+                <DayCell key={`current-${index}`} day={day} isFaded={false}
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>))}
+            {/* Next month leading days */}
+            {daysNextMonthDisplayed.daysInMonth.slice(0, nextMonthDaysDisplayed).map((day, index) => (
+                <DayCell key={`after-${index}`} day={day} isFaded={true}
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>))}
+        </div>
     );
 }
