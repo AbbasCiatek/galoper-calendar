@@ -1,6 +1,7 @@
 import WeekDaysDisplay from "@/Components/WeekComponents/WeekDaysDisplay.tsx";
 import WeekViewContainer from "@/Components/WeekComponents/WeekViewContainer.tsx";
 import DateDisplayLayout from "@/Components/WeeKDayViewCommonComponents/DateDisplayLayout.tsx";
+import WeekViewMultiDayEvent from "@/Components/WeekComponents/WeekViewMultiDayEvent.tsx";
 export default function WeekView({date}:{date:Date}) {
 
     return (
@@ -10,7 +11,7 @@ export default function WeekView({date}:{date:Date}) {
                     <DateDisplayLayout>
                     <WeekDaysDisplay date={date}/>
                     </DateDisplayLayout>
-                    {/*AllDayEventsDisplay*/}
+                    <WeekViewMultiDayEvent date={date} />
                 </div>
                 <WeekViewContainer date={date} />
             </div>
