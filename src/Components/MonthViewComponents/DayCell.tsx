@@ -18,6 +18,7 @@ export default function DayCell({day, isFaded, eventsForDay}: Props) {
         orange: "bg-orange-100 text-orange-900 border border-orange-400 ",
     };
     return (
+        <DroppableDayCell date={day}>
         <AddEditEventDialog startDate={day.setHours(8)} endDate={day.setHours(9)} >
         <div
             className={clsx("relative border-l border-t p-1 overflow-hidden h-full min-h-[120px] flex flex-col",
@@ -31,20 +32,23 @@ export default function DayCell({day, isFaded, eventsForDay}: Props) {
 
             <div className="flex flex-col  gap-0.5 flex-1">
                 {eventsForDay.slice(0, 3).map((event) => (
-                    // <EventDetailsDialog event={event} >
-                    <div key={event.id}
-                         className={`truncate font-bold  h-6 rounded px-1 text-xs  ${colorMap[event.color]}`}> {event.title}
-                    </div>
-                    //</EventDetailsDialog>
+                    <DraggableEvents key={event.id} event={event}>
+                         <EventDetailsDialog event={event} >
+                        <div className={`truncate font-bold  h-6 rounded px-1 text-xs  ${colorMap[event.color]}`}>
+                            {event.title}
+                        </div>
+                        </EventDetailsDialog>
+                        <DraggableEvents/>
                 ))}
                 {eventsForDay.length > 3 && (
-                    // <EventListDialog events={eventsForDay} date={day}  >
+                    <EventListDialog events={eventsForDay} date={day}  >
                         <div className="text-xs text-gray-500 px-1"> +{eventsForDay.length - 3} more
                         </div>
-                    // </EventListDialog>
+                     </EventListDialog>
                 )}
             </div>
         </div>
         </AddEditEventDialog>
+        </DroppableDayCell>
     );
 }
