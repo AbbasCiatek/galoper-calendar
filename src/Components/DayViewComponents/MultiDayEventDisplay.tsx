@@ -20,7 +20,7 @@ export function MultiDayEventDisplay({ event ,eventCurrentDay,eventTotalDays }: 
     return (
         // <EventDetailsDialog event={event}>
             <div className={  `flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer rounded-lg ${colorMap[event.color]} `}>
-                 <p className="flex-1 truncate font-semibold">
+                 <p>
                 {eventCurrentDay && (
                     <span className="text-xs">
                     Day {eventCurrentDay} of {eventTotalDays} •{" "}
