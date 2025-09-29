@@ -15,7 +15,6 @@ import DatePicker from "@/components/customUi/DatePicker.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Select} from "@radix-ui/react-select";
 import {SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import { v4  } from 'uuid';
 // for all option (when clicking on a button, clicking on a time cell, or clicking on event edit button)
@@ -44,7 +43,6 @@ export default function AddEditEventDialog({
     const startDateDefaults = startDate ? startDate : event ? event?.startDate : date ;
     const endDateDefaults = endDate ? endDate : event ? event?.endDate : oneHourAdded ;
 
-
     const form = useForm<EventFormData>({
         resolver:zodResolver(eventSchema),
         defaultValues:{
@@ -57,13 +55,20 @@ export default function AddEditEventDialog({
     });
     const onSubmit:SubmitHandler<EventFormData> = (eventData:EventFormData) =>{
        try {
+           const time24Hours = 24*60*60*1000;
+           //if >24hrs true else false
+           const isAllDay = (time24Hours) - (eventData.endDate.getTime() - eventData.startDate.getTime()) < 0;
+            const dataToSave = {
+                ...eventData,isAllDay,
+            }
+
            if(event){
-               editEvent(event.id,eventData);
+               editEvent(event.id,dataToSave);
            }else{
                 const id = v4();
-               addEvent({id, ...eventData});
+               addEvent({id, ...dataToSave});
            }
-           console.log("event", eventData);
+           console.log("event", dataToSave);
            toast.success(`Event ${event ? "edited!" :"created! "}`);
             onClose();
             form.reset();
@@ -107,22 +112,6 @@ export default function AddEditEventDialog({
                         </FormItem>
                     )}
                     />
-                        <FormField
-                            control={form.control}
-                            name="isAllDay"
-                            render={({ field }) => (
-                                <FormItem className="flex items-center gap-2">
-                                    <FormControl>
-                                        <Checkbox
-                                            id="isAllDay"
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <FormLabel htmlFor="isAllDay">All Day</FormLabel>
-                                </FormItem>
-                            )}
-                        />
                         <FormField
                             control={form.control}
                             name='startDate'
