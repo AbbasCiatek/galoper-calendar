@@ -21,13 +21,13 @@ export function MultiDayEventDisplay({ event, position }: Props) {
 
     const positionClasses = {
         none: "rounded-md",
-        first: "rounded-l-md",
-        middle: "border-l-0",
-        last: "rounded-r-md",
+        first: "rounded-l-md border-r-0  ",
+        middle: "border-x-0 ",
+        last: "rounded-r-md border-l-0 ",
     }[position];
 
     return (
-        <div className={  `flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer ${positionClasses}  ${colorMap[event.color]} `}>
+        <div className={  `  flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer ${positionClasses}  ${colorMap[event.color]} `}>
             {position === "first" || position === "none" ? event.title : null}
         </div>
     );
