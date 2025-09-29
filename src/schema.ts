@@ -8,6 +8,12 @@ export const eventSchema = z.object({
   color: z.enum(
     ["blue", "green", "red", "yellow", "purple", "orange", "gray"],
     { message: "Color is required" },
-  ),
+  ).refine((data)=> isAfter(data.endDate,data.startDate) ,{
+      message: "The ending date must be after the starting date ",
+      path:["endDate"],
+  }).refine((data)=> (data.endDate.getTime() - data.startDate.getTime())> (60 *1000) ,{
+      message: "Minimum Event Duration is One Minute ",
+      path:["endDate"],
 });
-export type EventFormData = z.infer<typeof eventSchema>;
+
+export type EventFormData = z.infer<typeof eventSchema>
