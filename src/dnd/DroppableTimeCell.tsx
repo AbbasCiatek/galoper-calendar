@@ -50,7 +50,7 @@ export function DroppableTimeCell({ date, hour, minute, children }: Props) {
     );
 
     return (
-        <div ref={drop as unknown as RefObject<HTMLDivElement>} className={cn("h-[24px]", isOver && canDrop && "bg-accent/50")}>
+        <div ref={drop as unknown as RefObject<HTMLDivElement>} className={cn("h-[24px]")}>
             {children}
         </div>
     );

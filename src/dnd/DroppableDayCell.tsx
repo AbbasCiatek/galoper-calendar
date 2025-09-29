@@ -11,17 +11,13 @@ import type { Event } from "@/types.ts";
 import type {ReactNode, RefObject} from "react";
 import useEventStore from "@/EventStore.ts";
 
-type CalendarCell={
-    day: number;
-    currentMonth: boolean;
-    date: Date;}
 
 type Props ={
-    cell: CalendarCell;
+    date: Date;
     children:ReactNode;
 }
 
-export function DroppableDayCell({ cell, children }: Props) {
+export function DroppableDayCell({date, children }: Props) {
     const {editEvent} = useEventStore();
 
     const [{ isOver, canDrop }, drop] = useDrop(
@@ -35,7 +31,7 @@ export function DroppableDayCell({ cell, children }: Props) {
 
                 const eventDurationMs = differenceInMilliseconds(eventEndDate, eventStartDate);
 
-                const newStartDate = new Date(cell.date);
+                const newStartDate = new Date(date);
                 newStartDate.setHours(eventStartDate.getHours(), eventStartDate.getMinutes(), eventStartDate.getSeconds(), eventStartDate.getMilliseconds());
                 const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
 
@@ -48,11 +44,11 @@ export function DroppableDayCell({ cell, children }: Props) {
                 canDrop: monitor.canDrop(),
             }),
         }),
-        [cell.date, editEvent]
+        [date, editEvent]
     );
 
     return (
-        <div ref={drop as unknown as RefObject<HTMLDivElement>} className={cn(isOver && canDrop && "bg-accent/50")}>
+        <div ref={drop as unknown as RefObject<HTMLDivElement>}>
             {children}
         </div>
     );
