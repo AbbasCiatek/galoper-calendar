@@ -10,25 +10,6 @@ import {
     startOfMonth,
     subMonths
 } from "date-fns";
-import {
-	addMonths,
-	eachDayOfInterval,
-	endOfMonth,
-	getDay,
-	startOfMonth,
-	subMonths,
-} from "date-fns";
-
-export default function daysInMonth(date: Date) {
-	const firstDayOfMonth = startOfMonth(date);
-	const lastDayOfMonth = endOfMonth(date);
-	//the Start of the week is Monday
-	const indexOfFirstDay = (getDay(firstDayOfMonth) + 6) % 7;
-	const daysInMonth = eachDayOfInterval({
-		start: firstDayOfMonth,
-		end: lastDayOfMonth,
-	});
-import {addMonths, eachDayOfInterval, endOfMonth, getDay, startOfMonth, subMonths} from "date-fns";
 
 export default function daysInMonth(date: Date){
     const firstDayOfMonth = startOfMonth(date);
@@ -63,18 +44,10 @@ export function arrayOfDaysOfPrevMonth(date: Date) {
 
 export function numberOfDisplayedDaysOfPrevMonth(currentDate:Date,indexOfCurrentMonthInWeekdays:number) {
     return arrayOfDaysOfPrevMonth(currentDate).daysInMonth.length - indexOfCurrentMonthInWeekdays;
-export function numberOfDisplayedDaysOfPrevMonth(
-	currentDate: Date,
-	indexOfCurrentMonthInWeekdays: number,
-) {
-	return (
-		arrayOfDaysOfPrevMonth(currentDate).daysInMonth.length -
-		indexOfCurrentMonthInWeekdays
-	);
 }
 
 
-export function calculateMonthEventPositions(multiDayEvents: Event[], singleDayEvents: Event[], selectedDate: Date) {
+export function calculateMonthEventPositions(events:Event[], selectedDate: Date) {
     const monthStart = startOfMonth(selectedDate);
     const monthEnd = endOfMonth(selectedDate);
 
@@ -142,12 +115,10 @@ export function getMonthCellEvents(date: Date, events: Event[], eventPositions: 
             const isMultiDay = !isSameDay(eventStart, eventEnd);
             const isFirstDay = isSameDay(date, eventStart);
             const isLastDay = isSameDay(date, eventEnd);
-            const isMiddleDay = isMultiDay && !isFirstDay && !isLastDay;
-
 
             return {
                 ...event,
-                position: eventPositions[event.id] ?? -1,
+                position: eventPositions[event.id]  ?? -1,
                 isMultiDay,
                 isFirstDay,
                 isLastDay,
@@ -156,6 +127,9 @@ export function getMonthCellEvents(date: Date, events: Event[], eventPositions: 
         .sort((a, b) => {
             if (a.isMultiDay && !b.isMultiDay) return -1;
             if (!a.isMultiDay && b.isMultiDay) return 1;
-            return a.position - b.position;
+
+            const posA = a.position === -1 ? 3 : a.position;
+            const posB = b.position === -1 ? 3 : b.position;
+            return posA - posB;
         });
 }

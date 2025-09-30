@@ -3,7 +3,7 @@ import daysInMonth, {
     numberOfDisplayedDaysOfNextMonth,
     numberOfDisplayedDaysOfPrevMonth
 } from "@/dateHelpers";
-import {endOfMonth, isSameDay, startOfMonth} from "date-fns";
+import {endOfMonth, startOfMonth} from "date-fns";
 import useEventStore from "@/EventStore.ts";
 import type {Event} from "@/types.ts";
 import DayCell from "@/Components/MonthViewComponents/DayCell.tsx";
@@ -25,14 +25,7 @@ export default function MonthViewContainer({date}: { date: Date }) {
 
     const allMonthEvents: Event[] = getEventsByDateRange(startOfMonth(date), endOfMonth(date));
 
-    const singleDayEvents = allMonthEvents.filter((event) =>
-        isSameDay(new Date(event.startDate), new Date(event.endDate))
-    )
-    const multiDayEvents = allMonthEvents.filter((event) =>
-        !isSameDay(new Date(event.startDate), new Date(event.endDate))
-    )
-
-    const eventPositions = calculateMonthEventPositions(multiDayEvents, singleDayEvents, date);
+    const eventPositions = calculateMonthEventPositions(allMonthEvents, date);
 
 
 
@@ -82,16 +75,43 @@ export default function MonthViewContainer({date}: { date: Date }) {
         <div className="grid grid-cols-7 w-full h-full">
             {/* Previous month trailing days */}
             {daysPrevMonthDisplayed.daysInMonth.splice(prevMonthDaysDisplayed).map((day, index) => (
-                <DayCell key={`before-${index}`} day={day} isFaded={true}
-                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>))}
+                <DayCell key={`before-${index}`} day={day} isFaded={true} isFirstCell={index === 0}
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+
+                ))}
             {/* Current month days */}
-            {days.daysInMonth.map((day, index) => (
-                <DayCell key={`current-${index}`} day={day} isFaded={false}
-                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>))}
+            {days.daysInMonth.map((day, index,array) => {
+                //if the start of month is current month
+                if(prevMonthDaysDisplayed===0 && nextMonthDaysDisplayed !==0) return(
+                    <DayCell key={`current-${index}`} day={day} isFaded={false} isFirstCell={index === 0}
+                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                )
+                //if the end of month is current month
+                else if (nextMonthDaysDisplayed===0 && prevMonthDaysDisplayed !==0)return(
+                <DayCell key={`current-${index}`} day={day} isFaded={false} isLastCell={index === array.length-1}
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                )
+                //if the start and the end of month is current month
+                else if (nextMonthDaysDisplayed===0 && prevMonthDaysDisplayed===0)
+                    return(
+                    <DayCell key={`current-${index}`} day={day} isFaded={false} isFirstCell={index===0} isLastCell={index === array.length-1}
+                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                )
+                    // if having a prevMonth days and nextMonth days
+                else return (
+                        <DayCell key={`current-${index}`} day={day} isFaded={false}
+                                 eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                    )
+            }
+            )}
             {/* Next month leading days */}
-            {daysNextMonthDisplayed.daysInMonth.slice(0, nextMonthDaysDisplayed).map((day, index) => (
-                <DayCell key={`after-${index}`} day={day} isFaded={true}
-                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>))}
+            {daysNextMonthDisplayed.daysInMonth.slice(0, nextMonthDaysDisplayed).map((day, index,array) => {
+                return (
+                    <DayCell key={`after-${index}`} day={day} isFaded={true} isLastCell={index === array.length - 1}
+                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+            )
+            }
+                )}
         </div>
     );
 }
