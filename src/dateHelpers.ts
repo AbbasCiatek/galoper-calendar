@@ -144,13 +144,13 @@ export function getMonthCellEvents(date: Date, events: Event[], eventPositions: 
             const isLastDay = isSameDay(date, eventEnd);
             const isMiddleDay = isMultiDay && !isFirstDay && !isLastDay;
 
+
             return {
                 ...event,
                 position: eventPositions[event.id] ?? -1,
                 isMultiDay,
                 isFirstDay,
                 isLastDay,
-                isMiddleDay,
             };
         })
         .sort((a, b) => {
