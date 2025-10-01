@@ -18,8 +18,8 @@ export function MultiDayEventDisplay({ event ,eventCurrentDay,eventTotalDays }: 
         blue: 'bg-blue-200 text-blue-800 border border-blue-500 ',
     }
     return (
-        <DraggableEvent event={event}>
-         <EventDetailsDialog event={event}>
+        // <DraggableEvent event={event}>
+        //  <EventDetailsDialog event={event}>
             <div className={  `flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer rounded-lg ${colorMap[event.color]} `}>
                  <p>
                 {eventCurrentDay && (
@@ -30,7 +30,7 @@ export function MultiDayEventDisplay({ event ,eventCurrentDay,eventTotalDays }: 
                 {event.title}
             </p>
             </div>
-        </EventDetailsDialog>
-            </DraggableEvent>
+        // </EventDetailsDialog>
+        //     </DraggableEvent>
     );
 }
