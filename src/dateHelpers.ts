@@ -58,6 +58,10 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
                 end:otherEvent.end,
             })
         )
+        const startBefore =overlapping.filter(otherEvent =>
+            otherEvent.start.getTime() < currentEvent.start.getTime(),
+        )
+        const biggerCount = startBefore.length;
             //container pixels = numberOfHours(24) * PIXELS_PER_HOUR
         console.log( `event:${currentEvent.event.title} ? ${overlapping.length} overlapping`);
         const containerPx = 24*96;
@@ -65,7 +69,7 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
         const width =lengthOfEvents<15 ? 100 / overlapCount :50 / overlapCount;
         const top = (currentEvent.startMinutes / 1440) * containerPx;
         const height = (currentEvent.durationMinutes / 1440) * containerPx;
-        const left =overlapping.length ? (lengthOfEvents<15 ? 10*index : 20*index ):0 ;
+        const left =overlapping.length ? (lengthOfEvents<15 ? 10*biggerCount : 20*biggerCount ):0 ;
         placed.push({ event: currentEvent.event, top, height, left, width });
     });
 
