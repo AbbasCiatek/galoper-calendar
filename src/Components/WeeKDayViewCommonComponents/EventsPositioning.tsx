@@ -23,7 +23,7 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
                             role="button"
                             tabIndex={0}
                             key={p.event.id}
-                            className={`border-2 rounded-lg ${styles} text-xs  absolute `}
+                            className={`border-2 rounded-lg ${styles} text-xs  absolute overflow-hidden`}
                             style={{
                                 top: `${p.top}px`,
                                 height: `${p.height}px`,
