@@ -55,6 +55,8 @@ export default function AddEditEventDialog({
     });
     const onSubmit:SubmitHandler<EventFormData> = (eventData:EventFormData) =>{
        try {
+           eventData.startDate.setSeconds(0,0)
+           eventData.endDate.setSeconds(0,0);
            const time24Hours = 24*60*60*1000;
            //if >24hrs true else false
            const isAllDay = (time24Hours) - (eventData.endDate.getTime() - eventData.startDate.getTime()) < 0;
