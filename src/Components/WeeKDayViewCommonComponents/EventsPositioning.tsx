@@ -18,20 +18,22 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
 
                 const styles=backgroundFromColor(p.event.color);
                 return(
-                    <div
-                        role="button"
-                        tabIndex={0}
-                        key={p.event.id}
-                        className={`border-2 rounded-lg ${styles} text-xs  absolute overflow-hidden text-ellipsis `}
-                        style={{
-                            top: `${p.top}%`,
-                            height: `${p.height}%`,
-                            left: `${p.left}%`,
-                            width: `${p.width}%`,
-                        }}
-                    >
-                        <EventBlock event={p.event}  />
-                    </div>
+
+                        <div
+                            role="button"
+                            tabIndex={0}
+                            key={p.event.id}
+                            className={`border-2 rounded-lg ${styles} text-xs  absolute `}
+                            style={{
+                                top: `${p.top}px`,
+                                height: `${p.height}px`,
+                                left: `${p.left}%`,
+                                width: `${p.width}%`,
+                            }}
+                        >
+                            <EventBlock event={p.event} height={p.height}  />
+                        </div>
+
                 )})}
         </>
     );
