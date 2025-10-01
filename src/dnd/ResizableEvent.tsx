@@ -4,7 +4,7 @@ import {Resizable, type ResizeCallback} from "re-resizable";
 import {addMinutes, differenceInMinutes, formatDate, isAfter, isBefore} from "date-fns";
 import useEventStore from "@/EventStore.ts";
 import {clsx} from "clsx";
-import {clipEvent, isClipped} from "@/dateHelpers.ts";
+import { isClipped} from "@/dateHelpers.ts";
 
 type Props = {
     event:Event,
@@ -40,16 +40,6 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
         () => differenceInMinutes(end,start),
         [start,end]);
 
-    const resizeBoundaries = useMemo(() => {
-        const dayStart = new Date(selectedDate);
-        dayStart.setHours(0, 0, 0, 0);
-
-        const dayEnd = new Date(selectedDate);
-        dayEnd.setHours(23, 59, 59, 999);
-
-        return { dayStart, dayEnd };
-    }, [selectedDate]);
-
     const handleResizeStart = useCallback(() => {
         setIsResizing(true);
     }, []);
@@ -57,7 +47,7 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
     const handleResize:ResizeCallback = useCallback(
         (_, direction,ref)=>{
             const newHeight = parseInt(ref.style.height,10);
-            const newDuration = Math.max(MIN_DURATION,(newHeight + 8)*MINUTES_PER_PIXEL);
+            const newDuration = Math.max(MIN_DURATION,(newHeight)*MINUTES_PER_PIXEL);
             const delta = newDuration - durationInMinutes;
 
             let newStart = start;
@@ -67,14 +57,6 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
                 newStart = addMinutes(start, -delta);
             } else if (direction.includes("bottom")) {
                 newEnd = addMinutes(end, delta);
-            }
-            //ensure in day
-            // may be deleted it in future
-            if (isBefore(newStart, resizeBoundaries.dayStart)) {
-                newStart = resizeBoundaries.dayStart;
-            }
-            if (isAfter(newEnd, resizeBoundaries.dayEnd)) {
-                newEnd = resizeBoundaries.dayEnd;
             }
 
             setResizePreview({
@@ -86,12 +68,7 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
 
             editEvent(event.id, { startDate: newStart, endDate: newEnd, isAllDay });
         },
-        [   start,
-            end,
-            durationInMinutes,
-            resizeBoundaries,
-            editEvent,
-            event,]
+        [start, end, durationInMinutes, editEvent, event]
     );
 
     const handleResizeStop = useCallback(() => {
@@ -104,8 +81,8 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
             minHeight: 15,
             maxHeight: 2304,
             enable:{
-                top:true,
-                bottom:true,
+                top:!clippedStart,
+                bottom:!clippedEnd,
                 topRight: false,
                 bottomRight: false,
                 bottomLeft: false,
@@ -136,7 +113,7 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
             className:clsx("transition-all duration-200",
                 isResizing && "z-50 shadow-lg"),
         }),
-        [isResizing,handleResize,handleResizeStart,handleResizeStop],
+        [clippedStart, clippedEnd, handleResizeStart, handleResize, handleResizeStop, isResizing],
     )
 
     console.log(resizePreview);
@@ -158,3 +135,5 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
         </div>
     );
 }
+
+
