@@ -4,8 +4,8 @@ import {formatDate} from "date-fns";
 export default function EventBlock({event}: { event:Event }) {
 
     return (
-        <DraggableEvent event={event}>
-            <EventDetailsDialog event={event}>
+        // <DraggableEvent event={event}>
+        //     <EventDetailsDialog event={event}>
         <div >
             <div className="truncate font-semibold">
                 {event.title}
@@ -14,7 +14,7 @@ export default function EventBlock({event}: { event:Event }) {
                {`${formatDate(event.startDate, " hh:mm a")} - ${formatDate(event.endDate, "hh:mm a")}`}
             </div>
         </div>
-                </EventDetailsDialog>
-            </DraggableEvent>
+                // </EventDetailsDialog>
+            // </DraggableEvent>
     )
 }

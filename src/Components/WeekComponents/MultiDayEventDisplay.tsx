@@ -27,13 +27,13 @@ export function MultiDayEventDisplay({ event, position }: Props) {
     }[position];
 
     return (
-        <DraggableEvent event={event}>
-            <EventDetailsDialog event={event}>
+        // <DraggableEvent event={event}>
+        //     <EventDetailsDialog event={event}>
         <div className={  `  flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer ${positionClasses}  ${colorMap[event.color]} `}>
             {position === "first" || position === "none" ? event.title : null}
         </div>
-                </EventDetailsDialog>
-            </DraggableEvent>
+                // </EventDetailsDialog>
+            // </DraggableEvent>
 
     );
 }
