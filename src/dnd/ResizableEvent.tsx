@@ -1,25 +1,32 @@
 import type {Event} from "@/types.ts";
 import {type ReactNode, useCallback, useMemo, useState} from "react";
 import {Resizable, type ResizeCallback} from "re-resizable";
-import { differenceInMinutes} from "date-fns";
+import {addMinutes, differenceInMinutes, formatDate, isAfter, isBefore} from "date-fns";
 import useEventStore from "@/EventStore.ts";
 import {clsx} from "clsx";
+import {clipEvent, isClipped} from "@/dateHelpers.ts";
 
 type Props = {
     event:Event,
     children:ReactNode,
     selectedDate:Date;
+    height?:number;
 }
 
 const PIXELS_PER_HOUR = 96;
 const MINUTES_PER_PIXEL = 60 / PIXELS_PER_HOUR;
 const MIN_DURATION = 15; // in minutes
 
-export default function ResizableEvent({event,children,selectedDate}:Props){
+export default function ResizableEvent({event,children,selectedDate,height}:Props){
 
     const {editEvent} = useEventStore();
 
-    console.log(selectedDate);//will use to see if the end or start date is the same day as selectedDate can get from hook
+    //will use to see if the end or start date is the same day as selectedDate can get from hook
+
+    const {clippedStart,clippedEnd} = isClipped(event,selectedDate);
+
+
+
     const [isResizing, setIsResizing] = useState(false);
     const [resizePreview, setResizePreview] = useState<{
         start:string,
@@ -71,13 +78,13 @@ export default function ResizableEvent({event,children,selectedDate}:Props){
             }
 
             setResizePreview({
-                start: format(newStart, "HH:mm"),
-                end: format(newEnd,  "HH:mm"),
+                start: formatDate(newStart, "HH:mm"),
+                end: formatDate(newEnd,  "HH:mm"),
             });
 
             const isAllDay = 24*60*60*1000 -(end.getTime()-start.getTime()) <0;
 
-            editEvent(event.id,{startDate:start,endDate:end,isAllDay:isAllDay});
+            editEvent(event.id, { startDate: newStart, endDate: newEnd, isAllDay });
         },
         [   start,
             end,
@@ -95,7 +102,7 @@ export default function ResizableEvent({event,children,selectedDate}:Props){
     const resizeConfig = useMemo(
         ()=>({
             minHeight: 15,
-            maxHeight: 1440,
+            maxHeight: 2304,
             enable:{
                 top:true,
                 bottom:true,
@@ -108,15 +115,15 @@ export default function ResizableEvent({event,children,selectedDate}:Props){
             handleStyles: {
                 top: {
                     cursor: "ns-resize",
-                    height: "8px",
+                    height: "10px",
                     top: "-4px",
-                    backgroundColor: "transparent",
+                    backgroundColor: "border-2 border-gray-700",
                 },
                 bottom: {
                     cursor: "ns-resize",
-                    height: "8px",
+                    height: "10px",
                     bottom: "-4px",
-                    backgroundColor: "transparent",
+                    backgroundColor: "border-2 border-gray-700",
                 },
             },
             handleClasses: {
@@ -132,18 +139,22 @@ export default function ResizableEvent({event,children,selectedDate}:Props){
         [isResizing,handleResize,handleResizeStart,handleResizeStop],
     )
 
-
+    console.log(resizePreview);
+    console.log(isResizing);
     return (
-        <div className={clsx("relative group",className)} >
-            <Resizable {...resizeConfig}>
+        <div className="relative group" >
+            <Resizable
+                defaultSize={{width:"100%", height:height}}
+                {...resizeConfig}>
                 {children}
             </Resizable>
-            {isResizing && resizePreview && (
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs shadow-lg px-2 py-1 rounded z-50 whitespace-nowrap " >
+            { resizePreview && (
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2
+		   bg-gray-900 text-white text-xs px-2 py-1
+		   rounded shadow-lg z-50 whitespace-nowrap"  >
                     {resizePreview.end} - {resizePreview.start}
                 </div>
             )}
         </div>
     );
 }
-
