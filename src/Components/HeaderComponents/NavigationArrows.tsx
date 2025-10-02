@@ -21,24 +21,24 @@ export default function NavigationArrows() {
         console.log(date);
     }
     return (
-        <div>
-            <Button
-                variant="secondary"
-                size="icon"
-                className="size-8 cursor-pointer"
-                onClick={()=>{handleLeftClick(view,date)}}
-            >
-                <ChevronLeftIcon/>
-            </Button>
-            <span className="text-gray-500" >{rangeDisplayer(view,date)}</span>
-            <Button
-                variant="secondary"
-                size="icon"
-                className="size-8 cursor-pointer "
-                onClick={()=>{handleRightClick(view,date)}}
-            >
-            <ChevronRightIcon />
-            </Button>
-        </div>
+            <div>
+                <Button
+                    variant="secondary"
+                    size="icon"
+                    className="size-8 cursor-pointer"
+                    onClick={()=>{handleLeftClick(view,date)}}
+                >
+                    <ChevronLeftIcon/>
+                </Button>
+                <span className="text-gray-500" >{rangeDisplayer(view,date)}</span>
+                <Button
+                    variant="secondary"
+                    size="icon"
+                    className="size-8 cursor-pointer "
+                    onClick={()=>{handleRightClick(view,date)}}
+                >
+                <ChevronRightIcon />
+                </Button>
+            </div>
     )
 }
