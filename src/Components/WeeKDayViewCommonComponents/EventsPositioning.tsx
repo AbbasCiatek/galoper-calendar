@@ -1,7 +1,7 @@
 import type {Events} from "@/types.ts";
 import {positionEventsWeekDayView} from "@/dateHelpers.ts";
 import EventBlock from "@/Components/WeeKDayViewCommonComponents/EventBlock.tsx";
-import {backgroundFromColor} from "@/helpers.ts";
+import  {colorMap} from "@/helpers.ts";
 
 type Props= {
     singleDayEvents: Events,
@@ -16,7 +16,7 @@ export default function EventsPositioning({singleDayEvents,day}: Props) {
         <>
             {positioning.map(p=>{
 
-                const styles=backgroundFromColor(p.event.color);
+                const styles=colorMap[p.event.color]
                 return(
                     <div
                         role="button"
