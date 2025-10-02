@@ -1,4 +1,5 @@
 import type {Event} from "@/types.ts";
+import {colorMap} from "@/helpers.ts";
 
 interface Props {
     event: Event;
@@ -8,19 +9,11 @@ interface Props {
 
 export function MultiDayEventDisplay({ event ,eventCurrentDay,eventTotalDays }: Props) {
 
-    const colorMap:Record<string, string>={
-        red: 'bg-red-200 text-red-800 border border-red-500 ',
-        green: 'bg-green-200 text-green-800 border border-green-500 ',
-        orange: 'bg-orange-200 text-orange-800 border border-orange-500 ',
-        yellow: 'bg-yellow-200 text-yellow-800 border border-yellow-500 ',
-        purple: 'bg-purple-200 text-purple-800 border border-purple-500 ',
-        gray: 'bg-gray-200 text-gray-800 border border-gray-500 ',
-        blue: 'bg-blue-200 text-blue-800 border border-blue-500 ',
-    }
+    const eventStyle = colorMap[event.color];
     return (
         // <DraggableEvent event={event}>
         //  <EventDetailsDialog event={event}>
-            <div className={  `flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer rounded-lg ${colorMap[event.color]} `}>
+            <div className={  `flex items-center h-6.5 px-2 text-xs font-medium truncate cursor-pointer rounded-lg ${eventStyle} `}>
                  <p>
                 {eventCurrentDay && (
                     <span className="text-xs">

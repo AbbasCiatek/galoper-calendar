@@ -1,12 +1,12 @@
-import type {Event} from "@/types.ts";
+import  type {Event} from "@/types.ts";
 import {formatDate} from "date-fns";
-import ResizableEvent from "@/Components/ResizableEvent.tsx";
+//import ResizableEvent from "@/Components/ResizableEvent.tsx";
 // import ResizableEvent from "@/Components/ResizableEvent.tsx";
 
 export default function EventBlock({event,height}: { event:Event ,height:number }) {
 
     return (
-        <ResizableEvent event={event} height={height} selectedDate={new Date()}>
+        // <ResizableEvent event={event} height={height} selectedDate={new Date()}>
         <div className=" overflow-hidden text-ellipsis" >
             <div className="truncate font-semibold">
                 {event.title}
@@ -15,6 +15,6 @@ export default function EventBlock({event,height}: { event:Event ,height:number 
                 {`${formatDate(event.startDate, " hh:mm a")} - ${formatDate(event.endDate, "hh:mm a")}`}
             </div>
         </div>
-         </ResizableEvent>
+       //  </ResizableEvent>
     )
 }
