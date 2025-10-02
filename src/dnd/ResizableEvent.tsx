@@ -1,7 +1,7 @@
 import type {Event} from "@/types.ts";
 import {type ReactNode, useCallback, useMemo, useState} from "react";
 import {Resizable, type ResizeCallback} from "re-resizable";
-import {addMinutes, differenceInMinutes, formatDate, isAfter, isBefore} from "date-fns";
+import {addMinutes, differenceInMinutes, formatDate} from "date-fns";
 import useEventStore from "@/EventStore.ts";
 import {clsx} from "clsx";
 import { isClipped} from "@/dateHelpers.ts";
@@ -115,9 +115,6 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
         }),
         [clippedStart, clippedEnd, handleResizeStart, handleResize, handleResizeStop, isResizing],
     )
-
-    console.log(resizePreview);
-    console.log(isResizing);
     return (
         <div className="relative group" >
             <Resizable
@@ -125,13 +122,6 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
                 {...resizeConfig}>
                 {children}
             </Resizable>
-            { resizePreview && (
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2
-		   bg-gray-900 text-white text-xs px-2 py-1
-		   rounded shadow-lg z-50 whitespace-nowrap"  >
-                    {resizePreview.end} - {resizePreview.start}
-                </div>
-            )}
         </div>
     );
 }
