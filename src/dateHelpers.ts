@@ -47,7 +47,7 @@ export function positionEventsWeekDayView  (events:Event[], day:Date ) {
     clippedEvents.sort((a, b) => a.start.getTime() - b.start.getTime());
     const placed: PositionedEvent[] = [];
     const lengthOfEvents =clippedEvents.length
-    clippedEvents.forEach((currentEvent,index) => {
+    clippedEvents.forEach((currentEvent) => {
         const overlapping = clippedEvents.filter(otherEvent =>
         otherEvent.start !== currentEvent.start &&
             areIntervalsOverlapping({
