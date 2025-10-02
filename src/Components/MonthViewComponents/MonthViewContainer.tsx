@@ -25,8 +25,7 @@ export default function MonthViewContainer({date}: { date: Date }) {
 
     const allMonthEvents: Event[] = getEventsByDateRange(startOfMonth(date), endOfMonth(date));
 
-    const eventPositions = calculateMonthEventPositions(allMonthEvents, date);
-
+    const {eventPositions,occupiedPositions} = calculateMonthEventPositions(allMonthEvents, date);
 
 
     return (
@@ -76,7 +75,7 @@ export default function MonthViewContainer({date}: { date: Date }) {
             {/* Previous month trailing days */}
             {daysPrevMonthDisplayed.daysInMonth.splice(prevMonthDaysDisplayed).map((day, index) => (
                 <DayCell key={`before-${index}`} day={day} isFaded={true} isFirstCell={index === 0}
-                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)} occupiedPositions={occupiedPositions}/>
 
                 ))}
             {/* Current month days */}
@@ -84,23 +83,23 @@ export default function MonthViewContainer({date}: { date: Date }) {
                 //if the start of month is current month
                 if(prevMonthDaysDisplayed===0 && nextMonthDaysDisplayed !==0) return(
                     <DayCell key={`current-${index}`} day={day} isFaded={false} isFirstCell={index === 0}
-                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)} occupiedPositions={occupiedPositions}/>
                 )
                 //if the end of month is current month
                 else if (nextMonthDaysDisplayed===0 && prevMonthDaysDisplayed !==0)return(
                 <DayCell key={`current-${index}`} day={day} isFaded={false} isLastCell={index === array.length-1}
-                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                         eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)} occupiedPositions={occupiedPositions}/>
                 )
                 //if the start and the end of month is current month
                 else if (nextMonthDaysDisplayed===0 && prevMonthDaysDisplayed===0)
                     return(
                     <DayCell key={`current-${index}`} day={day} isFaded={false} isFirstCell={index===0} isLastCell={index === array.length-1}
-                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)} occupiedPositions={occupiedPositions}/>
                 )
                     // if having a prevMonth days and nextMonth days
                 else return (
                         <DayCell key={`current-${index}`} day={day} isFaded={false}
-                                 eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                                 eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)} occupiedPositions={occupiedPositions}/>
                     )
             }
             )}
@@ -108,7 +107,7 @@ export default function MonthViewContainer({date}: { date: Date }) {
             {daysNextMonthDisplayed.daysInMonth.slice(0, nextMonthDaysDisplayed).map((day, index,array) => {
                 return (
                     <DayCell key={`after-${index}`} day={day} isFaded={true} isLastCell={index === array.length - 1}
-                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)}/>
+                             eventsForDay={getMonthCellEvents(day, allMonthEvents, eventPositions)} occupiedPositions={occupiedPositions}/>
             )
             }
                 )}

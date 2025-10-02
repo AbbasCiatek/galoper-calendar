@@ -98,8 +98,32 @@ export function calculateMonthEventPositions(events:Event[], selectedDate: Date)
         }
     });
 
-    return eventPositions;
+    return {eventPositions,occupiedPositions};
 }
+export function unassignedPosition(event:(Event & {position:number}),date:Date,occupiedPositions:{ [p: string]: boolean[] }){
+    if (event.position ===-1){
+        let position = -1;
+        const dayPositions = occupiedPositions[startOfDay(date).toISOString()];
+        for (let i = 0; i < 3; i++) {
+            if (dayPositions && !dayPositions[i])
+            {
+                position = i;
+                break;
+            }
+        }
+
+        if (position !== -1) {
+                const dayKey = startOfDay(date).toISOString();
+                occupiedPositions[dayKey][position] = true;
+            }
+            event.position = position;
+        }
+
+}
+
+
+
+
 
 export function getMonthCellEvents(date: Date, events: Event[], eventPositions: Record<string, number>) {
     const eventsForDate = events.filter(event => {
