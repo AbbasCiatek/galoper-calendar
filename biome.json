@@ -1,0 +1,60 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": ["./src/**/*.js", "./src/**/*.jsx"],
+    "rules": {
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "warn"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "warn",
+        "useAwait": "error",
+        "noDuplicateParameters": "error",
+        "noConsoleLog": "error"
+      },
+      "complexity": {
+        "noForEach": "off",
+        "useSimplifiedLogicExpression": "off"
+      },
+      "style": {
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": { "syntax": "generic" }
+        },
+        "noParameterAssign": "warn"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      }
+    }
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": ["node_modules/**/*", "dist/**/*"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "json": {
+    "parser": {
+      "allowTrailingCommas": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  }
+}
