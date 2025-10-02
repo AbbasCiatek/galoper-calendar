@@ -136,4 +136,3 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
     );
 }
 
-
