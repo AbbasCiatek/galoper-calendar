@@ -1,14 +1,14 @@
 import CalendarHeader from "@/Components/calendar-header.tsx";
-import {CalendarContextProvider} from "@/context/calendar-context.tsx";
-import MonthView from "@/Components/MonthView.tsx";
+import MonthView from "@/Components/month-view";
+import { CalendarContextProvider } from "@/context/calendar-context.tsx";
 
 function App() {
-  return (
-    <CalendarContextProvider>
-      <CalendarHeader/>
-      <MonthView/>
-    </CalendarContextProvider>
-  )
+	return (
+		<CalendarContextProvider>
+			<CalendarHeader />
+			<MonthView />
+		</CalendarContextProvider>
+	);
 }
 
-export default App
+export default App;
