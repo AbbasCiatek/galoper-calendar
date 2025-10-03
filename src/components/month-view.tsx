@@ -1,3 +1,11 @@
+import WeekDaysDisplay from "@/Components/MonthViewComponents/week-days-display.tsx";
+
 export default function MonthView() {
-  return <div className="border rounded-b-2xl" />;
+	return (
+		<div className="shadow-lg">
+			<div className="grid grid-cols-7 text-xl">
+				<WeekDaysDisplay />
+			</div>
+		</div>
+	);
 }
