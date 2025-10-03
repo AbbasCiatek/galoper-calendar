@@ -1,5 +1,14 @@
+import { clsx } from "clsx";
+import { useCalendar } from "@/context/calendar-context.tsx";
+
 export default function CalendarHeader() {
-  return (
-    <div className="flex items-center border p-5 m-5 rounded-t-2xl"/>
-  )
+	const { view } = useCalendar();
+	return (
+		<div
+			className={clsx(
+				"flex items-center border p-5 rounded-t-2xl",
+				view === "month" && "border-b-0",
+			)}
+		/>
+	);
 }
