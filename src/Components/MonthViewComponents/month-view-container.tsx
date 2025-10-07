@@ -40,7 +40,7 @@ export default function MonthViewContainer() {
 
 	return (
 		<div className="grid grid-cols-7 w-full h-full">
-			{/* Previous month trailing days */}
+
 			{daysPrevMonthDisplayed.daysInMonth
 				.splice(prevMonthDaysDisplayed)
 				.map((day, index) => (
@@ -57,7 +57,7 @@ export default function MonthViewContainer() {
 						occupiedPositions={occupiedPositions}
 					/>
 				))}
-			{/* Current month days */}
+
 			{days.daysInMonth.map((day, index, array) => {
 				//if the start of month is current month
 				if (prevMonthDaysDisplayed === 0 && nextMonthDaysDisplayed !== 0)
@@ -124,7 +124,7 @@ export default function MonthViewContainer() {
 						/>
 					);
 			})}
-			{/* Next month leading days */}
+
 			{daysNextMonthDisplayed.daysInMonth
 				.slice(0, nextMonthDaysDisplayed)
 				.map((day, index, array) => {
