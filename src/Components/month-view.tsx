@@ -2,10 +2,8 @@ import MonthViewContainer from "@/Components/MonthViewComponents/month-view-cont
 
 export default function MonthView() {
 	return (
-		<div className="shadow-lg">
-			<div className="grid grid-cols-7 text-xl">
-				<MonthViewContainer />
-			</div>
+		<div className="shadow-lg border border-t-0 rounded-b-2xl">
+			<MonthViewContainer />
 		</div>
 	);
 }
