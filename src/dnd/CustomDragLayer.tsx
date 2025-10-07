@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useDragLayer } from "react-dnd";
 import type { Event } from "@/types.ts";
 
@@ -38,7 +38,7 @@ export default function CustomDragLayer() {
 	const offsetX = initialClientOffset.x - initialOffset.x;
 	const offsetY = initialClientOffset.y - initialOffset.y;
 
-	const layerStyles: React.CSSProperties = {
+	const layerStyles: CSSProperties = {
 		position: "fixed",
 		pointerEvents: "none",
 		zIndex: 100,
