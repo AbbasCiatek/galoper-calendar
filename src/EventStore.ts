@@ -1,8 +1,17 @@
-import type {EventsStore} from "@/types.ts";
+import type {Event} from "@/types.ts";
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
 import {areIntervalsOverlapping} from "date-fns";
 
+type EventsStore = {
+    events: Event[];
+    getSingleDayEvents:(startDate:Date,endDate:Date)=>Event[];
+    getMultipleDayEvents:(startDate:Date,endDate:Date)=>Event[];
+    getEventsByDateRange: (startDate:Date, endDate:Date) => Event[];
+    addEvent: (event: Event) => void;
+    editEvent: (id: string, edited: Partial<Event>) => void;
+    removeEvent: (id: string) => void;
+};
 
 const useEventStore = create<EventsStore>()(
     persist(

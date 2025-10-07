@@ -4,7 +4,7 @@ import DateDisplayLayout from "@/Components/WeeKDayViewCommonComponents/date-dis
 
 export default function DayView() {
 	return (
-		<div className="flex flex-col border">
+		<div className="flex flex-col border border-b-0 rounded-b-2xl ">
 			<div>
 				<DateDisplayLayout>
 					<DayDisplay />
