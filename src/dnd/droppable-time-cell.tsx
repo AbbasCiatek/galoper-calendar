@@ -1,7 +1,7 @@
 import { differenceInMilliseconds } from "date-fns";
 import type { ReactNode, RefObject } from "react";
 import { useDrop } from "react-dnd";
-import { ItemTypes } from "@/dnd/DraggableEvents";
+import { ItemTypes } from "@/dnd/draggable-events.tsx";
 import useEventStore from "@/EventStore.ts";
 import { cn } from "@/lib/utils";
 import type { Event } from "@/types.ts";
