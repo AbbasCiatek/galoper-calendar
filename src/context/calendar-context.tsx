@@ -1,6 +1,7 @@
 import {createContext, type Dispatch, type ReactNode, type SetStateAction, useContext, useState} from "react";
 import type {ViewTypes} from "@/types.ts";
 
+
 export type CalendarContext = {
   date: Date,
   setDate: Dispatch<SetStateAction<Date>>
@@ -9,6 +10,7 @@ export type CalendarContext = {
 }
 
 export const CalendarContext = createContext<CalendarContext | null>(null);
+
 
 export function useCalendar(): CalendarContext {
   const context = useContext(CalendarContext);
