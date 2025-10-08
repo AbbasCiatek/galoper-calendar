@@ -1,5 +1,5 @@
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
-import {type ReactNode, useState} from "react";
+import {type ReactNode, useEffect, useState} from "react";
 import type {Event} from "@/types.ts";
 import {DialogTitle} from "@radix-ui/react-dialog";
 import {Calendar, Clock,Text} from "lucide-react";
@@ -28,7 +28,15 @@ export default function EventDetailsDialog({children,event}: EventDetailsDialogP
         removeEvent(event.id);
         toast.error(` Event ${event.id} Deleted!`);
     }
-
+    useEffect(() => {
+        const down = (e: KeyboardEvent) => {
+            if (e.key === "Delete" ) {
+                handleDeleteButton(event);
+            }
+        }
+        document.addEventListener("keydown", down)
+        return () => document.removeEventListener("keydown", down)
+    }, [])
 
     return (
         <Dialog open={isOpen} onOpenChange={onToggle} >
