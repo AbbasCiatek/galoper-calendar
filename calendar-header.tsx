@@ -1,5 +1,5 @@
-import MonthYearDisplay from "@/Components/HeaderComponents/month-year-display.tsx";
-import NavigationArrows from "@/Components/HeaderComponents/navigation-arrows.tsx";
+import MonthYearDisplay from "@/Components/header-components/month-year-display.tsx";
+import NavigationArrows from "@/Components/header-components/navigation-arrows.tsx";
 
 export default function CalendarHeader() {
 	return (
