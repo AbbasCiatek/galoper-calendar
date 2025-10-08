@@ -1,16 +1,21 @@
-import {createContext, type Dispatch, type ReactNode, type SetStateAction, useContext, useState} from "react";
-import type {ViewTypes} from "@/types.ts";
-
+import type { ViewTypes } from "@/types.ts";
+import {
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 
 export type CalendarContext = {
-  date: Date,
-  setDate: Dispatch<SetStateAction<Date>>
-  view: ViewTypes
-  setView: Dispatch<SetStateAction<ViewTypes>>
-}
+  date: Date;
+  setDate: Dispatch<SetStateAction<Date>>;
+  view: ViewTypes;
+  setView: Dispatch<SetStateAction<ViewTypes>>;
+};
 
 export const CalendarContext = createContext<CalendarContext | null>(null);
-
 
 export function useCalendar(): CalendarContext {
   const context = useContext(CalendarContext);
@@ -21,7 +26,7 @@ export function useCalendar(): CalendarContext {
   return context;
 }
 
-export function CalendarContextProvider({children}: { children: ReactNode }) {
+export function CalendarContextProvider({ children }: { children: ReactNode }) {
   const [date, setDate] = useState<Date>(new Date());
   const [view, setView] = useState<ViewTypes>("day");
 
@@ -31,8 +36,9 @@ export function CalendarContextProvider({children}: { children: ReactNode }) {
         date,
         setDate,
         view,
-        setView
-      }}>
+        setView,
+      }}
+    >
       {children}
     </CalendarContext.Provider>
   );
