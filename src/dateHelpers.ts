@@ -1,13 +1,16 @@
+import useEventStore from "@/EventStore.ts";
 import type { ViewTypes } from "@/types.ts";
 import {
   addDays,
   addMonths,
   addWeeks,
   addYears,
+  endOfDay,
   endOfMonth,
   endOfWeek,
   endOfYear,
   formatDate,
+  startOfDay,
   startOfMonth,
   startOfWeek,
   startOfYear,
@@ -80,4 +83,23 @@ export function rangeDisplayer(view: ViewTypes, date: Date) {
   }
 
   return `${formatDate(start, formatString)} - ${formatDate(end, formatString)}`;
+}
+
+export function getNumberOfEvents(date: Date, view: ViewTypes) {
+  const { getEventsByDateRange } = useEventStore();
+  switch (view) {
+    case "agenda":
+      return getEventsByDateRange(startOfMonth(date), endOfMonth(date)).length;
+    case "year":
+      return getEventsByDateRange(startOfYear(date), endOfYear(date)).length;
+    case "month":
+      return getEventsByDateRange(startOfMonth(date), endOfMonth(date)).length;
+    case "week":
+      return getEventsByDateRange(
+        startOfWeek(date, { weekStartsOn: 1 }),
+        endOfWeek(date, { weekStartsOn: 1 }),
+      ).length;
+    case "day":
+      return getEventsByDateRange(startOfDay(date), endOfDay(date)).length;
+  }
 }
