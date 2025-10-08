@@ -1,3 +1,4 @@
+import type { ViewTypes } from "@/types.ts";
 import {
   addDays,
   addMonths,
@@ -15,39 +16,38 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-import type {ViewTypes} from "@/types.ts";
 
 export function DateAdderFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
-      return (date = addMonths(date, 1));
+      return addMonths(date, 1);
     case "year":
-      return (date = addYears(date, 1));
+      return addYears(date, 1);
     case "month":
-      return (date = addMonths(date, 1));
+      return addMonths(date, 1);
     case "week":
-      return (date = addWeeks(date, 1));
+      return addWeeks(date, 1);
     case "day":
-      return (date = addDays(date, 1));
+      return addDays(date, 1);
     default:
-      return (date = addMonths(date, 1));
+      return addMonths(date, 1);
   }
 }
 
 export function DateSubtracterFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
-      return (date = subMonths(date, 1));
+      return subMonths(date, 1);
     case "year":
-      return (date = subYears(date, 1));
+      return subYears(date, 1);
     case "month":
-      return (date = subMonths(date, 1));
+      return subMonths(date, 1);
     case "week":
-      return (date = subWeeks(date, 1));
+      return subWeeks(date, 1);
     case "day":
-      return (date = subDays(date, 1));
+      return subDays(date, 1);
     default:
-      return (date = subMonths(date, 1));
+      return subMonths(date, 1);
   }
 }
 
@@ -70,8 +70,8 @@ export function rangeDisplayer(view: ViewTypes, date: Date) {
       end = endOfMonth(date);
       break;
     case "week":
-      start = startOfWeek(date, {weekStartsOn: 1});
-      end = endOfWeek(date, {weekStartsOn: 1});
+      start = startOfWeek(date, { weekStartsOn: 1 });
+      end = endOfWeek(date, { weekStartsOn: 1 });
       break;
     case "day":
       return formatDate(date, formatString);

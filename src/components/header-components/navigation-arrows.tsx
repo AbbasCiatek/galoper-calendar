@@ -14,12 +14,10 @@ export default function NavigationArrows() {
 	const handleLeftClick = (view: ViewTypes, date: Date) => {
 		date = DateSubtracterFunction(view, date);
 		setDate(date);
-		console.log(date);
 	};
 	const handleRightClick = (view: ViewTypes, date: Date) => {
 		date = DateAdderFunction(view, date);
 		setDate(date);
-		console.log(date);
 	};
 	return (
 		<div>
