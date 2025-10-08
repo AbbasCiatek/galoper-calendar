@@ -27,7 +27,7 @@ export default function ResizableEvent({event,children,selectedDate,height}:Prop
 
 
 
-    const [isResiqzing, setIsResizing] = useState(false);
+    const [isResizing, setIsResizing] = useState(false);
     const [resizePreview, setResizePreview] = useState<{
         start:string,
         end:string,
