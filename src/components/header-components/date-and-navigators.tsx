@@ -6,7 +6,7 @@ import {
   DateSubtracterFunction,
   getNumberOfEvents,
   rangeDisplayer,
-} from "@/dateHelpers.ts";
+} from "@/lib/date-helpers.ts";
 import type { ViewTypes } from "@/types.ts";
 import { formatDate } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
