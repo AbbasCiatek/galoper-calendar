@@ -88,7 +88,7 @@ export default function ViewChangerCreateEventButton() {
               key={value}
               className={clsx(
                 "flex gap-2",
-                isActive && "text-gray-800 dark:text-gray-white",
+                isActive && "text-gray-800 dark:text-white",
               )}
               onClick={() => handleViewClick(value as ViewTypes)}
               initial={false}
