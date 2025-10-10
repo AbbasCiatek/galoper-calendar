@@ -1,4 +1,4 @@
-import MonthContainers from "@/Components/month-containers.tsx";
+import MonthContainers from "@/components/year-view-components/month-containers.tsx";
 
 export default function YearView() {
   return (

@@ -19,7 +19,34 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
+export function numberOfDisplayedDaysOfNextMonth(
+  daysOfCurrentMonth: Array<Date>,
+  indexOfCurrentMonthInWeekdays: number,
+) {
+  const lengthOfCurrentMonth = daysOfCurrentMonth.length;
+  if (lengthOfCurrentMonth + indexOfCurrentMonthInWeekdays > 35)
+    return 42 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
+  return 35 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
+}
 
+export function arrayOfDaysOfNextMonth(date: Date) {
+  const nextMonth = addMonths(date, 1);
+  return daysInMonth(nextMonth);
+}
+export function arrayOfDaysOfPrevMonth(date: Date) {
+  const prevMonth = subMonths(date, 1);
+  return daysInMonth(prevMonth);
+}
+
+export function numberOfDisplayedDaysOfPrevMonth(
+  currentDate: Date,
+  indexOfCurrentMonthInWeekdays: number,
+) {
+  return (
+    arrayOfDaysOfPrevMonth(currentDate).daysInMonth.length -
+    indexOfCurrentMonthInWeekdays
+  );
+}
 export function DateAdderFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
@@ -105,13 +132,13 @@ export function getNumberOfEvents(date: Date, view: ViewTypes) {
 export function daysInMonth(date: Date) {
   const firstDayOfMonth = startOfMonth(date);
   const lastDayOfMonth = endOfMonth(date);
-  const firstDayIndex = getDay(firstDayOfMonth);
+  const indexOfFirstDay = (getDay(firstDayOfMonth) + 6) % 7;
   const daysInMonth = eachDayOfInterval({
     start: firstDayOfMonth,
     end: lastDayOfMonth,
   });
 
-  return { daysInMonth, firstDayIndex };
+  return { daysInMonth, indexOfFirstDay };
 }
 
 export function getArrayMonth(date: Date) {
