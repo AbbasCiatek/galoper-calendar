@@ -1,3 +1,5 @@
+import useEventStore from "@/EventStore.ts";
+import { EventBullet } from "@/components/events/event-bullet.tsx";
 import { useCalendar } from "@/context/calendar-context";
 import { WeekDays } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
@@ -12,6 +14,12 @@ export function DaysInMonth({ month }: { month: Date }) {
   const handleDayClick = (date: Date) => {
     setDate(date);
   };
+
+  const { getEventsByDateRange } = useEventStore();
+  const monthlyEvents: Array<Event> = getEventsByDateRange(
+    startOfMonth(month),
+    endOfMonth(month),
+  );
 
   return (
     <div className="grid grid-cols-7 gap-6 m-4">
@@ -40,6 +48,24 @@ export function DaysInMonth({ month }: { month: Date }) {
             )}
           >
             {formatDate(cell.day, "d")}
+            {dayEvent.length > 1 ? (
+              <div className="flex flex-col justify-center items-center">
+                {/*<EventListDialog events={dayEvent} date={day}>*/}
+                <EventBullet color={dayEvent[0].color} />
+                <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
+                  +{dayEvent.length - 1}
+                </span>
+                {/*</EventListDialog>*/}
+              </div>
+            ) : (
+              dayEvent.length > 0 && (
+                <div className="flex flex-col justify-center items-center">
+                  {/*<EventDetailsDialog event={dayEvent[0]}>*/}
+                  <EventBullet color={dayEvent[0].color} />
+                  {/*</EventDetailsDialog>*/}
+                </div>
+              )
+            )}
           </button>
         );
       })}
