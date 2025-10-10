@@ -13,10 +13,10 @@ export default function MonthContainers() {
       {months.map((month) => (
         <div
           key={formatDate(month, "MMM")}
-          className="flex flex-col border m-2 shadow-lg rounded-b-2xl "
+          className="flex flex-col border m-2 shadow-lg rounded-2xl "
         >
+          <MonthNameDisplayer month={month} />
           <DaysInMonth month={month} />
-          <MonthNameDisplayer key={formatDate(month, "MMM")} month={month} />
         </div>
       ))}
     </div>
