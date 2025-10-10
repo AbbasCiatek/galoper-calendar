@@ -1,3 +1,5 @@
+import useEventStore from "@/EventStore.ts";
+import { EventBullet } from "@/components/events/event-bullet.tsx";
 import { WeekDays } from "@/helpers.ts";
 import {
   arrayOfDaysOfNextMonth,
@@ -6,7 +8,8 @@ import {
   numberOfDisplayedDaysOfNextMonth,
   numberOfDisplayedDaysOfPrevMonth,
 } from "@/lib/date-helpers.ts";
-import { formatDate } from "date-fns";
+import type { Event } from "@/types.ts";
+import { endOfMonth, formatDate, isSameDay, startOfMonth } from "date-fns";
 
 export default function DaysInMonth({ month }: { month: Date }) {
   const days = daysInMonth(month);
@@ -19,6 +22,12 @@ export default function DaysInMonth({ month }: { month: Date }) {
   const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(
     month,
     days.indexOfFirstDay,
+  );
+
+  const { getEventsByDateRange } = useEventStore();
+  const monthlyEvents: Array<Event> = getEventsByDateRange(
+    startOfMonth(month),
+    endOfMonth(month),
   );
 
   return (
@@ -47,12 +56,32 @@ export default function DaysInMonth({ month }: { month: Date }) {
           );
         })}
       {days.daysInMonth.map((day) => {
+        const dayEvent = monthlyEvents.filter((event: Event) =>
+          isSameDay(new Date(event.startDate), day),
+        );
         return (
-          <div
-            key={formatDate(day, "dd MMM")}
-            className=" gap-1 p-1  text-center text-xs font-medium text-gray-800 dark:text-gray-200 rounded-full"
-          >
-            {formatDate(day, "d")}
+          <div key={formatDate(day, "dd MMM")}>
+            <div className=" gap-1 p-1  text-center text-xs font-medium text-gray-800 dark:text-gray-200 rounded-full">
+              {formatDate(day, "d")}
+            </div>
+            {dayEvent.length > 1 ? (
+              <div className="flex flex-col justify-center items-center">
+                {/*<EventListDialog events={dayEvent} date={day}>*/}
+                <EventBullet color={dayEvent[0].color} />
+                <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
+                  +{dayEvent.length - 1}
+                </span>
+                {/*</EventListDialog>*/}
+              </div>
+            ) : (
+              dayEvent.length > 0 && (
+                <div className="flex flex-col justify-center items-center">
+                  {/*<EventDetailsDialog event={dayEvent[0]}>*/}
+                  <EventBullet color={dayEvent[0].color} />
+                  {/*</EventDetailsDialog>*/}
+                </div>
+              )
+            )}
           </div>
         );
       })}
