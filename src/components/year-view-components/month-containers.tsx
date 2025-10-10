@@ -2,6 +2,7 @@ import MonthNameDisplayer from "@/components/year-view-components/month-name-dis
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { formatDate } from "date-fns";
 import { getArrayMonth } from "@/lib/date-helpers.ts";
+import { formatDate } from "date-fns";
 
 export default function MonthContainers() {
   const { date } = useCalendar();
