@@ -8,9 +8,12 @@ export default function MonthContainers() {
   const months = getArrayMonth(date);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {months.map((month) => (
-        <div key={formatDate(month, "MMM")}>
+        <div
+          key={formatDate(month, "MMM")}
+          className="flex flex-col border m-2 shadow-lg rounded-b-2xl "
+        >
           <DaysInMonth month={month} />
         </div>
       ))}
