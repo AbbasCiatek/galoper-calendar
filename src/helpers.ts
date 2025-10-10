@@ -1,1 +1,2 @@
-export const WeekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+export const today = new Date();
+export const WeekDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa","Su"];
