@@ -9,6 +9,12 @@ export function DaysInMonth({ month }: { month: Date }) {
   // option to path if week start at monday or sunday bool (if needed)
   const cells = getCalendarCellsOfMonth(month, true);
 
+  const { getEventsByDateRange } = useEventStore();
+  const monthlyEvents: Array<Event> = getEventsByDateRange(
+    startOfMonth(month),
+    endOfMonth(month),
+  );
+
   return (
     <div className="grid grid-cols-7 gap-6 p-4">
       {WEEK_DAYS.map((weekDay) => {
@@ -34,6 +40,20 @@ export function DaysInMonth({ month }: { month: Date }) {
             })}
           >
             {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
+            {dayEvent.length > 1 ? (
+              <div className="flex flex-col justify-center items-center">
+                <EventBullet color={dayEvent[0].color} />
+                <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
+                  +{dayEvent.length - 1}
+                </span>
+              </div>
+            ) : (
+              dayEvent.length > 0 && (
+                <div className="flex flex-col justify-center items-center">
+                  <EventBullet color={dayEvent[0].color} />
+                </div>
+              )
+            )}
           </button>
         );
       })}
