@@ -3,22 +3,30 @@ import MonthNameDisplayer from "@/components/year-view-components/month-name-dis
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { getArrayMonth } from "@/lib/date-helpers.ts";
 import { formatDate } from "date-fns";
+import { motion } from "motion/react";
 
 export default function MonthContainers() {
   const { date } = useCalendar();
   const months = getArrayMonth(date);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {months.map((month) => (
-        <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
+      {months.map((month, index) => (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ staggerChildren: 0.25, delay: 0.05 * index }}
           key={formatDate(month, "MMM")}
           className="flex flex-col border m-2 shadow-lg rounded-2xl "
         >
           <MonthNameDisplayer month={month} />
           <DaysInMonth month={month} />
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
