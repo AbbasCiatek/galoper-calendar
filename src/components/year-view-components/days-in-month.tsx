@@ -1,73 +1,42 @@
-import { WeekDays } from "@/helpers.ts";
-import {
-  arrayOfDaysOfNextMonth,
-  arrayOfDaysOfPrevMonth,
-  daysInMonth,
-  numberOfDisplayedDaysOfNextMonth,
-  numberOfDisplayedDaysOfPrevMonth,
-} from "@/lib/date-helpers.ts";
-import { formatDate } from "date-fns";
+import { DATE_FORMAT, WEEK_DAYS } from "@/constants";
+import { useCalendar } from "@/context/calendar-context";
+import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
+import { clsx } from "clsx";
+import { formatDate, isSameDay } from "date-fns";
 
-export default function DaysInMonth({ month }: { month: Date }) {
-  const days = daysInMonth(month);
-  const nextMonthDaysDisplayed = numberOfDisplayedDaysOfNextMonth(
-    days.daysInMonth,
-    days.indexOfFirstDay,
-  );
-  const daysNextMonthDisplayed = arrayOfDaysOfNextMonth(month);
-  const daysPrevMonthDisplayed = arrayOfDaysOfPrevMonth(month);
-  const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(
-    month,
-    days.indexOfFirstDay,
-  );
+export function DaysInMonth({ month }: { month: Date }) {
+  const { date, setDate } = useCalendar();
+  // option to path if week start at monday or sunday bool (if needed)
+  const cells = getCalendarCellsOfMonth(month, true);
 
   return (
-    <div className="grid grid-cols-7 px-3 py-2 gap-4">
-      {WeekDays.map((weekDay) => {
+    <div className="grid grid-cols-7 gap-6 p-4">
+      {WEEK_DAYS.map((weekDay) => {
         return (
           <div
-            className="p-1.5 flex-grow text-xs font-semibold text-gray-600 dark:text-gray-200 gap-1 "
+            className="text-xs font-semibold capitalize text-gray-600 dark:text-gray-200 "
             key={weekDay}
           >
-            {weekDay}
+            {weekDay.toLowerCase().slice(0, 2)}
           </div>
         );
       })}
-      {daysPrevMonthDisplayed.daysInMonth
-        .splice(prevMonthDaysDisplayed)
-        .map((day) => {
-          return (
-            <div
-              key={formatDate(day, "dd MMM")}
-              className=" gap-1 p-1  text-center text-xs rounded-sm text-gray-400 dark:text-gray-500"
-            >
-              {" "}
-              {formatDate(day, "d")}
-            </div>
-          );
-        })}
-      {days.daysInMonth.map((day) => {
+      {cells.map((cell) => {
         return (
-          <div
-            key={formatDate(day, "dd MMM")}
-            className=" gap-1 p-1  text-center text-xs font-medium text-gray-800 dark:text-gray-200 rounded-full"
+          <button
+            type={"button"}
+            key={formatDate(cell.day, DATE_FORMAT.fullDate)}
+            onClick={() => setDate(cell.day)}
+            className={clsx("text-center font-medium text-xs rounded-full", {
+              "text-gray-800 dark:text-gray-200": cell.currentMonth,
+              "text-gray-400 dark:text-gray-500": !cell.currentMonth,
+              "bg-gray-300": isSameDay(date, cell.day) && cell.currentMonth,
+            })}
           >
-            {formatDate(day, "d")}
-          </div>
+            {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
+          </button>
         );
       })}
-      {daysNextMonthDisplayed.daysInMonth
-        .slice(0, nextMonthDaysDisplayed)
-        .map((day) => {
-          return (
-            <div
-              key={formatDate(day, "dd MMM")}
-              className=" gap-1 p-1  text-center text-xs rounded-sm text-gray-400 dark:text-gray-500"
-            >
-              {formatDate(day, "d")}
-            </div>
-          );
-        })}
     </div>
   );
 }
