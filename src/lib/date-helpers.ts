@@ -101,7 +101,18 @@ export function getNumberOfEvents(date: Date, view: ViewTypes) {
       ).length;
     case "day":
       return getEventsByDateRange(startOfDay(date), endOfDay(date)).length;
-import { addMonths, startOfYear } from "date-fns";
+
+export function daysInMonth(date: Date) {
+  const firstDayOfMonth = startOfMonth(date);
+  const lastDayOfMonth = endOfMonth(date);
+  const firstDayIndex = getDay(firstDayOfMonth);
+  const daysInMonth = eachDayOfInterval({
+    start: firstDayOfMonth,
+    end: lastDayOfMonth,
+  });
+
+  return { daysInMonth, firstDayIndex };
+}
 
 export function getArrayMonth(date: Date) {
   const year = startOfYear(date);
