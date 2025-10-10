@@ -1,3 +1,4 @@
+import DaysInMonth from "@/components/year-view-components/days-in-month.tsx";
 import MonthNameDisplayer from "@/components/year-view-components/month-name-displayer.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { getArrayMonth } from "@/lib/date-helpers.ts";
@@ -8,9 +9,15 @@ export default function MonthContainers() {
   const months = getArrayMonth(date);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {months.map((month) => (
-        <MonthNameDisplayer key={formatDate(month, "MMM")} month={month} />
+        <div
+          key={formatDate(month, "MMM")}
+          className="flex flex-col border m-2 shadow-lg rounded-b-2xl "
+        >
+          <DaysInMonth month={month} />
+          <MonthNameDisplayer key={formatDate(month, "MMM")} month={month} />
+        </div>
       ))}
     </div>
   );
