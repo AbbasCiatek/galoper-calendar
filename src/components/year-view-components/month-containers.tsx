@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
-import getArrayMonth from "@/lib/date-helpers.ts";
+import { getArrayMonth } from "@/lib/date-helpers.ts";
 
 export default function MonthContainers() {
   const { date } = useCalendar();
