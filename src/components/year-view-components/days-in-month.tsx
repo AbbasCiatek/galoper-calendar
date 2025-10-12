@@ -1,25 +1,11 @@
 import { WeekDays } from "@/helpers.ts";
-import {
-  arrayOfDaysOfNextMonth,
-  arrayOfDaysOfPrevMonth,
-  daysInMonth,
-  numberOfDisplayedDaysOfNextMonth,
-  numberOfDisplayedDaysOfPrevMonth,
-} from "@/lib/date-helpers.ts";
+import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
+import { clsx } from "clsx";
 import { formatDate } from "date-fns";
 
 export default function DaysInMonth({ month }: { month: Date }) {
-  const days = daysInMonth(month);
-  const nextMonthDaysDisplayed = numberOfDisplayedDaysOfNextMonth(
-    days.daysInMonth,
-    days.indexOfFirstDay,
-  );
-  const daysNextMonthDisplayed = arrayOfDaysOfNextMonth(month);
-  const daysPrevMonthDisplayed = arrayOfDaysOfPrevMonth(month);
-  const prevMonthDaysDisplayed = numberOfDisplayedDaysOfPrevMonth(
-    month,
-    days.indexOfFirstDay,
-  );
+  // option to path if week start at monday or sunday bool (if needed)
+  const daysObject = getCalendarCellsOfMonth(month, true);
 
   return (
     <div className="grid grid-cols-7 px-3 py-2 gap-4">
@@ -33,41 +19,21 @@ export default function DaysInMonth({ month }: { month: Date }) {
           </div>
         );
       })}
-      {daysPrevMonthDisplayed.daysInMonth
-        .splice(prevMonthDaysDisplayed)
-        .map((day) => {
-          return (
-            <div
-              key={formatDate(day, "dd MMM")}
-              className=" gap-1 p-1  text-center text-xs rounded-sm text-gray-400 dark:text-gray-500"
-            >
-              {" "}
-              {formatDate(day, "d")}
-            </div>
-          );
-        })}
-      {days.daysInMonth.map((day) => {
+      {daysObject.map((objectDay) => {
         return (
           <div
-            key={formatDate(day, "dd MMM")}
-            className=" gap-1 p-1  text-center text-xs font-medium text-gray-800 dark:text-gray-200 rounded-full"
+            key={formatDate(objectDay.day, "do dd MMMM yyyy HH:mm")}
+            className={clsx(
+              "gap-1 p-1  text-center font-medium",
+              objectDay.currentMonth
+                ? "text-gray-800 dark:text-gray-200"
+                : "text-gray-400 dark:text-gray-500",
+            )}
           >
-            {formatDate(day, "d")}
+            {formatDate(objectDay.day, "d")}
           </div>
         );
       })}
-      {daysNextMonthDisplayed.daysInMonth
-        .slice(0, nextMonthDaysDisplayed)
-        .map((day) => {
-          return (
-            <div
-              key={formatDate(day, "dd MMM")}
-              className=" gap-1 p-1  text-center text-xs rounded-sm text-gray-400 dark:text-gray-500"
-            >
-              {formatDate(day, "d")}
-            </div>
-          );
-        })}
     </div>
   );
 }
