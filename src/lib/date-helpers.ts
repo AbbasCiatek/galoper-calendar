@@ -22,6 +22,24 @@ import {
   subYears,
 } from "date-fns";
 
+export function numberOfDisplayedDaysOfNextMonth(
+  daysOfCurrentMonth: Array<Date>,
+  indexOfCurrentMonthInWeekdays: number,
+) {
+  const lengthOfCurrentMonth = daysOfCurrentMonth.length;
+  if (lengthOfCurrentMonth + indexOfCurrentMonthInWeekdays > 35)
+    return 42 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
+  return 35 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
+}
+
+export function arrayOfDaysOfNextMonth(date: Date) {
+  const nextMonth = addMonths(date, 1);
+  return daysInMonth(nextMonth);
+}
+export function arrayOfDaysOfPrevMonth(date: Date) {
+  const prevMonth = subMonths(date, 1);
+  return daysInMonth(prevMonth);
+}
 
 export function numberOfDisplayedDaysOfPrevMonth(
   currentDate: Date,
@@ -32,6 +50,7 @@ export function numberOfDisplayedDaysOfPrevMonth(
     indexOfCurrentMonthInWeekdays
   );
 }
+
 export function DateAdderFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
@@ -147,7 +166,7 @@ export function getCalendarCellsOfMonth(
     ? (getDay(firstDayOfMonth) + 6) % 7
     : getDay(firstDayOfMonth);
   const daysNumber = indexOfFirstDay + lastDayOfMonth.getDate();
-  const cellsNumber = daysNumber === 28 ? 28 : daysNumber <= 35 ? 35 : 42;
+  const cellsNumber = daysNumber <= 35 ? 35 : 42;
 
   const daysInPrevMonth = eachDayOfInterval({
     start: startOfMonth(prevMonth),
@@ -179,7 +198,6 @@ export function getCalendarCellsOfMonth(
   }));
 
   const nextMonthObject =
-    prevMonthObject.length + currentMonthObject.length === 28 ||
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
