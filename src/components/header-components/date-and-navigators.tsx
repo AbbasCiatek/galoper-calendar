@@ -43,43 +43,46 @@ export default function DateAndNavigators() {
       variants={slideFromLeft}
       initial="initial"
       animate="animate"
-      className="flex flex-row"
+      className="flex flex-row gap-2"
     >
+      {/* <!-- Today Button --> */}
       <button
         type="button"
         onClick={() => handleTodayClick(date)}
-        className="flex flex-col size-16 border text-center mr-2 pt-1 rounded-lg cursor-pointer font-bold hover:scale-105 transform transition-all duration-150"
+        className="flex flex-col size-16 border rounded-lg cursor-pointer font-bold hover:scale-105 transform transition-all duration-150"
       >
-        <p className="text-gray-900 dark:bg-gray-900 dark:text-white">
+        <p className="text-gray-900 dark:bg-gray-900 dark:text-white p-0.5">
           {formatDate(today, "MMM").toUpperCase()}
         </p>
-        <p className="pt-1.5 w-full h-9 bg-gray-900 rounded-b-lg pb-[2px] text-white dark:text-gray-900 dark:bg-white">
+        <p className="grow text-center flex items-center justify-center bg-gray-900 rounded-b-lg pb-[2px] text-white dark:text-gray-900 dark:bg-white">
           {today.getDate()}
         </p>
       </button>
-      <div className="flex flex-col">
-        <div className="flex flex-row">
+
+      {/* <!-- Date and Range Display --> */}
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-row gap-2 items-center">
           <motion.p
-            className="font-extrabold text-gray-800 dark:text-white text-2xl pb-1"
+            className="font-extrabold text-gray-800 dark:text-white text-2xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
             {formatDate(date, "MMMM yyyy")}
           </motion.p>
-          <div className="mx-1">
-            <AnimatePresence mode="wait">
-              <MotionBadge
-                variant="secondary"
-                className="py-1 px-3 "
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-              >
-                {eventCounter} events
-              </MotionBadge>
-            </AnimatePresence>
-          </div>
+
+          <AnimatePresence mode="wait">
+            <MotionBadge
+              variant="secondary"
+              className="px-3 h-fit"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+            >
+              {eventCounter} events
+            </MotionBadge>
+          </AnimatePresence>
         </div>
+
         <div>
           <MotionButton
             variants={buttonHover}
