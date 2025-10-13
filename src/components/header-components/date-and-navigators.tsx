@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge.tsx";
 import { Button } from "@/components/ui/button";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { buttonHover, slideFromLeft, transition } from "@/lib/animations.ts";
 import {
   DateAdderFunction,
   DateSubtracterFunction,
@@ -17,7 +16,6 @@ export default function DateAndNavigators() {
   const { view, date, setDate } = useCalendar();
 
   const today = new Date();
-  const MotionButton = motion(Button);
   const MotionBadge = motion(Badge);
 
   const handleTodayClick = (date: Date) => {
@@ -40,9 +38,8 @@ export default function DateAndNavigators() {
 
   return (
     <motion.div
-      variants={slideFromLeft}
-      initial="initial"
-      animate="animate"
+      initial={{ x: -20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
       className="flex flex-row gap-2"
     >
       {/* <!-- Today Button --> */}
@@ -60,15 +57,11 @@ export default function DateAndNavigators() {
       </button>
 
       {/* <!-- Date and Range Display --> */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 justify-end ">
         <div className="flex flex-row gap-2 items-center">
-          <motion.p
-            className="font-extrabold text-gray-800 dark:text-white text-2xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
+          <p className="font-semibold text-gray-800 dark:text-white text-lg">
             {formatDate(date, "MMMM yyyy")}
-          </motion.p>
+          </p>
 
           <AnimatePresence mode="wait">
             <MotionBadge
@@ -83,39 +76,37 @@ export default function DateAndNavigators() {
           </AnimatePresence>
         </div>
 
-        <div>
-          <MotionButton
-            variants={buttonHover}
-            whileHover="hover"
-            whileTap="tap"
+        <div className="flex flex-row gap-1 items-center">
+          <Button
             variant="secondary"
-            className="size-7 cursor-pointer mr-1"
+            className="size-7 cursor-pointer hover:scale-105 transform transition-all duration-150"
             onClick={() => {
               handleLeftClick(view, date);
             }}
           >
             <ChevronLeftIcon />
-          </MotionButton>
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={transition}
-            className="text-gray-500 dark:text-gray-900"
-          >
-            {rangeDisplayer(view, date)}
-          </motion.span>
-          <MotionButton
-            variants={buttonHover}
-            whileHover="hover"
-            whileTap="tap"
+          </Button>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={rangeDisplayer(view, date)}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="text-gray-500 text-sm dark:text-gray-900"
+            >
+              {rangeDisplayer(view, date)}
+            </motion.span>
+          </AnimatePresence>
+          <Button
             variant="secondary"
-            className="size-7 cursor-pointer ml-1"
+            className="size-7 cursor-pointer hover:scale-105  transform transition-all duration-150"
             onClick={() => {
               handleRightClick(view, date);
             }}
           >
             <ChevronRightIcon />
-          </MotionButton>
+          </Button>
         </div>
       </div>
     </motion.div>
