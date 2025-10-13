@@ -166,7 +166,7 @@ export function getCalendarCellsOfMonth(
     ? (getDay(firstDayOfMonth) + 6) % 7
     : getDay(firstDayOfMonth);
   const daysNumber = indexOfFirstDay + lastDayOfMonth.getDate();
-  const cellsNumber = daysNumber <= 35 ? 35 : 42;
+  const cellsNumber = daysNumber === 28 ? 28 : daysNumber <= 35 ? 35 : 42;
 
   const daysInPrevMonth = eachDayOfInterval({
     start: startOfMonth(prevMonth),
@@ -198,6 +198,7 @@ export function getCalendarCellsOfMonth(
   }));
 
   const nextMonthObject =
+    prevMonthObject.length + currentMonthObject.length === 28 ||
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
