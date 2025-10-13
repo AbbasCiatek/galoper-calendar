@@ -1,12 +1,13 @@
 import CalendarHeader from "@/components/calendar-header.tsx";
+import MonthView from "@/components/month-view";
 import { CalendarContextProvider } from "@/context/calendar-context.tsx";
-import MonthView from "@/Components/MonthView.tsx";
+
 function App() {
   return (
     <CalendarContextProvider>
       <div className="container m-auto mt-5">
         <CalendarHeader />
-          <MonthView/>
+        <MonthView />
       </div>
     </CalendarContextProvider>
   );
