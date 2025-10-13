@@ -1,13 +1,7 @@
 import { Badge } from "@/components/ui/badge.tsx";
 import { Button } from "@/components/ui/button";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import {
-  buttonHover,
-  slideFromBot,
-  slideFromLeft,
-  slideFromTop,
-  transition,
-} from "@/lib/animations.ts";
+import { buttonHover, slideFromLeft, transition } from "@/lib/animations.ts";
 import {
   DateAdderFunction,
   DateSubtracterFunction,
@@ -51,34 +45,18 @@ export default function DateAndNavigators() {
       animate="animate"
       className="flex flex-row"
     >
-      <motion.button
-        variants={buttonHover}
-        whileHover="hover"
-        whileTap="tap"
-        transition={transition}
+      <button
         type="button"
         onClick={() => handleTodayClick(date)}
-        className="flex flex-col size-16 border text-center mr-2 pt-1 rounded-lg cursor-pointer font-bold"
+        className="flex flex-col size-16 border text-center mr-2 pt-1 rounded-lg cursor-pointer font-bold hover:scale-105 transform transition-all duration-150"
       >
-        <motion.p
-          className="text-gray-900 dark:bg-gray-900 dark:text-white"
-          variants={slideFromTop}
-          initial="initial"
-          animate="animate"
-          transition={{ delay: 0.1, ...transition }}
-        >
+        <p className="text-gray-900 dark:bg-gray-900 dark:text-white">
           {formatDate(today, "MMM").toUpperCase()}
-        </motion.p>
-        <motion.p
-          className="pt-1.5 w-full h-9 bg-gray-900 rounded-b-lg pb-[2px] text-white dark:text-gray-900 dark:bg-white"
-          variants={slideFromBot}
-          initial="initial"
-          animate="animate"
-          transition={{ delay: 0.2, ...transition }}
-        >
+        </p>
+        <p className="pt-1.5 w-full h-9 bg-gray-900 rounded-b-lg pb-[2px] text-white dark:text-gray-900 dark:bg-white">
           {today.getDate()}
-        </motion.p>
-      </motion.button>
+        </p>
+      </button>
       <div className="flex flex-col">
         <div className="flex flex-row">
           <motion.p
