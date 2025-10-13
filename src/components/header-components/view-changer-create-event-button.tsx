@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { buttonHover, slideFromRight, transition } from "@/lib/animations.ts";
 import type { ViewTypes } from "@/types.ts";
 import { clsx } from "clsx";
 import {
@@ -74,13 +73,13 @@ export default function ViewChangerCreateEventButton() {
 
   return (
     <motion.div
-      variants={slideFromRight}
-      initial="initial"
-      animate="animate"
-      transition={transition}
+      initial={{ x: 20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 200, damping: 18 }}
       className="flex flex-row items-center gap-4"
     >
       <div className="flex gap-4 text-sm font-semibold w-60 text-gray-500 dark:text-gray-300 ">
+        {/*<!--View Changers-->*/}
         {views.map(({ icon: Icon, name, value }) => {
           const isActive = view === value;
           return (
@@ -95,18 +94,15 @@ export default function ViewChangerCreateEventButton() {
               animate={{
                 width: isActive ? 120 : 32,
               }}
-              transition={{
-                type: "tween",
-                stiffness: 400,
-                damping: 25,
-              }}
+              transition={{ duration: 0.5, ease: "easeIn" }}
             >
-              <motion.button
-                className="flex h-8 w-full items-center justify-center cursor-pointer"
-                variants={buttonHover}
-                whileHover={!isActive ? "hover" : undefined}
-                whileTap={!isActive ? "tap" : undefined}
-                transition={transition}
+              <button
+                type="button"
+                className={clsx(
+                  "flex h-8 w-full items-center justify-center cursor-pointer",
+                  !isActive &&
+                    " hover:scale-105 transform transition-all duration-200",
+                )}
               >
                 <Icon />
                 <AnimatePresence initial={false}>
@@ -122,15 +118,18 @@ export default function ViewChangerCreateEventButton() {
                     </motion.span>
                   )}
                 </AnimatePresence>
-              </motion.button>
+              </button>
             </motion.div>
           );
         })}
       </div>
+      {/*<!--Add Event Button-->*/}
+      {/*<AddEditEventDialog>*/}
       <Button className="font-semibold" variant="default">
         {" "}
         <PlusIcon /> Add Event
       </Button>
+      {/*</AddEditEventDialog>*/}
     </motion.div>
   );
 }
