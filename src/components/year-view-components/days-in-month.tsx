@@ -3,8 +3,9 @@ import { EventBullet } from "@/components/events/event-bullet.tsx";
 import { useCalendar } from "@/context/calendar-context";
 import { WeekDays } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
+import type { Event } from "@/types.ts";
 import { clsx } from "clsx";
-import { formatDate, isSameDay } from "date-fns";
+import { endOfMonth, formatDate, isSameDay, startOfMonth } from "date-fns";
 
 export function DaysInMonth({ month }: { month: Date }) {
   const { date, setDate } = useCalendar();
@@ -48,7 +49,7 @@ export function DaysInMonth({ month }: { month: Date }) {
             )}
           >
             {formatDate(cell.day, "d")}
-            {dayEvent.length > 1 ? (
+            {cell.currentMonth && dayEvent.length > 1 ? (
               <div className="flex flex-col justify-center items-center">
                 {/*<EventListDialog events={dayEvent} date={day}>*/}
                 <EventBullet color={dayEvent[0].color} />
@@ -58,6 +59,7 @@ export function DaysInMonth({ month }: { month: Date }) {
                 {/*</EventListDialog>*/}
               </div>
             ) : (
+              cell.currentMonth &&
               dayEvent.length > 0 && (
                 <div className="flex flex-col justify-center items-center">
                   {/*<EventDetailsDialog event={dayEvent[0]}>*/}
