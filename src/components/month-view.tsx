@@ -1,8 +1,7 @@
 export default function MonthView() {
-    return (
-        <div className="shadow-lg">
-            <div className="grid grid-cols-7 text-xl">
-            </div>
-        </div>
-    );
+  return (
+    <div className="border rounded-b-2xl">
+      <div className="grid grid-cols-7 text-xl" />
+    </div>
+  );
 }
