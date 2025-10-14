@@ -2,8 +2,6 @@ import { DATE_FORMAT } from "@/constants";
 import DayCell from "@/components/month-view-components/day-cell.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
-import { clsx } from "clsx";
-import { formatDate, isMonday, isToday } from "date-fns";
 import { useMemo } from "react";
 import useEventStore from "@/event-store.ts";
 import {
@@ -11,7 +9,14 @@ import {
   getCalendarCellsOfMonth,
 } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types.ts";
-import { endOfMonth, formatDate, startOfMonth } from "date-fns";
+import {
+  areIntervalsOverlapping,
+  endOfDay,
+  endOfMonth,
+  formatDate,
+  startOfDay,
+  startOfMonth,
+} from "date-fns";
 
 export function MonthViewContainer() {
   const { date } = useCalendar();
@@ -30,19 +35,25 @@ export function MonthViewContainer() {
     endOfMonth(date),
   );
 
-  const { eventPositions, occupiedPositions } = calculateMonthEventPositions(
-    allMonthEvents,
-    date,
-  );
+  const eventPositions = calculateMonthEventPositions(allMonthEvents, date);
 
   return (
     <div className="grid grid-cols-7 w-full h-full">
       {cells.map((cell) => {
+        const eventsForCell = allMonthEvents.filter((event) => {
+          const eventStart = new Date(event.startDate);
+          const eventEnd = new Date(event.endDate);
+          return areIntervalsOverlapping(
+            { start: startOfDay(cell.day), end: endOfDay(cell.day) },
+            { start: eventStart, end: eventEnd },
+          );
+        });
         return (
           <DayCell
             key={formatDate(cell.day, DATE_FORMAT.fullDate)}
-            objectDay={cell}
-            events={allMonthEvents}
+            cell={cell}
+            events={eventsForCell}
+            eventPositions={eventPositions}
           />
         );
       })}
