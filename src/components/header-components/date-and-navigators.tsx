@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge.tsx";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import {
@@ -7,14 +7,13 @@ import {
   getNumberOfEvents,
   rangeDisplayer,
 } from "@/lib/date-helpers.ts";
-import type { ViewTypes } from "@/types.ts";
 import { formatDate } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { useCallback } from "react";
 
 export default function DateAndNavigators() {
   const { view, date, setDate } = useCalendar();
-
   const today = new Date();
   const MotionBadge = motion(Badge);
 
@@ -24,15 +23,20 @@ export default function DateAndNavigators() {
     }
   };
 
-  const handleLeftClick = (view: ViewTypes, date: Date) => {
-    const subtractedDate = DateSubtracterFunction(view, date);
-    setDate(subtractedDate);
-  };
-
-  const handleRightClick = (view: ViewTypes, date: Date) => {
-    const addedDate = DateAdderFunction(view, date);
-    setDate(addedDate);
-  };
+  const handleLeftClick = useCallback(
+    (date: Date) => {
+      const subtractedDate = DateSubtracterFunction(view, date);
+      setDate(subtractedDate);
+    },
+    [view, setDate],
+  );
+  const handleRightClick = useCallback(
+    (date: Date) => {
+      const addedDate = DateAdderFunction(view, date);
+      setDate(addedDate);
+    },
+    [view, setDate],
+  );
 
   const eventCounter = getNumberOfEvents(date, view);
 
@@ -81,7 +85,7 @@ export default function DateAndNavigators() {
             variant="secondary"
             className="size-7 cursor-pointer hover:scale-105 transform transition-all duration-150"
             onClick={() => {
-              handleLeftClick(view, date);
+              handleLeftClick(date);
             }}
           >
             <ChevronLeftIcon />
@@ -102,7 +106,7 @@ export default function DateAndNavigators() {
             variant="secondary"
             className="size-7 cursor-pointer hover:scale-105  transform transition-all duration-150"
             onClick={() => {
-              handleRightClick(view, date);
+              handleRightClick(date);
             }}
           >
             <ChevronRightIcon />
