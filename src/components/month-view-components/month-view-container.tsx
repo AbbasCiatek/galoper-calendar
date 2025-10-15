@@ -1,6 +1,6 @@
-import DayCell from "@/components/month-view-components/day-cell.tsx";
+import { DayCell } from "@/components/month-view-components/day-cell.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import useEventStore from "@/event-store.ts";
+import { useEventStore } from "@/event-store.ts";
 import {
   calculateMonthEventPositions,
   getCalendarCellsOfMonth,
@@ -16,7 +16,7 @@ import {
 } from "date-fns";
 import { useMemo } from "react";
 
-export default function MonthViewContainer() {
+export function MonthViewContainer() {
   const { date } = useCalendar();
   //for re-rendering only on year or month change
   const monthDate = new Date(date.getFullYear(), date.getMonth(), 1);
