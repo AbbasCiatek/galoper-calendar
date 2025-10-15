@@ -10,7 +10,7 @@ type TProps = {
   events: Array<Event>;
   eventPositions: Record<string, number>;
 };
-export default function DayCell({ cell, events, eventPositions }: TProps) {
+export function DayCell({ cell, events, eventPositions }: TProps) {
   const cellEvents = useMemo(
     () => getMonthCellEvents(events, eventPositions),
     [events, eventPositions],
