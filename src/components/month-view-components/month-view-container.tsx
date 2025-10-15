@@ -1,9 +1,6 @@
-import { DATE_FORMAT } from "@/constants";
-import DayCell from "@/components/month-view-components/day-cell.tsx";
+import { DayCell } from "@/components/month-view-components/day-cell.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
-import { useMemo } from "react";
-import useEventStore from "@/event-store.ts";
+import { useEventStore } from "@/event-store.ts";
 import {
   calculateMonthEventPositions,
   getCalendarCellsOfMonth,
