@@ -1,80 +1,106 @@
-import { colorMap } from "@/helpers";
-import { getMonthCellEvents } from "@/lib/date-helpers";
+import { MAX_EVENTS_PER_DAY, getMonthCellEvents } from "@/lib/date-helpers";
 import type { Event } from "@/types";
 import { clsx } from "clsx";
 import { formatDate, isMonday, isSameDay, isToday } from "date-fns";
+import { motion } from "motion/react";
+import { useCallback, useMemo } from "react";
+import { MonthBadgeEvent } from "./month-badge-event";
 type TProps = {
   cell: { day: Date; currentMonth: boolean };
   events: Array<Event>;
   eventPositions: Record<string, number>;
 };
 export default function DayCell({ cell, events, eventPositions }: TProps) {
-  const eventsForDay = getMonthCellEvents(cell.day, events, eventPositions);
-  const positionMap: Record<number, string> = {
-    0: "",
-    1: "top-[42px]",
-    2: "top-[63px]",
-  };
+  const cellEvents = useMemo(
+    () => getMonthCellEvents(events, eventPositions),
+    [events, eventPositions],
+  );
+
+  const renderEventAtPosition = useCallback(
+    (position: number) => {
+      const event = cellEvents.find((e) => e.position === position);
+
+      if (!event) {
+        return (
+          <motion.div
+            key={`empty-${position}`}
+            className="flex-1"
+            initial={false}
+            animate={false}
+          />
+        );
+      }
+      const isMiddleDay =
+        !isSameDay(event.startDate, cell.day) &&
+        !isSameDay(event.endDate, cell.day);
+      return (
+        <motion.div
+          key={`event-${event.id}-${position}`}
+          className={clsx("flex-1", isMiddleDay && "z-20 w-[calc(100%_+_2px)]")}
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            delay: position * 0.1,
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+          }}
+        >
+          <MonthBadgeEvent event={event} cell={cell} />
+        </motion.div>
+      );
+    },
+    [cellEvents, cell],
+  );
+
   return (
     <div
       className={clsx(
-        "relative border-l border-t  overflow-hidden h-full min-h-[120px] flex flex-col",
+        "flex flex-col gap-1 border-l border-t h-full min-h-40",
         isMonday(cell.day) && "border-l-0",
         "bg-white",
       )}
     >
-      <div
+      <span
         className={clsx(
-          "flex w-5 h-5 items-center justify-center rounded-full text-xs font-semibold flex-shrink-0",
-          !cell.currentMonth && "opacity-20",
+          "flex w-6 h-6 items-center justify-center rounded-full text-xs font-semibold flex-shrink-0",
+          cell.currentMonth
+            ? "text-gray-800 dark:text-gray-200"
+            : "text-gray-400 dark:text-gray-500",
           isToday(cell.day) && "bg-primary font-bold text-primary-foreground",
         )}
       >
         {formatDate(cell.day, "d")}
-      </div>
+      </span>
 
-      <div className="flex flex-col  flex-1">
-        {eventsForDay.length > 0 &&
-          eventsForDay.slice(0, 3).map((event) => {
-            return (
-              <div
-                key={event.id}
-                className={clsx(
-                  `px-2 absolute left-0 right-0 flex justify-between cursor-pointer ${colorMap[event.color]} ${positionMap[event.position]}  truncate font-bold  h-5 rounded m-1 text-xs`,
-                  !isSameDay(cell.day, event.startDate) &&
-                    "border-l-0 rounded-l-none ml-0 ",
-                  !isSameDay(cell.day, event.endDate) &&
-                    "border-r-0 rounded-r-none mr-0 ",
-                  !cell.currentMonth && "opacity-40",
-                )}
-              >
-                <span>
-                  {(!event.isMultiDay ||
-                    (event.isMultiDay && event.isFirstDay)) &&
-                    event.title}
-                </span>
-                <span>
-                  {(!event.isMultiDay ||
-                    (event.isMultiDay && event.isLastDay)) &&
-                    formatDate(new Date(event.startDate), "hh:mm")}
-                </span>
-              </div>
-            );
-          })}
-        {eventsForDay.length > 3 && (
-          // <EventListDialog>
-          <div
+      <div
+        className={clsx(
+          "flex mt-1 h-24 flex-col gap-2 ",
+          !cell.currentMonth && "opacity-50",
+        )}
+      >
+        {cellEvents.length > 0 && [0, 1, 2].map(renderEventAtPosition)}
+      </div>
+      <div className="flex justify-center">
+        {cellEvents.length > MAX_EVENTS_PER_DAY && (
+          // <EventListDialog events={events}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
             className={clsx(
-              "absolute border rounded-full px-1 border-gray-200 bottom-2 right-2 text-xs  text-gray-500 font-semibold ",
-              !cell.currentMonth && "opacity-40",
+              "border rounded-full px-1 mb-2 border-gray-200 cursor-pointer text-xs font-semibold ",
+              cell.currentMonth
+                ? "text-gray-500 dark:text-gray-300"
+                : "text-gray-500/50 dark:text-gray-300/50",
             )}
           >
-            <span className="px-1">
+            <span>
               {" "}
-              +{eventsForDay.length - 3}{" "}
+              +{cellEvents.length - MAX_EVENTS_PER_DAY}{" "}
               <span className="hidden md:inline-block">more</span>
             </span>
-          </div>
+          </motion.div>
           // </EventListDialog>
         )}
       </div>

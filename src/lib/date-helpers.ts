@@ -143,24 +143,14 @@ export function calculateMonthEventPositions(events: Array<Event>, date: Date) {
 }
 
 export function getMonthCellEvents(
-  date: Date,
   events: Array<Event>,
   eventPositions: Record<string, number>,
 ) {
   return events
     .map((event) => {
-      const eventStart = new Date(event.startDate);
-      const eventEnd = new Date(event.endDate);
-      const isMultiDay = !isSameDay(eventStart, eventEnd);
-      const isFirstDay = isSameDay(date, eventStart);
-      const isLastDay = isSameDay(date, eventEnd);
-
       return {
         ...event,
         position: eventPositions[event.id] ?? -1,
-        isMultiDay,
-        isFirstDay,
-        isLastDay,
       };
     })
     .sort(
