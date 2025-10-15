@@ -14,6 +14,7 @@ type TProps = {
 export function MonthBadgeEvent({ event, cell }: TProps) {
   const isFirstDay = isSameDay(event.startDate, cell.day);
   const isLastDay = isSameDay(event.endDate, cell.day);
+  const isMiddleDay = !isFirstDay && !isLastDay;
   return (
     <motion.div
       key={event.id}
@@ -29,6 +30,7 @@ export function MonthBadgeEvent({ event, cell }: TProps) {
         `flex justify-between cursor-pointer ${colorMap[event.color]} mx-1 h-6.5 items-center gap-1.5 border px-2 truncate font-bold rounded text-xs`,
         !isFirstDay && "border-l-0  rounded-l-none ml-0 ",
         !isLastDay && "border-r-0  rounded-r-none mr-0 ",
+        isMiddleDay && "z-20 w-[calc(100%_+_2px)]",
       )}
     >
       <span>{isFirstDay && event.title}</span>
