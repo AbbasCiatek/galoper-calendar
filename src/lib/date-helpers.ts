@@ -139,7 +139,7 @@ export function calculateMonthEventPositions(events: Array<Event>, date: Date) {
       eventPositions[event.id] = position;
     }
   });
-  return eventPositions;
+  return { eventPositions, occupiedPositions };
 }
 
 export function getMonthCellEvents(
@@ -158,4 +158,26 @@ export function getMonthCellEvents(
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime() ||
         new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
     );
+}
+export function unassignedPosition(
+  event: Event & { position: number },
+  date: Date,
+  occupiedPositions: { [p: string]: Array<boolean> },
+) {
+  if (event.position === -1) {
+    let position = -1;
+    const dayPositions = occupiedPositions[startOfDay(date).toISOString()];
+    for (let i = 0; i < 3; i++) {
+      if (dayPositions && !dayPositions[i]) {
+        position = i;
+        break;
+      }
+    }
+
+    if (position !== -1) {
+      const dayKey = startOfDay(date).toISOString();
+      occupiedPositions[dayKey][position] = true;
+    }
+    event.position = position;
+  }
 }

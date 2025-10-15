@@ -1,4 +1,8 @@
-import { MAX_EVENTS_PER_DAY, getMonthCellEvents } from "@/lib/date-helpers";
+import {
+  MAX_EVENTS_PER_DAY,
+  getMonthCellEvents,
+  unassignedPosition,
+} from "@/lib/date-helpers";
 import type { Event } from "@/types";
 import { clsx } from "clsx";
 import { formatDate, isMonday, isSameDay, isToday } from "date-fns";
@@ -9,16 +13,25 @@ type TProps = {
   cell: { day: Date; currentMonth: boolean };
   events: Array<Event>;
   eventPositions: Record<string, number>;
+  occupiedPositions: Record<string, Array<boolean>>;
 };
-export function DayCell({ cell, events, eventPositions }: TProps) {
+export function DayCell({
+  cell,
+  events,
+  eventPositions,
+  occupiedPositions,
+}: TProps) {
   const cellEvents = useMemo(
     () => getMonthCellEvents(events, eventPositions),
     [events, eventPositions],
   );
+  cellEvents.map((cellEvent) => console.log(cellEvent));
 
   const renderEventAtPosition = useCallback(
     (position: number) => {
-      const event = cellEvents.find((e) => e.position === position);
+      const event = cellEvents
+        .slice(0, MAX_EVENTS_PER_DAY)
+        .find((e) => e.position === position || e.position === -1);
 
       if (!event) {
         return (
@@ -29,6 +42,10 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
             animate={false}
           />
         );
+      }
+      //This is not an optimal solution but it works
+      if (event.position === -1) {
+        unassignedPosition(event, cell.day, occupiedPositions);
       }
       const isMiddleDay =
         !isSameDay(event.startDate, cell.day) &&
@@ -50,7 +67,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
         </motion.div>
       );
     },
-    [cellEvents, cell],
+    [cellEvents, cell, occupiedPositions],
   );
 
   return (

@@ -33,7 +33,7 @@ export function MonthViewContainer() {
     [getEventsByDateRange, monthDate],
   );
 
-  const eventPositions = useMemo(
+  const { eventPositions, occupiedPositions } = useMemo(
     () => calculateMonthEventPositions(allMonthEvents, monthDate),
     [allMonthEvents, monthDate],
   );
@@ -55,6 +55,7 @@ export function MonthViewContainer() {
             cell={cell}
             events={eventsForCell}
             eventPositions={eventPositions}
+            occupiedPositions={occupiedPositions}
           />
         );
       })}
