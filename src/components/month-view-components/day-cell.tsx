@@ -1,9 +1,10 @@
 import { MAX_EVENTS_PER_DAY, getMonthCellEvents } from "@/lib/date-helpers";
 import type { Event } from "@/types";
 import { clsx } from "clsx";
-import { formatDate, isMonday, isSameDay, isToday } from "date-fns";
+import { formatDate, isMonday, isToday } from "date-fns";
 import { motion } from "motion/react";
 import { useCallback, useMemo } from "react";
+import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
 type TProps = {
   cell: { day: Date; currentMonth: boolean };
@@ -19,35 +20,48 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
   const renderEventAtPosition = useCallback(
     (position: number) => {
       const event = cellEvents.find((e) => e.position === position);
-
       if (!event) {
         return (
           <motion.div
             key={`empty-${position}`}
-            className="flex-1"
+            className=" lg:flex-1"
             initial={false}
             animate={false}
           />
         );
       }
-      const isMiddleDay =
-        !isSameDay(event.startDate, cell.day) &&
-        !isSameDay(event.endDate, cell.day);
+      //destructuring event object and taking only pure event attributes to pass to Event Details Dialog
+      // const { id, title, description, startDate, endDate, color, isAllDay } =
+      //   event;
+      // const pureEvent = {
+      //   id,
+      //   title,
+      //   description,
+      //   startDate,
+      //   endDate,
+      //   color,
+      //   isAllDay,
+      // };
       return (
-        <motion.div
-          key={`event-${event.id}-${position}`}
-          className={clsx("flex-1", isMiddleDay && "z-20 w-[calc(100%_+_2px)]")}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{
-            delay: position * 0.1,
-            type: "spring",
-            stiffness: 200,
-            damping: 20,
-          }}
-        >
-          <MonthBadgeEvent event={event} cell={cell} />
-        </motion.div>
+        <div>
+          <EventBullet className="lg:hidden" color={event.color} />
+          <motion.div
+            key={`event-${event.id}-${position}`}
+            className={clsx("hidden lg:flex lg:flex-col lg:flex-1")}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              delay: position * 0.1,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+          >
+            {/*<EventDetailsDialog event={pureEvent} />*/}
+            <MonthBadgeEvent event={event} cell={cell} />
+            {/*</EventDetailsDialog>*/}
+          </motion.div>
+        </div>
       );
     },
     [cellEvents, cell],
@@ -56,7 +70,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
   return (
     <div
       className={clsx(
-        "flex flex-col gap-1 border-l border-t h-full min-h-40",
+        "flex flex-col border-l border-t h-full lg:min-h-40",
         isMonday(cell.day) && "border-l-0",
         "bg-white",
       )}
@@ -75,7 +89,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
 
       <div
         className={clsx(
-          "flex mt-1 h-24 flex-col gap-2 ",
+          "flex lg:h-24 lg:flex-col gap-0.5 lg:gap-2 ",
           !cell.currentMonth && "opacity-50",
         )}
       >
@@ -98,7 +112,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
             <span>
               {" "}
               +{cellEvents.length - MAX_EVENTS_PER_DAY}{" "}
-              <span className="hidden md:inline-block">more</span>
+              <span className="hidden lg:inline-block">more</span>
             </span>
           </motion.div>
           // </EventListDialog>
