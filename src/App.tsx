@@ -1,4 +1,4 @@
-import CalendarHeader from "@/components/calendar-header.tsx";
+import { CalendarHeader } from "@/components/calendar-header.tsx";
 import { MonthView } from "@/components/month-view";
 import { CalendarContextProvider } from "@/context/calendar-context.tsx";
 
