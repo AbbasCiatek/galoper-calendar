@@ -13,7 +13,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 
-export default function ViewChangerCreateEventButton() {
+export function ViewChangerCreateEventButton() {
   const { view, setView } = useCalendar();
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
