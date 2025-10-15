@@ -17,6 +17,7 @@ import {
   startOfDay,
   startOfMonth,
 } from "date-fns";
+import { useMemo } from "react";
 
 export function MonthViewContainer() {
   const { date } = useCalendar();
@@ -30,12 +31,15 @@ export function MonthViewContainer() {
 
   const { getEventsByDateRange } = useEventStore();
 
-  const allMonthEvents: Array<Event> = getEventsByDateRange(
-    startOfMonth(date),
-    endOfMonth(date),
+  const allMonthEvents: Array<Event> = useMemo(
+    () => getEventsByDateRange(startOfMonth(monthDate), endOfMonth(monthDate)),
+    [getEventsByDateRange, monthDate],
   );
 
-  const eventPositions = calculateMonthEventPositions(allMonthEvents, date);
+  const eventPositions = useMemo(
+    () => calculateMonthEventPositions(allMonthEvents, monthDate),
+    [allMonthEvents, monthDate],
+  );
 
   return (
     <div className="grid grid-cols-7 w-full h-full">
