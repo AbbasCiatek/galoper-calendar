@@ -3,7 +3,7 @@ import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
 import { formatDate } from "date-fns";
 
-export default function DaysInMonth({ month }: { month: Date }) {
+export function DaysInMonth({ month }: { month: Date }) {
   // option to path if week start at monday or sunday bool (if needed)
   const daysObject = getCalendarCellsOfMonth(month, true);
 

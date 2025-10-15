@@ -1,11 +1,11 @@
-import DaysInMonth from "@/components/year-view-components/days-in-month.tsx";
-import MonthNameDisplayer from "@/components/year-view-components/month-name-displayer.tsx";
+import { DaysInMonth } from "@/components/year-view-components/days-in-month.tsx";
+import { MonthNameDisplayer } from "@/components/year-view-components/month-name-displayer.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { getArrayMonth } from "@/lib/date-helpers.ts";
 import { formatDate } from "date-fns";
 import { motion } from "motion/react";
 
-export default function MonthContainers() {
+export function MonthContainers() {
   const { date } = useCalendar();
   const months = getArrayMonth(date);
 

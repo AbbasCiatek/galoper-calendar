@@ -1,7 +1,7 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { formatDate } from "date-fns";
 
-export default function monthNameDisplayer({ month }: { month: Date }) {
+export function monthNameDisplayer({ month }: { month: Date }) {
   const formattedMonth = formatDate(month, "MMMM");
 
   const { setDate, setView } = useCalendar();
