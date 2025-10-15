@@ -1,4 +1,4 @@
-import useEventStore from "@/event-store.ts";
+import { useEventStore } from "@/event-store.ts";
 import type { ViewTypes } from "@/types.ts";
 import {
   addDays,

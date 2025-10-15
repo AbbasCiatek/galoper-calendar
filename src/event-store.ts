@@ -21,7 +21,7 @@ type EventsStore = {
   removeEvent: (id: string) => void;
 };
 
-const useEventStore = create<EventsStore>()(
+export const useEventStore = create<EventsStore>()(
   persist(
     (set, get) => ({
       events: [],
@@ -67,5 +67,3 @@ const useEventStore = create<EventsStore>()(
     { name: "Event-Storage" },
   ),
 );
-
-export default useEventStore;

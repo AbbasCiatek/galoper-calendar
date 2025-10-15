@@ -12,7 +12,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback } from "react";
 
-export default function DateAndNavigators() {
+export function DateAndNavigators() {
   const { view, date, setDate } = useCalendar();
   const today = new Date();
   const MotionBadge = motion(Badge);
