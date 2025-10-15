@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import { formatDate, isMonday, isToday } from "date-fns";
 import { useMemo } from "react";
 
-export default function MonthViewContainer() {
+export function MonthViewContainer() {
   const { date } = useCalendar();
   //for re-rendering only on year or month change
   const monthDate = new Date(date.getFullYear(), date.getMonth(), 1);

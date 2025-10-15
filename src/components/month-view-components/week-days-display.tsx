@@ -1,5 +1,5 @@
 import { WeekDays } from "@/helpers.tsx";
-export default function WeekDaysDisplay() {
+export function WeekDaysDisplay() {
   return (
     <div className="grid grid-cols-7 text-xl justify-between items-center divide-x  ">
       {WeekDays.map((day) => {
