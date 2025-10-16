@@ -1,21 +1,35 @@
-import { MAX_EVENTS_PER_DAY, getMonthCellEvents } from "@/lib/date-helpers";
 import type { Event } from "@/types";
 import { clsx } from "clsx";
-import { formatDate, isMonday, isToday } from "date-fns";
+import {
+  areIntervalsOverlapping,
+  endOfDay,
+  formatDate,
+  isMonday,
+  isToday,
+  startOfDay,
+} from "date-fns";
 import { motion } from "motion/react";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
 type TProps = {
   cell: { day: Date; currentMonth: boolean };
-  events: Array<Event>;
-  eventPositions: Record<string, number>;
+  eventsPerWeek: Array<Event & { position: number }>;
 };
-export function DayCell({ cell, events, eventPositions }: TProps) {
-  const cellEvents = useMemo(
-    () => getMonthCellEvents(events, eventPositions),
-    [events, eventPositions],
-  );
+export function DayCell({ cell, eventsPerWeek }: TProps) {
+  const cellEvents = eventsPerWeek.filter((event) => {
+    const eventStart = new Date(event.startDate);
+    const eventEnd = new Date(event.endDate);
+    return areIntervalsOverlapping(
+      { start: startOfDay(cell.day), end: endOfDay(cell.day) },
+      { start: eventStart, end: eventEnd },
+    );
+  });
+
+  let undisplayedEvents = 0;
+  for (const cell of cellEvents) {
+    if (cell.position === -1) undisplayedEvents++;
+  }
 
   const renderEventAtPosition = useCallback(
     (position: number) => {
@@ -44,29 +58,20 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
       // };
       return (
         <>
-          <EventBullet className="lg:hidden" color={event.color} />
-          <motion.div
-            key={`event-${event.id}-${position}`}
-            className={clsx("hidden lg:flex lg:flex-col lg:flex-1")}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              delay: position * 0.1,
-              type: "spring",
-              stiffness: 200,
-              damping: 20,
-            }}
-          >
+          <div className="flex flex-row gap-1">
+            <EventBullet className="lg:hidden" color={event.color} />
+          </div>
+          <div className={clsx("hidden lg:flex lg:flex-col lg:flex-1")}>
             {/*<EventDetailsDialog event={pureEvent} />*/}
             <MonthBadgeEvent event={event} cell={cell} />
             {/*</EventDetailsDialog>*/}
-          </motion.div>
+          </div>
         </>
       );
     },
     [cellEvents, cell],
   );
-
+  const array: Array<number> = [0, 1, 2];
   return (
     <div
       className={clsx(
@@ -77,7 +82,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
     >
       <span
         className={clsx(
-          "flex w-6 h-6 items-center justify-center rounded-full text-xs font-semibold flex-shrink-0",
+          "flex w-6 h-6 items-center justify-center rounded-full text-xs font-semibold",
           cell.currentMonth
             ? "text-gray-800 dark:text-gray-200"
             : "text-gray-400 dark:text-gray-500",
@@ -89,21 +94,22 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
 
       <div
         className={clsx(
-          "flex lg:h-24 lg:flex-col gap-0.5 lg:gap-2 ",
+          "flex lg:h-24 lg:flex-col",
           !cell.currentMonth && "opacity-50",
         )}
       >
-        {cellEvents.length > 0 && [0, 1, 2].map(renderEventAtPosition)}
+        {cellEvents.length > 0 && array.map(renderEventAtPosition)}
       </div>
       <div className="flex justify-center">
-        {cellEvents.length > MAX_EVENTS_PER_DAY && (
+        {undisplayedEvents > 0 && (
           // <EventListDialog events={events}>
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
             className={clsx(
-              "border rounded-full px-1 mb-2 border-gray-200 cursor-pointer text-xs font-semibold ",
+              "border rounded-full border-gray-200 cursor-pointer text-xs font-semibold ",
               cell.currentMonth
                 ? "text-gray-500 dark:text-gray-300"
                 : "text-gray-500/50 dark:text-gray-300/50",
@@ -111,7 +117,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
           >
             <span>
               {" "}
-              +{cellEvents.length - MAX_EVENTS_PER_DAY}{" "}
+              +{undisplayedEvents}{" "}
               <span className="hidden lg:inline-block">more</span>
             </span>
           </motion.div>

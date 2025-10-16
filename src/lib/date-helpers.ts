@@ -70,21 +70,32 @@ export function getCalendarCellsOfMonth(
   return [...prevMonthObject, ...currentMonthObject];
 }
 
-function positionPerDay(date: Date) {
+function positionPerDay(cells: Array<{ day: Date; currentMonth: boolean }>) {
   const positions: Record<string, Array<boolean>> = {};
-  eachDayOfInterval({
-    start: startOfMonth(date),
-    end: endOfMonth(date),
-  }).forEach((day) => {
-    positions[startOfDay(day).toISOString()] =
+  cells.forEach((cell) => {
+    positions[startOfDay(cell.day).toISOString()] =
       Array(MAX_EVENTS_PER_DAY).fill(false);
   });
   return positions;
 }
+type Cell = {
+  day: Date;
+  currentMonth: boolean;
+};
+export function chunkCells(arr: Array<Cell>) {
+  const result: Array<Array<Cell>> = [];
+  for (let i = 0; i < arr.length; i += 7) {
+    result.push(arr.slice(i, i + 7));
+  }
+  return result;
+}
 
-export function calculateMonthEventPositions(events: Array<Event>, date: Date) {
+export function calculateMonthChunckEventPositions(
+  events: Array<Event>,
+  cells: Array<Cell>,
+) {
   const eventPositions: Record<string, number> = {};
-  const occupiedPositions = positionPerDay(date);
+  const occupiedPositions = positionPerDay(cells);
 
   const singleDayEvents = events.filter((event) =>
     isSameDay(new Date(event.startDate), new Date(event.endDate)),
@@ -94,28 +105,36 @@ export function calculateMonthEventPositions(events: Array<Event>, date: Date) {
     (event) => !isSameDay(new Date(event.startDate), new Date(event.endDate)),
   );
 
-  const monthStart = startOfMonth(date);
-  const monthEnd = endOfMonth(date);
-
   const sortedEvents = [
     ...multiDayEvents.sort(
-      (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime() ||
-        new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
+      //sort by start -> end ->title alphabet
+      (a, b) => {
+        return (
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+      },
     ),
-    ...singleDayEvents.sort(
-      (a, b) =>
+    ...singleDayEvents.sort((a, b) => {
+      const aDuration =
+        new Date(a.endDate).getTime() - new Date(a.startDate).getTime();
+      const bDuration =
+        new Date(b.endDate).getTime() - new Date(b.startDate).getTime();
+      return (
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime() ||
-        new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
-    ),
+        aDuration - bDuration
+      );
+    }),
   ];
+
+  const firstCell = cells[0];
+  const lastCell = cells.slice(-1)[0];
 
   sortedEvents.forEach((event) => {
     const eventStart = new Date(event.startDate);
     const eventEnd = new Date(event.endDate);
     const eventDays = eachDayOfInterval({
-      start: eventStart < monthStart ? monthStart : eventStart,
-      end: eventEnd > monthEnd ? monthEnd : eventEnd,
+      start: eventStart < firstCell.day ? firstCell.day : eventStart,
+      end: eventEnd > lastCell.day ? lastCell.day : eventEnd,
     });
 
     let position = -1;
@@ -139,6 +158,7 @@ export function calculateMonthEventPositions(events: Array<Event>, date: Date) {
       eventPositions[event.id] = position;
     }
   });
+
   return eventPositions;
 }
 
@@ -156,6 +176,6 @@ export function getMonthCellEvents(
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime() ||
-        new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
+        a.title.localeCompare(b.title),
     );
 }
