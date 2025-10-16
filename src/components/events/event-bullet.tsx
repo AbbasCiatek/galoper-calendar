@@ -29,7 +29,7 @@ export function EventBullet({ color, className }: TProps) {
         stiffness: 200,
         damping: 20,
       }}
-      className={clsx(className, colorBulletMap[color], "mt-0.5")}
+      className={clsx(className, colorBulletMap[color])}
     />
   );
 }
