@@ -2,8 +2,10 @@ import { DayCell } from "@/components/month-view-components/day-cell.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { useEventStore } from "@/event-store.ts";
 import {
-  calculateMonthEventPositions,
+  calculateMonthChunckEventPositions,
+  chunkCells,
   getCalendarCellsOfMonth,
+  getMonthCellEvents,
 } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types.ts";
 import {
@@ -14,7 +16,8 @@ import {
   startOfDay,
   startOfMonth,
 } from "date-fns";
-import { useMemo } from "react";
+import { type ReactNode, useMemo } from "react";
+import { DayCell } from "./day-cell";
 
 export function MonthViewContainer() {
   const { date } = useCalendar();
@@ -26,6 +29,8 @@ export function MonthViewContainer() {
     [monthDate],
   );
 
+  const cellsDividedIntoWeeks = chunkCells(cells);
+
   const { getEventsByDateRange } = useEventStore();
 
   const allMonthEvents: Array<Event> = useMemo(
@@ -33,30 +38,36 @@ export function MonthViewContainer() {
     [getEventsByDateRange, monthDate],
   );
 
-  const eventPositions = useMemo(
-    () => calculateMonthEventPositions(allMonthEvents, monthDate),
-    [allMonthEvents, monthDate],
-  );
-
   return (
     <div className="grid grid-cols-7 w-full h-full">
-      {cells.map((cell) => {
+      {cellsDividedIntoWeeks.map((cells): ReactNode => {
+        const firstDayOfWeek = cells[0].day;
+        const lastDayOfWeek = cells.slice(-1)[0].day;
+        const eventPositions = useMemo(
+          () => calculateMonthChunckEventPositions(allMonthEvents, cells),
+          [cells],
+        );
         const eventsForCell = allMonthEvents.filter((event) => {
           const eventStart = new Date(event.startDate);
           const eventEnd = new Date(event.endDate);
           return areIntervalsOverlapping(
-            { start: startOfDay(cell.day), end: endOfDay(cell.day) },
+            { start: startOfDay(firstDayOfWeek), end: endOfDay(lastDayOfWeek) },
             { start: eventStart, end: eventEnd },
           );
         });
-        return (
-          <DayCell
-            key={formatDate(cell.day, DATE_FORMAT.fullDate)}
-            cell={cell}
-            events={eventsForCell}
-            eventPositions={eventPositions}
-          />
+        const cellEvents = useMemo(
+          () => getMonthCellEvents(eventsForCell, eventPositions),
+          [eventsForCell, eventPositions],
         );
+        return cells.map((cell) => {
+          return (
+            <DayCell
+              key={formatDate(cell.day, "dd MMMM yyyy")}
+              cell={cell}
+              eventsPerWeek={cellEvents}
+            />
+          );
+        });
       })}
     </div>
   );
