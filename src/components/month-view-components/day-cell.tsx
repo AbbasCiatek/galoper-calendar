@@ -43,7 +43,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
       //   isAllDay,
       // };
       return (
-        <div>
+        <>
           <EventBullet className="lg:hidden" color={event.color} />
           <motion.div
             key={`event-${event.id}-${position}`}
@@ -61,7 +61,7 @@ export function DayCell({ cell, events, eventPositions }: TProps) {
             <MonthBadgeEvent event={event} cell={cell} />
             {/*</EventDetailsDialog>*/}
           </motion.div>
-        </div>
+        </>
       );
     },
     [cellEvents, cell],
