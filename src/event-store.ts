@@ -2,7 +2,7 @@ import type { COLORS } from "@/types.ts";
 import { areIntervalsOverlapping } from "date-fns";
 import { v4 } from "uuid";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export type Event = {
   id: string;
@@ -64,6 +64,6 @@ export const useEventStore = create<EventsStore>()(
           events: state.events.filter((e) => e.id !== id),
         })),
     }),
-    { name: "Event-Storage" },
+    { name: "event-storage", storage: createJSONStorage(() => localStorage) },
   ),
 );

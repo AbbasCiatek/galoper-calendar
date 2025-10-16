@@ -23,20 +23,14 @@ export function DateAndNavigators() {
     }
   };
 
-  const handleLeftClick = useCallback(
-    (date: Date) => {
-      const subtractedDate = DateSubtracterFunction(view, date);
-      setDate(subtractedDate);
-    },
-    [view, setDate],
-  );
-  const handleRightClick = useCallback(
-    (date: Date) => {
-      const addedDate = DateAdderFunction(view, date);
-      setDate(addedDate);
-    },
-    [view, setDate],
-  );
+  const handleLeftClick = useCallback(() => {
+    const subtractedDate = DateSubtracterFunction(view, date);
+    setDate(subtractedDate);
+  }, [view, date, setDate]);
+  const handleRightClick = useCallback(() => {
+    const addedDate = DateAdderFunction(view, date);
+    setDate(addedDate);
+  }, [view, date, setDate]);
 
   const eventCounter = getNumberOfEvents(date, view);
 
@@ -55,7 +49,7 @@ export function DateAndNavigators() {
         <p className="text-gray-900 dark:bg-gray-900 dark:text-white p-0.5">
           {formatDate(today, "MMM").toUpperCase()}
         </p>
-        <p className="grow text-center flex items-center justify-center bg-gray-900 rounded-b-lg pb-[2px] text-white dark:text-gray-900 dark:bg-white">
+        <p className="grow text-center flex items-center justify-center bg-gray-900 rounded-b-lg  text-white dark:text-gray-900 dark:bg-white">
           {today.getDate()}
         </p>
       </button>
@@ -84,9 +78,7 @@ export function DateAndNavigators() {
           <Button
             variant="secondary"
             className="size-7 cursor-pointer hover:scale-105 transform transition-all duration-150"
-            onClick={() => {
-              handleLeftClick(date);
-            }}
+            onClick={handleLeftClick}
           >
             <ChevronLeftIcon />
           </Button>
@@ -105,9 +97,7 @@ export function DateAndNavigators() {
           <Button
             variant="secondary"
             className="size-7 cursor-pointer hover:scale-105  transform transition-all duration-150"
-            onClick={() => {
-              handleRightClick(date);
-            }}
+            onClick={handleRightClick}
           >
             <ChevronRightIcon />
           </Button>
