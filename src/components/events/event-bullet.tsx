@@ -15,6 +15,7 @@ export function EventBullet({ color, className }: TProps) {
     blue: "w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-500",
     purple: "w-2 h-2 rounded-full bg-purple-600 dark:bg-purple-500",
     orange: "w-2 h-2 rounded-full bg-orange-600 dark:bg-orange-500",
+    gray: "w-2 h-2 rounded-full bg-gray-600 dark:bg-gray-500",
   };
 
   return (
