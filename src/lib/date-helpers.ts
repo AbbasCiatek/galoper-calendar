@@ -1,7 +1,9 @@
 import type { Event } from "@/types";
 import {
   addMonths,
+  areIntervalsOverlapping,
   eachDayOfInterval,
+  endOfDay,
   endOfMonth,
   getDay,
   isSameDay,
@@ -107,11 +109,21 @@ export function calculateMonthChunckEventPositions(
 
   const sortedEvents = [
     ...multiDayEvents.sort(
-      //sort by start -> end ->title alphabet
+      //sort by start -> duration ->title alphabet
       (a, b) => {
-        return (
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-        );
+        const aDuration =
+          new Date(a.endDate).getTime() - new Date(a.startDate).getTime();
+        const bDuration =
+          new Date(b.endDate).getTime() - new Date(b.startDate).getTime();
+
+        const startDiff =
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+        if (startDiff !== 0) return startDiff;
+
+        const durationDiff = aDuration - bDuration;
+        if (durationDiff !== 0) return durationDiff;
+
+        return a.title.localeCompare(b.title);
       },
     ),
     ...singleDayEvents.sort((a, b) => {
@@ -119,10 +131,15 @@ export function calculateMonthChunckEventPositions(
         new Date(a.endDate).getTime() - new Date(a.startDate).getTime();
       const bDuration =
         new Date(b.endDate).getTime() - new Date(b.startDate).getTime();
-      return (
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime() ||
-        aDuration - bDuration
-      );
+
+      const startDiff =
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      if (startDiff !== 0) return startDiff;
+
+      const durationDiff = aDuration - bDuration;
+      if (durationDiff !== 0) return durationDiff;
+
+      return a.title.localeCompare(b.title);
     }),
   ];
 
@@ -173,9 +190,51 @@ export function getMonthCellEvents(
         position: eventPositions[event.id] ?? -1,
       };
     })
-    .sort(
-      (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime() ||
-        a.title.localeCompare(b.title),
+    .sort((a, b) => {
+      const aMultiDay = !isSameDay(new Date(a.startDate), new Date(a.endDate));
+      const bMultiDay = !isSameDay(new Date(b.startDate), new Date(b.endDate));
+
+      const aDuration =
+        new Date(a.endDate).getTime() - new Date(a.startDate).getTime();
+      const bDuration =
+        new Date(b.endDate).getTime() - new Date(b.startDate).getTime();
+
+      if (aMultiDay && !bMultiDay) return -1;
+      if (!aMultiDay && bMultiDay) return 1;
+
+      const startDiff =
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      if (startDiff !== 0) return startDiff;
+
+      const durationDiff = aDuration - bDuration;
+      if (durationDiff !== 0) return durationDiff;
+
+      return a.title.localeCompare(b.title);
+    });
+}
+
+// normal cell height. This fn give max event count of week (used in day-cell comp)
+// without this function the cell will take the height of MAX_EVENTS_PER_DAY*h-6 (if there only one event in all week)
+//needed especially in if u want to give access to user to change MAX_EVENTS_PER_DAY or min to max range
+
+export function maxNumberOfEventsPerInterval(
+  interval: Array<Cell>,
+  eventsOfCells: Array<Event>,
+) {
+  let maxEventNumberPerInterval = 0;
+
+  interval.forEach((cell) => {
+    const eventsPerCell = eventsOfCells.filter((event) => {
+      return areIntervalsOverlapping(
+        { start: startOfDay(cell.day), end: endOfDay(cell.day) },
+        { start: event.startDate, end: event.endDate },
+      );
+    });
+    maxEventNumberPerInterval = Math.max(
+      eventsPerCell.length,
+      maxEventNumberPerInterval,
     );
+  });
+
+  return maxEventNumberPerInterval;
 }

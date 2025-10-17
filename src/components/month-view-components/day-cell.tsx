@@ -1,38 +1,25 @@
+import { MAX_EVENTS_PER_DAY } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types";
 import { clsx } from "clsx";
-import {
-  areIntervalsOverlapping,
-  endOfDay,
-  formatDate,
-  isMonday,
-  isToday,
-  startOfDay,
-} from "date-fns";
+import { formatDate, isMonday, isToday } from "date-fns";
 import { motion } from "motion/react";
 import { useCallback } from "react";
 import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
 type TProps = {
+  maxEventsPerWeek: number;
   isFirstCell: boolean;
   isLastCell: boolean;
   cell: { day: Date; currentMonth: boolean };
-  eventsPerWeek: Array<Event & { position: number }>;
+  cellEvents: Array<Event & { position: number }>;
 };
 export function DayCell({
+  maxEventsPerWeek,
   isFirstCell,
   isLastCell,
   cell,
-  eventsPerWeek,
+  cellEvents,
 }: TProps) {
-  const cellEvents = eventsPerWeek.filter((event) => {
-    const eventStart = new Date(event.startDate);
-    const eventEnd = new Date(event.endDate);
-    return areIntervalsOverlapping(
-      { start: startOfDay(cell.day), end: endOfDay(cell.day) },
-      { start: eventStart, end: eventEnd },
-    );
-  });
-
   let undisplayedEvents = 0;
   for (const cell of cellEvents) {
     if (cell.position === -1) undisplayedEvents++;
@@ -45,7 +32,7 @@ export function DayCell({
         return (
           <motion.div
             key={`empty-${position}`}
-            className=" lg:flex-1"
+            className=" h-[26px]"
             initial={false}
             animate={false}
           />
@@ -65,10 +52,10 @@ export function DayCell({
       // };
       return (
         <>
-          <div className="flex flex-row gap-1">
+          <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
             <EventBullet className="lg:hidden" color={event.color} />
           </div>
-          <div className={clsx("hidden lg:flex lg:flex-col lg:flex-1")}>
+          <div className={clsx("hidden lg:flex lg:flex-col  ")}>
             {/*<EventDetailsDialog event={pureEvent} />*/}
             <MonthBadgeEvent
               isFirstCell={isFirstCell}
@@ -83,13 +70,17 @@ export function DayCell({
     },
     [cellEvents, cell, isFirstCell, isLastCell],
   );
-  const array: Array<number> = [0, 1, 2];
+  const renderingNumber =
+    maxEventsPerWeek < MAX_EVENTS_PER_DAY
+      ? maxEventsPerWeek
+      : MAX_EVENTS_PER_DAY;
+  const positionArray: Array<number> = [];
+  for (let i = 0; i < renderingNumber; i++) positionArray.push(i);
   return (
     <div
       className={clsx(
-        "flex flex-col border-l border-t h-full lg:min-h-40",
+        "flex flex-col lg:flex-grow border-l border-t h-full lg:min-h-36",
         isMonday(cell.day) && "border-l-0",
-        "bg-white",
       )}
     >
       <span
@@ -106,11 +97,11 @@ export function DayCell({
 
       <div
         className={clsx(
-          "flex lg:h-24 lg:flex-col",
+          "flex lg:flex-grow gap-0.5 lg:flex-col",
           !cell.currentMonth && "opacity-50",
         )}
       >
-        {cellEvents.length > 0 && array.map(renderEventAtPosition)}
+        {cellEvents.length > 0 && positionArray.map(renderEventAtPosition)}
       </div>
       <div className="flex justify-center">
         {undisplayedEvents > 0 && (
