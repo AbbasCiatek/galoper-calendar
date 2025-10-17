@@ -5,13 +5,20 @@ import { formatDate, isSameDay } from "date-fns";
 import { motion } from "motion/react";
 
 type TProps = {
+  isFirstCell: boolean;
+  isLastCell: boolean;
   event: Event & {
     position: number;
   };
   cell: { day: Date; currentMonth: boolean };
 };
 
-export function MonthBadgeEvent({ event, cell }: TProps) {
+export function MonthBadgeEvent({
+  isFirstCell,
+  isLastCell,
+  event,
+  cell,
+}: TProps) {
   const isFirstDay = isSameDay(event.startDate, cell.day);
   const isLastDay = isSameDay(event.endDate, cell.day);
   const isMiddleDay = !isFirstDay && !isLastDay;
@@ -33,8 +40,11 @@ export function MonthBadgeEvent({ event, cell }: TProps) {
         isMiddleDay && "z-20 w-[calc(100%_+_2px)]",
       )}
     >
-      <span>{isFirstDay && event.title}</span>
-      <span>{isLastDay && formatDate(new Date(event.startDate), "hh:mm")}</span>
+      <span>{(isFirstDay || isFirstCell) && event.title}</span>
+      <span>
+        {(isLastDay || isLastCell) &&
+          formatDate(new Date(event.startDate), "hh:mm")}
+      </span>
     </motion.div>
   );
 }
