@@ -59,9 +59,11 @@ export function MonthViewContainer() {
           () => getMonthCellEvents(eventsForCell, eventPositions),
           [eventsForCell, eventPositions],
         );
-        return cells.map((cell) => {
+        return cells.map((cell, index) => {
           return (
             <DayCell
+              isFirstCell={index === 0}
+              isLastCell={index === 6}
               key={formatDate(cell.day, "dd MMMM yyyy")}
               cell={cell}
               eventsPerWeek={cellEvents}
