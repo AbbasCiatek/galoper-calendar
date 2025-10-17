@@ -34,7 +34,7 @@ export function MonthBadgeEvent({
         damping: 20,
       }}
       className={clsx(
-        `flex justify-between cursor-pointer ${colorMap[event.color]} mx-1 px-1 h-6.5 items-center border truncate font-bold rounded text-xs`,
+        `flex justify-between cursor-pointer ${colorMap[event.color]} mx-1 px-1 h-6 items-center border truncate font-bold rounded text-xs`,
         !isFirstDay && "border-l-0  rounded-l-none ml-0 ",
         !isLastDay && "border-r-0  rounded-r-none mr-0 ",
         isMiddleDay && "z-20 w-[calc(100%_+_2px)]",
