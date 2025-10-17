@@ -20,11 +20,13 @@ export function DayCell({
   cell,
   cellEvents,
 }: TProps) {
+  //calculates undisplayed events
   let undisplayedEvents = 0;
   for (const cell of cellEvents) {
     if (cell.position === -1) undisplayedEvents++;
   }
 
+  // returns events or empty div(if not event at the specific positions)
   const renderEventAtPosition = useCallback(
     (position: number) => {
       const event = cellEvents.find((e) => e.position === position);
@@ -70,12 +72,16 @@ export function DayCell({
     },
     [cellEvents, cell, isFirstCell, isLastCell],
   );
+
+  //maps only the needed number of positions to not make the cell height huge because of empty divs
   const renderingNumber =
     maxEventsPerWeek < MAX_EVENTS_PER_DAY
       ? maxEventsPerWeek
       : MAX_EVENTS_PER_DAY;
+
   const positionArray: Array<number> = [];
   for (let i = 0; i < renderingNumber; i++) positionArray.push(i);
+
   return (
     <div
       className={clsx(
