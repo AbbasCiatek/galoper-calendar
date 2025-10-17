@@ -1,5 +1,5 @@
-import useEventStore from "@/EventStore.ts";
 import { EventBullet } from "@/components/events/event-bullet.tsx";
+import useEventStore from "@/event-store.ts";
 import { useCalendar } from "@/context/calendar-context";
 import { WeekDays } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
