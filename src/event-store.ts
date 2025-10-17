@@ -7,7 +7,7 @@ type EventsStore = {
   events: Array<Event>;
   getEventsByDateRange: (startDate: Date, endDate: Date) => Array<Event>;
 };
-const useEventStore = create<EventsStore>()(
+export const useEventStore = create<EventsStore>()(
   persist(
     (set, get) => ({
       events: [],
@@ -34,5 +34,3 @@ const useEventStore = create<EventsStore>()(
     { name: "Event-Storage" },
   ),
 );
-
-export default useEventStore;
