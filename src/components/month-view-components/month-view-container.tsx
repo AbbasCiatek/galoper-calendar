@@ -2,10 +2,10 @@ import { DayCell } from "@/components/month-view-components/day-cell.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { useEventStore } from "@/event-store.ts";
 import {
-  calculateMonthChunckEventPositions,
+  assignPositionForCellEvents,
+  calculateEventPositionsPerDurations,
   chunkCells,
   getCalendarCellsOfMonth,
-  getMonthCellEvents,
   maxNumberOfEventsPerInterval,
 } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types.ts";
@@ -30,10 +30,12 @@ export function MonthViewContainer() {
     [monthDate],
   );
 
+  //dividing each 7 days of month into chunks to give events positions correctly
   const cellsDividedIntoWeeks = chunkCells(cells);
 
   const { getEventsByDateRange } = useEventStore();
 
+  //getting events per month
   const allMonthEvents: Array<Event> = useMemo(
     () => getEventsByDateRange(startOfMonth(monthDate), endOfMonth(monthDate)),
     [getEventsByDateRange, monthDate],
@@ -42,13 +44,14 @@ export function MonthViewContainer() {
   return (
     <div className="grid grid-cols-7 w-full h-full">
       {cellsDividedIntoWeeks.map((cells): ReactNode => {
+        //saving first and last day for event title and date to be displayed per line (week) if it is long event
         const firstDayOfWeek = cells[0].day;
         const lastDayOfWeek = cells.slice(-1)[0].day;
         const eventPositions = useMemo(
-          () => calculateMonthChunckEventPositions(allMonthEvents, cells),
+          () => calculateEventPositionsPerDurations(allMonthEvents, cells),
           [cells],
         );
-        const eventsForCell = allMonthEvents.filter((event) => {
+        const eventsOfTheWeek = allMonthEvents.filter((event) => {
           const eventStart = new Date(event.startDate);
           const eventEnd = new Date(event.endDate);
           return areIntervalsOverlapping(
@@ -56,16 +59,17 @@ export function MonthViewContainer() {
             { start: eventStart, end: eventEnd },
           );
         });
-        const weekEvents = useMemo(
-          () => getMonthCellEvents(eventsForCell, eventPositions),
-          [eventsForCell, eventPositions],
+        //adding the position attribute to eact event of the week
+        const weekEventsPositioned = useMemo(
+          () => assignPositionForCellEvents(eventsOfTheWeek, eventPositions),
+          [eventsOfTheWeek, eventPositions],
         );
         const maxEventsPerWeek = maxNumberOfEventsPerInterval(
           cells,
-          weekEvents,
+          weekEventsPositioned,
         );
         return cells.map((cell, index) => {
-          const cellEvents = weekEvents.filter((event) => {
+          const cellEvents = weekEventsPositioned.filter((event) => {
             const eventStart = new Date(event.startDate);
             const eventEnd = new Date(event.endDate);
             return areIntervalsOverlapping(
