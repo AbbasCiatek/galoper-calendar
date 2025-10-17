@@ -5,6 +5,7 @@ import {
   chunkCells,
   getCalendarCellsOfMonth,
   getMonthCellEvents,
+  maxNumberOfEventsPerInterval,
 } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types.ts";
 import {
@@ -54,18 +55,31 @@ export function MonthViewContainer() {
             { start: eventStart, end: eventEnd },
           );
         });
-        const cellEvents = useMemo(
+        const weekEvents = useMemo(
           () => getMonthCellEvents(eventsForCell, eventPositions),
           [eventsForCell, eventPositions],
         );
+        const maxEventsPerWeek = maxNumberOfEventsPerInterval(
+          cells,
+          weekEvents,
+        );
         return cells.map((cell, index) => {
+          const cellEvents = weekEvents.filter((event) => {
+            const eventStart = new Date(event.startDate);
+            const eventEnd = new Date(event.endDate);
+            return areIntervalsOverlapping(
+              { start: startOfDay(cell.day), end: endOfDay(cell.day) },
+              { start: eventStart, end: eventEnd },
+            );
+          });
           return (
             <DayCell
+              maxEventsPerWeek={maxEventsPerWeek}
               isFirstCell={index === 0}
               isLastCell={index === 6}
               key={formatDate(cell.day, "dd MMMM yyyy")}
               cell={cell}
-              eventsPerWeek={cellEvents}
+              cellEvents={cellEvents}
             />
           );
         });
