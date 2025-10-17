@@ -1,6 +1,6 @@
 import { EventBullet } from "@/components/events/event-bullet.tsx";
-import useEventStore from "@/event-store.ts";
 import { useCalendar } from "@/context/calendar-context";
+import { useEventStore } from "@/event-store.ts";
 import { WeekDays } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types.ts";
@@ -35,6 +35,9 @@ export function DaysInMonth({ month }: { month: Date }) {
         );
       })}
       {cells.map((cell) => {
+        const dayEvent = monthlyEvents.filter((event: Event) =>
+          isSameDay(new Date(event.startDate), cell.day),
+        );
         return (
           <button
             type={"button"}
@@ -46,6 +49,7 @@ export function DaysInMonth({ month }: { month: Date }) {
                 ? "text-gray-800 dark:text-gray-200"
                 : "text-gray-400 dark:text-gray-500",
               isSameDay(date, cell.day) && cell.currentMonth && "bg-gray-300",
+              dayEvent.length === 0 && "size-5",
             )}
           >
             {formatDate(cell.day, "d")}
