@@ -31,6 +31,9 @@ export function DaysInMonth({ month }: { month: Date }) {
         );
       })}
       {cells.map((cell) => {
+        const dayEvent = monthlyEvents.filter((event: Event) =>
+          isSameDay(new Date(event.startDate), cell.day),
+        );
         return (
           <button
             type={"button"}
@@ -40,6 +43,7 @@ export function DaysInMonth({ month }: { month: Date }) {
               "text-gray-800 dark:text-gray-200": cell.currentMonth,
               "text-gray-400 dark:text-gray-500": !cell.currentMonth,
               "bg-gray-300": isSameDay(date, cell.day) && cell.currentMonth,
+              "size-5":dayEvent.length===0,
             })}
           >
             {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
