@@ -1,6 +1,6 @@
-import useEventStore from "@/EventStore.ts";
-import { DATE_FORMAT, WEEK_DAYS } from "@/constants";
 import { EventBullet } from "@/components/events/event-bullet.tsx";
+import useEventStore from "@/event-store.ts";
+import { DATE_FORMAT, WEEK_DAYS } from "@/constants";
 import { useCalendar } from "@/context/calendar-context";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types.ts";
