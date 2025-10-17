@@ -13,10 +13,17 @@ import { useCallback } from "react";
 import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
 type TProps = {
+  isFirstCell: boolean;
+  isLastCell: boolean;
   cell: { day: Date; currentMonth: boolean };
   eventsPerWeek: Array<Event & { position: number }>;
 };
-export function DayCell({ cell, eventsPerWeek }: TProps) {
+export function DayCell({
+  isFirstCell,
+  isLastCell,
+  cell,
+  eventsPerWeek,
+}: TProps) {
   const cellEvents = eventsPerWeek.filter((event) => {
     const eventStart = new Date(event.startDate);
     const eventEnd = new Date(event.endDate);
@@ -63,13 +70,18 @@ export function DayCell({ cell, eventsPerWeek }: TProps) {
           </div>
           <div className={clsx("hidden lg:flex lg:flex-col lg:flex-1")}>
             {/*<EventDetailsDialog event={pureEvent} />*/}
-            <MonthBadgeEvent event={event} cell={cell} />
+            <MonthBadgeEvent
+              isFirstCell={isFirstCell}
+              isLastCell={isLastCell}
+              event={event}
+              cell={cell}
+            />
             {/*</EventDetailsDialog>*/}
           </div>
         </>
       );
     },
-    [cellEvents, cell],
+    [cellEvents, cell, isFirstCell, isLastCell],
   );
   const array: Array<number> = [0, 1, 2];
   return (
