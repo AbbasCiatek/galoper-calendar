@@ -32,7 +32,7 @@ export function DaysInMonth({ month }: { month: Date }) {
             key={formatDate(cell.day, "do dd MMMM yyyy HH:mm")}
             onClick={() => handleDayClick(cell.day)}
             className={clsx(
-              "text-center size-5 font-medium text-xs rounded-full",
+              "text-center font-medium text-xs rounded-full",
               cell.currentMonth
                 ? "text-gray-800 dark:text-gray-200"
                 : "text-gray-400 dark:text-gray-500",
