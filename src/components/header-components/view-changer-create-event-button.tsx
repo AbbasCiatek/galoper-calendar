@@ -99,7 +99,7 @@ export function ViewChangerCreateEventButton() {
               <button
                 type="button"
                 className={clsx(
-                  "flex h-8 w-full items-center justify-center cursor-pointer",
+                  "flex gap-2 h-8 w-full items-center justify-center cursor-pointer",
                   !isActive &&
                     " hover:scale-105 transform transition-all duration-200",
                 )}
@@ -108,7 +108,6 @@ export function ViewChangerCreateEventButton() {
                 <AnimatePresence initial={false}>
                   {isActive && (
                     <motion.span
-                      className="ml-2"
                       initial={{ opacity: 0, scaleX: 0.8 }}
                       animate={{ opacity: 1, scaleX: 1 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
