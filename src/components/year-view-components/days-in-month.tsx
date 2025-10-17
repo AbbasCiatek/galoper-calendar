@@ -21,7 +21,7 @@ export function DaysInMonth({ month }: { month: Date }) {
             className="text-xs font-semibold text-gray-600 dark:text-gray-200 "
             key={weekDay}
           >
-            {weekDay}
+            {weekDay.slice(0, 2)}
           </div>
         );
       })}
