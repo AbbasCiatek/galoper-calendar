@@ -92,7 +92,7 @@ export function chunkCells(arr: Array<Cell>) {
   return result;
 }
 
-export function calculateMonthChunckEventPositions(
+export function calculateEventPositionsPerDurations(
   events: Array<Event>,
   cells: Array<Cell>,
 ) {
@@ -179,7 +179,7 @@ export function calculateMonthChunckEventPositions(
   return eventPositions;
 }
 
-export function getMonthCellEvents(
+export function assignPositionForCellEvents(
   events: Array<Event>,
   eventPositions: Record<string, number>,
 ) {
