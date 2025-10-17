@@ -1,37 +1,46 @@
+import { useCalendar } from "@/context/calendar-context";
 import { WeekDays } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
-import { formatDate } from "date-fns";
+import { formatDate, isSameDay } from "date-fns";
 
 export function DaysInMonth({ month }: { month: Date }) {
+  const { date, setDate } = useCalendar();
   // option to path if week start at monday or sunday bool (if needed)
-  const daysObject = getCalendarCellsOfMonth(month, true);
+  const cells = getCalendarCellsOfMonth(month, true);
+
+  const handleDayClick = (date: Date) => {
+    setDate(date);
+  };
 
   return (
-    <div className="grid grid-cols-7 px-3 py-2 gap-4">
+    <div className="grid grid-cols-7 gap-6 m-4">
       {WeekDays.map((weekDay) => {
         return (
           <div
-            className="p-1.5 flex-grow text-xs font-semibold text-gray-600 dark:text-gray-200 gap-1 "
+            className="text-xs font-semibold text-gray-600 dark:text-gray-200 "
             key={weekDay}
           >
             {weekDay}
           </div>
         );
       })}
-      {daysObject.map((objectDay) => {
+      {cells.map((cell) => {
         return (
-          <div
-            key={formatDate(objectDay.day, "do dd MMMM yyyy HH:mm")}
+          <button
+            type={"button"}
+            key={formatDate(cell.day, "do dd MMMM yyyy HH:mm")}
+            onClick={() => handleDayClick(cell.day)}
             className={clsx(
-              "gap-1 p-1  text-center font-medium",
-              objectDay.currentMonth
+              "text-center size-5 font-medium text-xs rounded-full",
+              cell.currentMonth
                 ? "text-gray-800 dark:text-gray-200"
                 : "text-gray-400 dark:text-gray-500",
+              isSameDay(date, cell.day) && cell.currentMonth && "bg-gray-300",
             )}
           >
-            {formatDate(objectDay.day, "d")}
-          </div>
+            {formatDate(cell.day, "d")}
+          </button>
         );
       })}
     </div>

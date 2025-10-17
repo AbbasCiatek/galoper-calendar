@@ -17,7 +17,7 @@ export function MonthNameDisplayer({ month }: { month: Date }) {
       onClick={() => {
         handleMonthClick(month);
       }}
-      className="text-[16px] font-semibold text-gray-800 dark:text-gray-200  text-center px-20 py-2 border-b cursor-pointer hover:bg-gray-100"
+      className="text-sm font-semibold h-9 text-gray-800 dark:text-gray-200 text-center border-b cursor-pointer hover:bg-gray-100"
     >
       {formattedMonth}
     </button>

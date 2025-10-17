@@ -13,7 +13,7 @@ export function MonthContainers() {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
     >
       {months.map((month, index) => (
         <motion.div
@@ -21,7 +21,7 @@ export function MonthContainers() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ staggerChildren: 0.25, delay: 0.05 * index }}
           key={formatDate(month, "MMM")}
-          className="flex flex-col border m-2 shadow-lg rounded-2xl "
+          className="flex flex-col border shadow-lg rounded-2xl m-2 "
         >
           <MonthNameDisplayer month={month} />
           <DaysInMonth month={month} />
