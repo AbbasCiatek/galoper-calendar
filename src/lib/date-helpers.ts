@@ -12,7 +12,7 @@ import {
   startOfMonth,
   subMonths,
 } from "date-fns";
-export const MAX_EVENTS_PER_DAY = 3;
+export const MAX_EVENTS_PER_DAY = 8;
 
 export function getCalendarCellsOfMonth(
   date: Date,

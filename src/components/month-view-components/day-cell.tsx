@@ -1,3 +1,4 @@
+import { LineEvent } from "@/components/month-view-components/line-event.tsx";
 import { MAX_EVENTS_PER_DAY } from "@/lib/date-helpers.ts";
 import type { Event } from "@/types";
 import { clsx } from "clsx";
@@ -5,7 +6,6 @@ import { formatDate, isMonday, isToday } from "date-fns";
 import { motion } from "motion/react";
 import { useCallback } from "react";
 import { EventBullet } from "../events/event-bullet";
-import { MonthBadgeEvent } from "./month-badge-event";
 type TProps = {
   maxEventsPerWeek: number;
   isFirstCell: boolean;
@@ -34,7 +34,7 @@ export function DayCell({
         return (
           <motion.div
             key={`empty-${position}`}
-            className=" h-[26px]"
+            className="h-[10px]"
             initial={false}
             animate={false}
           />
@@ -57,20 +57,15 @@ export function DayCell({
           <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
             <EventBullet className="lg:hidden" color={event.color} />
           </div>
-          <div className={clsx("hidden lg:flex lg:flex-col  ")}>
+          <div className={clsx("hidden lg:flex lg:flex-col ")}>
             {/*<EventDetailsDialog event={pureEvent} />*/}
-            <MonthBadgeEvent
-              isFirstCell={isFirstCell}
-              isLastCell={isLastCell}
-              event={event}
-              cell={cell}
-            />
+            <LineEvent event={event} cell={cell} />
             {/*</EventDetailsDialog>*/}
           </div>
         </>
       );
     },
-    [cellEvents, cell, isFirstCell, isLastCell],
+    [cellEvents, cell],
   );
 
   //maps only the needed number of positions to not make the cell height huge because of empty divs
