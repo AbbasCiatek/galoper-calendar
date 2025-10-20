@@ -4,17 +4,17 @@ import WeekViewContainer from "@/Components/WeekComponents/week-view-container.t
 import WeekViewMultiDayEvent from "@/Components/WeekComponents/week-view-multi-day-event.tsx";
 
 export default function WeekView() {
-	return (
-		<>
-			<div className="flex flex-col border rounded-b-2xl">
-				<div>
-					<DateDisplayLayout>
-						<WeekDaysDisplay />
-					</DateDisplayLayout>
-					<WeekViewMultiDayEvent />
-				</div>
-				<WeekViewContainer />
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div className="flex flex-col border rounded-b-2xl">
+        <div>
+          <DateDisplayLayout>
+            <WeekDaysDisplay />
+          </DateDisplayLayout>
+          <WeekViewMultiDayEvent />
+        </div>
+        <WeekViewContainer />
+      </div>
+    </>
+  );
 }
