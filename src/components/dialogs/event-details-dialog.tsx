@@ -13,6 +13,7 @@ import { formatDate } from "date-fns";
 import { Calendar, Clock, Text } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { AddEditEventDialog } from "./add-edit-event-dialog";
 
 type EventDetailsDialogProps = {
   children: ReactNode;
@@ -107,11 +108,11 @@ export function EventDetailsDialog({
 
         <DialogFooter>
           {/* clicking edit triggers add edit event dialog component */}
-          {/*<AddEditEventDialog event={event}>*/}
-          {/*  <Button type="button" variant="outline">*/}
-          {/*    Edit*/}
-          {/*  </Button>*/}
-          {/*</AddEditEventDialog>*/}
+          <AddEditEventDialog event={event}>
+            <Button type="button" variant="outline">
+              Edit
+            </Button>
+          </AddEditEventDialog>
           <Button
             type="button"
             variant="destructive"
