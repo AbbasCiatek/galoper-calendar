@@ -1,5 +1,5 @@
+import type { Event } from "@/event-store.ts";
 import { colorMap } from "@/helpers.ts";
-import type { Event } from "@/types.ts";
 
 interface Props {
   event: Event;

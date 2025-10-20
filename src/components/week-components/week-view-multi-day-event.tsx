@@ -1,6 +1,6 @@
-import { MultiDayEventDisplay } from "@/Components/WeekComponents/multi-day-event-display.tsx";
+import { MultiDayEventDisplay } from "@/components/week-components/multi-day-event-display.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import useEventStore from "@/event-store.ts";
+import { useEventStore } from "@/event-store.ts";
 import {
   addDays,
   differenceInDays,
@@ -12,7 +12,7 @@ import {
 } from "date-fns";
 import { useMemo } from "react";
 
-export default function WeekViewMultiDayEvent() {
+export function WeekViewMultiDayEvent() {
   const { date } = useCalendar();
   const { getMultipleDayEvents } = useEventStore();
   const multiDayEvents = getMultipleDayEvents(
@@ -48,7 +48,7 @@ export default function WeekViewMultiDayEvent() {
   }, [multiDayEvents, weekStart, weekEnd]);
 
   const eventRows = useMemo(() => {
-    const rows: (typeof processedEvents)[] = [];
+    const rows: Array<typeof processedEvents> = [];
 
     processedEvents.forEach((event) => {
       let rowIndex = rows.findIndex((row) =>
@@ -90,7 +90,7 @@ export default function WeekViewMultiDayEvent() {
 
   return (
     <div className="hidden overflow-hidden sm:flex">
-      <div className="w-18 border-b"></div>
+      <div className="w-18 border-b" />
       <div className="grid flex-1 grid-cols-7 divide-x border-b border-l">
         {weekDays.map((day, dayIndex) => (
           <div
@@ -104,7 +104,10 @@ export default function WeekViewMultiDayEvent() {
 
               if (!event) {
                 return (
-                  <div key={`${rowIndex}-${dayIndex}`} className="h-6.5" />
+                  <div
+                    key={`${rowIndex}-${day.toISOString()}`}
+                    className="h-6.5"
+                  />
                 );
               }
 
@@ -125,7 +128,7 @@ export default function WeekViewMultiDayEvent() {
 
               return (
                 <MultiDayEventDisplay
-                  key={`${event.id}-${dayIndex}`}
+                  key={`${event.id}-${day.toISOString()}`}
                   event={event}
                   cellDate={startOfDay(day)}
                   position={position}

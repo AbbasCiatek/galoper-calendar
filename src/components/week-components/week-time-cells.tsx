@@ -1,3 +1,4 @@
+import EventPerDay from "@/components/week-components/event-per-day.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { daysOfWeek } from "@/lib/date-helpers.ts";
 import { isToday } from "date-fns";
@@ -14,6 +15,7 @@ export function WeekTimeCells() {
           return (
             <div key={day.toISOString()} className="relative">
               <TimeCells />
+              <EventPerDay day={day} />
               {isToday(day) && <TimeLine />}
             </div>
           );
