@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context";
-import { WeekDays } from "@/helpers.ts";
+import { Date_Format, WEEK_DAYS, lowerSliceWord } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
 import { formatDate, isSameDay } from "date-fns";
@@ -15,13 +15,13 @@ export function DaysInMonth({ month }: { month: Date }) {
 
   return (
     <div className="grid grid-cols-7 gap-6 m-4">
-      {WeekDays.map((weekDay) => {
+      {WEEK_DAYS.map((weekDay) => {
         return (
           <div
             className="text-xs font-semibold text-gray-600 dark:text-gray-200 "
             key={weekDay}
           >
-            {weekDay.slice(0, 2)}
+            {lowerSliceWord(weekDay, 2)}
           </div>
         );
       })}
@@ -29,7 +29,7 @@ export function DaysInMonth({ month }: { month: Date }) {
         return (
           <button
             type={"button"}
-            key={formatDate(cell.day, "do dd MMMM yyyy HH:mm")}
+            key={formatDate(cell.day, Date_Format.fullDate)}
             onClick={() => handleDayClick(cell.day)}
             className={clsx(
               "text-center font-medium text-xs rounded-full",
@@ -39,7 +39,7 @@ export function DaysInMonth({ month }: { month: Date }) {
               isSameDay(date, cell.day) && cell.currentMonth && "bg-gray-300",
             )}
           >
-            {formatDate(cell.day, "d")}
+            {formatDate(cell.day, Date_Format.dayOfMonth)}
           </button>
         );
       })}
