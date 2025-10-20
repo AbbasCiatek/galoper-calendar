@@ -165,12 +165,18 @@ export function getCalendarCellsOfMonth(
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
-          day,
-          currentMonth: false,
-        }));
+        day,
+        currentMonth: false,
+      }));
 
   if (nextMonthObject) {
     return [...prevMonthObject, ...currentMonthObject, ...nextMonthObject];
   }
   return [...prevMonthObject, ...currentMonthObject];
+}
+export function daysOfWeek(date: Date) {
+  return eachDayOfInterval({
+    start: startOfWeek(date, { weekStartsOn: 1 }),
+    end: endOfWeek(date, { weekStartsOn: 1 }),
+  });
 }
