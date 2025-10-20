@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { daysOfWeek } from "@/dateHelpers.ts";
+import { daysOfWeek } from "@/lib/date-helpers.ts";
 import { isToday } from "date-fns";
 import { TimeCells } from "../week-day-view-commons/time-cell";
 import { TimeLine } from "../week-day-view-commons/time-line";
