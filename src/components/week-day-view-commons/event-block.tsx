@@ -1,9 +1,9 @@
-import type { Event } from "@/event-store";
+import type { Event } from "@/event-store.ts";
 import { formatDate } from "date-fns";
 //import ResizableEvent from "@/Components/ResizableEvent.tsx";
 // import ResizableEvent from "@/Components/ResizableEvent.tsx";
 
-export default function EventBlock({
+export function EventBlock({
   event,
   height,
 }: { event: Event; height: number }) {

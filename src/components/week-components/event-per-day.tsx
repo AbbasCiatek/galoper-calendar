@@ -1,6 +1,5 @@
-import EventsPositioning from "@/Components/WeeKDayViewCommonComponents/event-positioning.tsx";
-import { useEventStore } from "@/event-store.ts";
-import type { Event } from "@/types.ts";
+import { EventsPositioning } from "@/components/week-day-view-commons/event-positioning.tsx";
+import { type Event, useEventStore } from "@/event-store.ts";
 import { endOfDay, startOfDay } from "date-fns";
 
 export default function EventPerDay({ day }: { day: Date }) {
