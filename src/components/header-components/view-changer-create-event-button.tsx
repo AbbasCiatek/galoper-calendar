@@ -13,6 +13,34 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 
+const views = [
+  {
+    name: "Agenda",
+    value: "agenda",
+    icon: () => <CalendarRange className="size-5" />,
+  },
+  {
+    name: "Day",
+    value: "day",
+    icon: () => <ClipboardList className="size-5" />,
+  },
+  {
+    name: "Week",
+    value: "week",
+    icon: () => <Columns4 className="size-5" />,
+  },
+  {
+    name: "Month",
+    value: "month",
+    icon: () => <Grid3x3 className="size-5" />,
+  },
+  {
+    name: "Year",
+    value: "year",
+    icon: () => <CalendarDays className="size-5" />,
+  },
+];
+
 export function ViewChangerCreateEventButton() {
   const { view, setView } = useCalendar();
   useEffect(() => {
@@ -39,36 +67,8 @@ export function ViewChangerCreateEventButton() {
     return () => window.removeEventListener("keyup", handleKey);
   }, []);
 
-  const views = [
-    {
-      name: "Agenda",
-      value: "agenda",
-      icon: () => <CalendarRange className="size-5" />,
-    },
-    {
-      name: "Day",
-      value: "day",
-      icon: () => <ClipboardList className="size-5" />,
-    },
-    {
-      name: "Week",
-      value: "week",
-      icon: () => <Columns4 className="size-5" />,
-    },
-    {
-      name: "Month",
-      value: "month",
-      icon: () => <Grid3x3 className="size-5" />,
-    },
-    {
-      name: "Year",
-      value: "year",
-      icon: () => <CalendarDays className="size-5" />,
-    },
-  ];
-
   const handleViewClick = (view: ViewTypes) => {
-    setView((prevView) => (prevView !== view ? view : prevView));
+    setView(view);
   };
 
   return (
