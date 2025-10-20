@@ -1,7 +1,7 @@
 import { Hours } from "@/helpers.ts";
 import { formatDate } from "date-fns";
 
-export default function HoursColumn() {
+export function HoursColumn() {
   return (
     <div className="relative w-18">
       {Hours.map((hour, index) => (

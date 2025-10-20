@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function TimeLine() {
+export function TimeLine() {
   const [currentTime, setCurrentTime] = useState(new Date());
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60 * 1000);

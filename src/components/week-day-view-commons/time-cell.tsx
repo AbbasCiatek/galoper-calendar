@@ -1,5 +1,5 @@
 import { Hours } from "@/helpers.ts";
-export default function TimeCells() {
+export function TimeCells() {
   return (
     <>
       {Hours.map((hour, index) => {
