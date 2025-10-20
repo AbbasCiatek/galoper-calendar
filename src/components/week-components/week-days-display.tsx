@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { daysOfWeek } from "@/dateHelpers.ts";
+import { daysOfWeek } from "@/lib/date-helpers";
 import { clsx } from "clsx";
 import { formatDate } from "date-fns";
 
