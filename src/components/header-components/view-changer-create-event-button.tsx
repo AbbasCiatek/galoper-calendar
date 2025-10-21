@@ -47,29 +47,25 @@ export function ViewChangerCreateEventButton() {
     const handleKey = (event: KeyboardEvent) => {
       switch (event.key) {
         case "a":
-          handleViewClick("agenda");
+          setView("agenda");
           break;
         case "d":
-          handleViewClick("day");
+          setView("day");
           break;
         case "w":
-          handleViewClick("week");
+          setView("week");
           break;
         case "m":
-          handleViewClick("month");
+          setView("month");
           break;
         case "y":
-          handleViewClick("year");
+          setView("year");
           break;
       }
     };
     window.addEventListener("keyup", handleKey);
     return () => window.removeEventListener("keyup", handleKey);
-  }, []);
-
-  const handleViewClick = (view: ViewTypes) => {
-    setView(view);
-  };
+  }, [setView]);
 
   return (
     <motion.div
@@ -89,7 +85,7 @@ export function ViewChangerCreateEventButton() {
                 "flex gap-2",
                 isActive && "text-gray-800 dark:text-white",
               )}
-              onClick={() => handleViewClick(value as ViewTypes)}
+              onClick={() => setView(value as ViewTypes)}
               initial={false}
               animate={{
                 width: isActive ? 120 : 32,
