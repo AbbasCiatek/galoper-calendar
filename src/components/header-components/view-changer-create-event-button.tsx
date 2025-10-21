@@ -17,27 +17,27 @@ const views = [
   {
     name: "Agenda",
     value: "agenda",
-    icon: () => <CalendarRange className="size-5" />,
+    icon: CalendarRange,
   },
   {
     name: "Day",
     value: "day",
-    icon: () => <ClipboardList className="size-5" />,
+    icon: ClipboardList,
   },
   {
     name: "Week",
     value: "week",
-    icon: () => <Columns4 className="size-5" />,
+    icon: Columns4,
   },
   {
     name: "Month",
     value: "month",
-    icon: () => <Grid3x3 className="size-5" />,
+    icon: Grid3x3,
   },
   {
     name: "Year",
     value: "year",
-    icon: () => <CalendarDays className="size-5" />,
+    icon: CalendarDays,
   },
 ];
 
@@ -104,7 +104,7 @@ export function ViewChangerCreateEventButton() {
                     " hover:scale-105 transform transition-all duration-200",
                 )}
               >
-                <Icon />
+                <Icon className="size-5" />
                 <AnimatePresence initial={false}>
                   {isActive && (
                     <motion.span
@@ -123,12 +123,10 @@ export function ViewChangerCreateEventButton() {
         })}
       </div>
       {/*<!--Add Event Button-->*/}
-      {/*<AddEditEventDialog>*/}
       <Button className="font-semibold" variant="default">
         {" "}
         <PlusIcon /> Add Event
       </Button>
-      {/*</AddEditEventDialog>*/}
     </motion.div>
   );
 }
