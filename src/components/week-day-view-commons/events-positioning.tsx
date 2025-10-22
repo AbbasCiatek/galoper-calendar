@@ -3,6 +3,7 @@ import type { Event } from "@/event-store.ts";
 import { colorMap } from "@/helpers.ts";
 import { positionEventsWeekDayView } from "@/lib/date-helpers";
 import { clsx } from "clsx";
+import { motion } from "motion/react";
 
 type Props = {
   singleDayEvents: Array<Event>;
@@ -14,13 +15,22 @@ export function EventsPositioning({ singleDayEvents, date }: Props) {
 
   return (
     <>
-      {positioning.map((p) => {
+      {positioning.map((p, index) => {
         return (
-          <button
-            type="button"
+          <motion.div
             key={p.event.id}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.2,
+              delay: 0.2 * index,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+              mass: 2,
+            }}
             className={clsx(
-              "border-2 rounded-lg text-xs  absolute overflow-hidden",
+              "border-2 rounded-md text-xs cursor-pointer absolute overflow-hidden",
               colorMap[p.event.color],
             )}
             style={{
@@ -31,7 +41,7 @@ export function EventsPositioning({ singleDayEvents, date }: Props) {
             }}
           >
             <EventBlock event={p.event} />
-          </button>
+          </motion.div>
         );
       })}
     </>
