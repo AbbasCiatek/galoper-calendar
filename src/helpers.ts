@@ -3,5 +3,7 @@ export const HOURS = [
   22, 23,
 ];
 export const DATE_FORMAT = {
+  shortWeekDay: "EE",
+  dayOfMonth: "d",
   hours24Format: "HH",
 };
