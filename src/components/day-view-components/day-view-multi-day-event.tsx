@@ -1,4 +1,4 @@
-import { MultiDayEventDisplay } from "@/components/day-view-components/multi-day-event-display.tsx";
+import { MultiDayEventDisplay } from "@/components/week-day-view-commons/multi-day-event-display.tsx";
 import { useCalendar } from "@/context/calendar-context";
 import { useEventStore } from "@/event-store.ts";
 import {
