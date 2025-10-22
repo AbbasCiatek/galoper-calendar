@@ -4,7 +4,7 @@ import { DayTimeCell } from "./day-time-cell";
 
 export function DayViewContainer() {
   return (
-    <ScrollArea className="h-[500px] md:h-[800px] border-b">
+    <ScrollArea className="h-[500px] md:h-[800px] border-b rounded-b-2xl">
       <div className="flex overflow-hidden">
         <HoursColumn />
         <DayTimeCell />
