@@ -16,5 +16,6 @@ export const DATE_FORMAT = {
   longMonth: "MMMM",
   fullDate: "dd MMM yyyy",
   dayOfMonth: "d",
+  shortWeekDay: "EE",
   hours24Format: "HH",
 };
