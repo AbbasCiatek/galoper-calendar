@@ -152,6 +152,6 @@ export const useEventStore = create<EventsStore>()(
           events: state.events.filter((e) => e.id !== id),
         })),
     }),
-    { name: "event-storage", storage: createJSONStorage(() => localStorage) },
+    { name: "Event-Storage", storage: createJSONStorage(() => localStorage) },
   ),
 );
