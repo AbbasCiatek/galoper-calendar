@@ -3,10 +3,20 @@ import { colorMap } from "@/helpers.ts";
 
 interface Props {
   event: Event;
+  eventCurrentDay?: number;
+  eventTotalDays?: number;
   position: "first" | "middle" | "last" | "none";
 }
 
-export function MultiDayEventDisplay({ event, position }: Props) {
+export function MultiDayEventDisplay({
+  event,
+  eventCurrentDay,
+  eventTotalDays,
+  position,
+}: Props) {
+  if (!position) {
+    position = "none";
+  }
   const positionClasses = {
     none: "rounded-md mr-2",
     first: "rounded-l-md border-r-0 z-10 ml-2 w-[calc(100%_+_4px)]",
@@ -16,9 +26,16 @@ export function MultiDayEventDisplay({ event, position }: Props) {
 
   return (
     <div
-      className={`flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer ${positionClasses} ${colorMap[event.color]} `}
+      className={`flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer  ${positionClasses} ${colorMap[event.color]} `}
     >
-      {position === "first" || position === "none" ? event.title : null}
+      <p>
+        {eventCurrentDay && (
+          <span className="text-xs">
+            Day {eventCurrentDay} of {eventTotalDays} •{" "}
+          </span>
+        )}
+        {position === "first" || position === "none" ? event.title : null}
+      </p>
     </div>
   );
 }
