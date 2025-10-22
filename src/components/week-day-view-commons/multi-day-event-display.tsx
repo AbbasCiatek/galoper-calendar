@@ -5,7 +5,7 @@ interface Props {
   event: Event;
   eventCurrentDay?: number;
   eventTotalDays?: number;
-  position: "first" | "middle" | "last" | "none";
+  position?: "first" | "middle" | "last" | "none";
 }
 
 export function MultiDayEventDisplay({
