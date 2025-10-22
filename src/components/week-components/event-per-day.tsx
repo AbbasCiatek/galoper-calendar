@@ -3,9 +3,9 @@ import { type Event, useEventStore } from "@/event-store.ts";
 import { endOfDay, startOfDay } from "date-fns";
 
 export default function EventPerDay({ day }: { day: Date }) {
-  const { getEventsByDateRange } = useEventStore();
+  const { getSingleDayEvents } = useEventStore();
 
-  const events: Array<Event> = getEventsByDateRange(
+  const events: Array<Event> = getSingleDayEvents(
     startOfDay(day),
     endOfDay(day),
   );

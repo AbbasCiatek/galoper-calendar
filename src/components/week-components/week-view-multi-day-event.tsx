@@ -89,7 +89,7 @@ export function WeekViewMultiDayEvent() {
   }
 
   return (
-    <div className="hidden overflow-hidden sm:flex">
+    <div className="flex">
       <div className="w-18 border-b" />
       <div className="grid flex-1 grid-cols-7 divide-x border-b border-l">
         {weekDays.map((day, dayIndex) => (
@@ -111,7 +111,7 @@ export function WeekViewMultiDayEvent() {
                 );
               }
 
-              let position: "first" | "middle" | "last" | "none" = "none";
+              let position: "first" | "middle" | "last" | "none";
 
               if (
                 dayIndex === event.startIndex &&
