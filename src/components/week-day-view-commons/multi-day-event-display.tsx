@@ -14,6 +14,9 @@ export function MultiDayEventDisplay({
   eventTotalDays,
   position,
 }: Props) {
+  if (!position) {
+    position = "none";
+  }
   const positionClasses = {
     none: "rounded-md mr-2",
     first: "rounded-l-md border-r-0 z-10 ml-2 w-[calc(100%_+_4px)]",
@@ -23,7 +26,7 @@ export function MultiDayEventDisplay({
 
   return (
     <div
-      className={`flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer rounded-lg ${positionClasses} ${colorMap[event.color]} `}
+      className={`flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer  ${positionClasses} ${colorMap[event.color]} `}
     >
       <p>
         {eventCurrentDay && (
@@ -31,9 +34,7 @@ export function MultiDayEventDisplay({
             Day {eventCurrentDay} of {eventTotalDays} •{" "}
           </span>
         )}
-        {position === "first" || position === "none" || position == null
-          ? event.title
-          : null}
+        {position === "first" || position === "none" ? event.title : null}
       </p>
     </div>
   );
