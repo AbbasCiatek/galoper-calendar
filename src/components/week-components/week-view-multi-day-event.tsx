@@ -1,4 +1,4 @@
-import { MultiDayEventDisplay } from "@/components/week-components/multi-day-event-display.tsx";
+import { MultiDayEventDisplay } from "@/components/week-day-view-commons/multi-day-event-display.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { useEventStore } from "@/event-store.ts";
 import {
@@ -7,7 +7,6 @@ import {
   endOfWeek,
   isAfter,
   isBefore,
-  startOfDay,
   startOfWeek,
 } from "date-fns";
 import { useMemo } from "react";
@@ -130,7 +129,6 @@ export function WeekViewMultiDayEvent() {
                 <MultiDayEventDisplay
                   key={`${event.id}-${day.toISOString()}`}
                   event={event}
-                  cellDate={startOfDay(day)}
                   position={position}
                 />
               );
