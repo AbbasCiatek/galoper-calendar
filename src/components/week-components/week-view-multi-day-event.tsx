@@ -9,6 +9,7 @@ import {
   isBefore,
   startOfWeek,
 } from "date-fns";
+import { motion } from "motion/react";
 import { useMemo } from "react";
 
 export function WeekViewMultiDayEvent() {
@@ -126,11 +127,21 @@ export function WeekViewMultiDayEvent() {
               }
 
               return (
-                <MultiDayEventDisplay
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 0.2,
+                    delay: 0.1 * rowIndex,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20,
+                    mass: 2,
+                  }}
                   key={`${event.id}-${day.toISOString()}`}
-                  event={event}
-                  position={position}
-                />
+                >
+                  <MultiDayEventDisplay event={event} position={position} />
+                </motion.div>
               );
             })}
           </div>
