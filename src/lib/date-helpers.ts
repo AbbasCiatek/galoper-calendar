@@ -9,12 +9,13 @@ import {
   subMonths,
 } from "date-fns";
 
-export function getArrayMonth(date: Date) {
+export function getArrayOfMonthsOfYear(date: Date) {
   const year = startOfYear(date);
   const months: Array<Date> = [];
-  for (let i = 0; i < 12; i++) {
+  Array.from({ length: 12 }, (_, i) => {
     months.push(addMonths(year, i));
-  }
+  });
+
   return months;
 }
 
