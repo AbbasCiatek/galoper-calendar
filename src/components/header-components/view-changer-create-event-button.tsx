@@ -8,12 +8,13 @@ import {
   ClipboardList,
   Columns4,
   Grid3x3,
+  type LucideIcon,
   PlusIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 
-const views = [
+const views: Array<{ name: string; value: ViewTypes; icon: LucideIcon }> = [
   {
     name: "Agenda",
     value: "agenda",
@@ -85,7 +86,7 @@ export function ViewChangerCreateEventButton() {
                 "flex gap-2",
                 isActive && "text-gray-800 dark:text-white",
               )}
-              onClick={() => setView(value as ViewTypes)}
+              onClick={() => setView(value)}
               initial={false}
               animate={{
                 width: isActive ? 120 : 32,
