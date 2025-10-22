@@ -1,4 +1,4 @@
-import { Hours } from "@/helpers.ts";
+import { Date_Format, Hours } from "@/helpers.ts";
 import { formatDate } from "date-fns";
 
 export function HoursColumn() {
@@ -10,7 +10,10 @@ export function HoursColumn() {
             {index !== 0 && (
               <span className="text-xs text-muted-foreground">
                 {" "}
-                {formatDate(new Date().setHours(hour), "HH")}
+                {formatDate(
+                  new Date().setHours(hour),
+                  Date_Format.hours24Format,
+                )}
               </span>
             )}
           </div>
