@@ -8,12 +8,15 @@ export const WEEK_DAYS = [
   "SUNDAY",
 ] as const;
 
-export const Date_Format = {
+export const DATE_FORMAT = {
   longMonth: "MMMM",
   fullDate: "dd MMM yyyy",
   dayOfMonth: "d",
 };
-export function lowerSliceWord(word: string, sliceAt: number) {
+export function capitalizeAndSlice(word: string, sliceAt: number) {
   if (!word) return "";
-  return (word.charAt(0) + word.slice(1).toLowerCase()).slice(0, sliceAt);
+  return (word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).slice(
+    0,
+    sliceAt,
+  );
 }
