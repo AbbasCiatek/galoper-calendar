@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { Date_Format } from "@/helpers";
+import { DATE_FORMAT } from "@/helpers";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
 import { formatDate, isMonday, isToday } from "date-fns";
@@ -20,7 +20,7 @@ export function MonthViewContainer() {
       {cells.map((cell) => {
         return (
           <div
-            key={formatDate(cell.day, Date_Format.fullDate)}
+            key={formatDate(cell.day, DATE_FORMAT.fullDate)}
             className={clsx(
               "h-32 gap-1 border-l border-t",
               isMonday(cell.day) && "border-l-0",
@@ -39,7 +39,7 @@ export function MonthViewContainer() {
               )}
             >
               {" "}
-              {formatDate(cell.day, Date_Format.dayOfMonth)}
+              {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
             </div>
           </div>
         );

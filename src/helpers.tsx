@@ -8,7 +8,7 @@ export const WEEK_DAYS = [
   "SUNDAY",
 ] as const;
 
-export const Date_Format = {
+export const DATE_FORMAT = {
   longMonth: "MMMM",
   fullDate: "dd MMM yyyy",
   dayOfMonth: "d",
