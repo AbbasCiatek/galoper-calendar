@@ -21,22 +21,17 @@ export function MonthViewContainer() {
         return (
           <div
             key={formatDate(cell.day, DATE_FORMAT.fullDate)}
-            className={clsx(
-              "h-32 gap-1 border-l border-t",
-              isMonday(cell.day) && "border-l-0",
-              cell.currentMonth
-                ? "text-gray-800 dark:text-gray-200"
-                : "text-gray-400 dark:text-gray-500",
-            )}
+            className={clsx("h-32 gap-1 border-l border-t", {
+              "border-l-0": isMonday(cell.day),
+              "text-gray-800 dark:text-gray-200": cell.currentMonth,
+              "text-gray-400 dark:text-gray-500": !cell.currentMonth,
+            })}
           >
             <div
-              className={clsx(
-                "h-6 px-1 text-xs font-semibold lg:px-2 ",
-                cell.currentMonth &&
-                  isToday(cell.day) &&
-                  "flex w-6 translate-x-1 items-center justify-center rounded-full " +
-                    "bg-gray-900 text-gray-200 dark:bg-gray-200 dark:text-gray-900 px-0 font-bold ",
-              )}
+              className={clsx("h-6 px-1 text-xs font-semibold lg:px-2 ", {
+                "flex w-6 translate-x-1 items-center justify-center rounded-full bg-gray-900 text-gray-200 dark:bg-gray-200dark:text-gray-900 px-0 font-bold ":
+                  cell.currentMonth && isToday(cell.day),
+              })}
             >
               {" "}
               {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
