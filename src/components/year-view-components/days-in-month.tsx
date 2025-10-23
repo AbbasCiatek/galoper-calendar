@@ -10,7 +10,7 @@ export function DaysInMonth({ month }: { month: Date }) {
   const cells = getCalendarCellsOfMonth(month, true);
 
   return (
-    <div className="grid grid-cols-7 gap-6 m-4">
+    <div className="grid grid-cols-7 gap-6 p-4">
       {WEEK_DAYS.map((weekDay) => {
         return (
           <div
