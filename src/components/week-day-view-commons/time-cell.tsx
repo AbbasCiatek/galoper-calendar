@@ -1,8 +1,8 @@
-import { Hours } from "@/helpers.ts";
+import { HOURS } from "@/helpers.ts";
 export function TimeCells() {
   return (
     <>
-      {Hours.map((hour, index) => {
+      {HOURS.map((hour, index) => {
         return (
           <div key={hour} className="relative h-24">
             {index !== 0 && (
