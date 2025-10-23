@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { Date_Format } from "@/helpers";
+import { DATE_FORMAT } from "@/helpers";
 import { daysOfWeek } from "@/lib/date-helpers";
 import { clsx } from "clsx";
 import { formatDate } from "date-fns";
@@ -27,10 +27,10 @@ export function WeekDaysDisplay() {
           <div className="flex flex-col items-center text-xs font-medium">
             <div className="flex items-center gap-2">
               <span className="leading-none">
-                {formatDate(day, Date_Format.shortWeekDay).toUpperCase()}
+                {formatDate(day, DATE_FORMAT.shortWeekDay).toUpperCase()}
               </span>
               <span className=" leading-none font-bold">
-                {formatDate(day, Date_Format.dayOfMonth)}
+                {formatDate(day, DATE_FORMAT.dayOfMonth)}
               </span>
             </div>
           </div>
