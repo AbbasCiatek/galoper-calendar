@@ -1,5 +1,5 @@
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { Date_Format } from "@/helpers";
+import { DATE_FORMAT } from "@/helpers";
 import { formatDate } from "date-fns";
 
 export function DayDisplay() {
@@ -9,10 +9,10 @@ export function DayDisplay() {
       <div className="flex flex-col items-start text-xs font-medium  ">
         <div className="flex items-center gap-2">
           <span className="leading-none ">
-            {formatDate(date, Date_Format.shortWeekDay).toUpperCase()}
+            {formatDate(date, DATE_FORMAT.shortWeekDay).toUpperCase()}
           </span>
           <span className=" leading-none font-bold">
-            {formatDate(date, Date_Format.dayOfMonth)}
+            {formatDate(date, DATE_FORMAT.dayOfMonth)}
           </span>
         </div>
       </div>
