@@ -1,10 +1,10 @@
-import { Date_Format, Hours } from "@/helpers.ts";
+import { DATE_FORMAT, HOURS } from "@/helpers.ts";
 import { formatDate } from "date-fns";
 
 export function HoursColumn() {
   return (
     <div className="relative w-18">
-      {Hours.map((hour, index) => (
+      {HOURS.map((hour, index) => (
         <div key={hour} className="relative h-24">
           <div className="absolute -top-6 right-2 flex h-12 items-center">
             {index !== 0 && (
@@ -12,7 +12,7 @@ export function HoursColumn() {
                 {" "}
                 {formatDate(
                   new Date().setHours(hour),
-                  Date_Format.hours24Format,
+                  DATE_FORMAT.hours24Format,
                 )}
               </span>
             )}
