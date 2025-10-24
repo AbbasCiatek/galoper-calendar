@@ -1,5 +1,5 @@
+import { DATE_FORMAT, WEEK_DAYS } from "@/constants";
 import { useCalendar } from "@/context/calendar-context";
-import { DATE_FORMAT, WEEK_DAYS, capitalizeAndSlice } from "@/helpers.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
 import { formatDate, isSameDay } from "date-fns";
@@ -14,10 +14,10 @@ export function DaysInMonth({ month }: { month: Date }) {
       {WEEK_DAYS.map((weekDay) => {
         return (
           <div
-            className="text-xs font-semibold text-gray-600 dark:text-gray-200 "
+            className="text-xs font-semibold capitalize text-gray-600 dark:text-gray-200 "
             key={weekDay}
           >
-            {capitalizeAndSlice(weekDay, 2)}
+            {weekDay.toLowerCase().slice(0, 2)}
           </div>
         );
       })}

@@ -1,7 +1,7 @@
 import { DaysInMonth } from "@/components/year-view-components/days-in-month.tsx";
 import { MonthNameDisplayer } from "@/components/year-view-components/month-name-displayer.tsx";
+import { DATE_FORMAT } from "@/constants";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { DATE_FORMAT } from "@/helpers";
 import { getArrayOfMonthsOfYear } from "@/lib/date-helpers.ts";
 import { formatDate } from "date-fns";
 import { motion } from "motion/react";
