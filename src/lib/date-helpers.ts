@@ -1,6 +1,5 @@
 import type { Event } from "@/event-store.ts";
 import {
-  areIntervalsOverlapping,
   differenceInMinutes,
   eachDayOfInterval,
   endOfWeek,
@@ -14,76 +13,46 @@ export function daysOfWeek(date: Date) {
   });
 }
 
-type PositionedEvent = {
-  event: Event;
-  top: number; // % from top of day
-  height: number; // % of the day
-  left: number; // % from left
-  width: number; // % of the container
-};
+export function groupEvents(dayEvents: Array<Event>): Array<Array<Event>> {
+  const sortedEvents = dayEvents.sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+  );
+  const groups: Array<Array<Event>> = [];
 
-export function clipEvent(event: Event, date: Date) {
-  const dayStart = new Date(date);
-  dayStart.setHours(0, 0, 0, 0);
-  const dayEnd = new Date(date);
-  dayEnd.setHours(23, 59, 59, 999);
+  for (const event of sortedEvents) {
+    const eventStart = event.startDate;
+    let placed = false;
 
-  const start = event.startDate;
-  const end = event.endDate;
+    for (const group of groups) {
+      const lastEventInGroup = group[group.length - 1];
+      const lastEventEnd = lastEventInGroup.endDate;
 
-  const clippedStart = start < dayStart ? dayStart : start;
-  const clippedEnd = end > dayEnd ? dayEnd : end;
+      if (eventStart >= lastEventEnd) {
+        group.push(event);
+        placed = true;
+        break;
+      }
+    }
 
-  const startMinutes = differenceInMinutes(clippedStart, dayStart);
-  const durationMinutes = differenceInMinutes(clippedEnd, clippedStart);
-  return {
-    event,
-    start: clippedStart,
-    end: clippedEnd,
-    startMinutes,
-    durationMinutes,
-  };
+    if (!placed) groups.push([event]);
+  }
+
+  return groups;
 }
-export function positionEventsWeekDayView(events: Array<Event>, day: Date) {
-  const clippedEvents = events.map((event: Event) => {
-    return clipEvent(event, day);
-  });
-  clippedEvents.sort((a, b) => a.start.getTime() - b.start.getTime());
-  const placed: Array<PositionedEvent> = [];
-  const lengthOfEvents = clippedEvents.length;
-  clippedEvents.forEach((currentEvent) => {
-    const overlapping = clippedEvents.filter(
-      (otherEvent) =>
-        otherEvent.start !== currentEvent.start &&
-        areIntervalsOverlapping(
-          {
-            start: currentEvent.start,
-            end: currentEvent.end,
-          },
-          {
-            start: otherEvent.start,
-            end: otherEvent.end,
-          },
-        ),
-    );
-    const startBefore = overlapping.filter(
-      (otherEvent) => otherEvent.start.getTime() < currentEvent.start.getTime(),
-    );
-    const biggerCount = startBefore.length;
-    //container pixels = numberOfHours(24) * PIXELS_PER_HOUR
 
-    const containerPx = 24 * 96;
-    const overlapCount = overlapping.length + 1;
-    const width = lengthOfEvents < 15 ? 100 / overlapCount : 50 / overlapCount;
-    const top = (currentEvent.startMinutes / 1440) * containerPx;
-    const height = (currentEvent.durationMinutes / 1440) * containerPx;
-    const left = overlapping.length
-      ? lengthOfEvents < 15
-        ? 10 * biggerCount
-        : 20 * biggerCount
-      : 0;
-    placed.push({ event: currentEvent.event, top, height, left, width });
-  });
+export function positionEventsWeekDayView(
+  event: Event,
+  groupIndex: number,
+  groupsSize: number,
+) {
+  const startMinutes =
+    event.startDate.getMinutes() + event.startDate.getHours() * 60;
+  const durationMinutes = differenceInMinutes(event.endDate, event.startDate);
+  const containerPx = 24 * 96;
+  const top = (startMinutes / 1440) * containerPx;
+  const height = (durationMinutes / 1440) * containerPx;
+  const width = 100 / groupsSize;
+  const left = groupIndex * width;
 
-  return placed;
+  return { top, height, left, width };
 }

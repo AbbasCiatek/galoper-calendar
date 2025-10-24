@@ -18,7 +18,7 @@ export default function EventPerDay({ day }: { day: Date }) {
   return (
     <>
       {singleDayEvents.length > 0 && (
-        <EventsPositioning singleDayEvents={singleDayEvents} date={day} />
+        <EventsPositioning singleDayEvents={singleDayEvents} />
       )}
     </>
   );
