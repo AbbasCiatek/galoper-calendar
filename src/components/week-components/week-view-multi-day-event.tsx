@@ -14,17 +14,24 @@ import { useMemo } from "react";
 
 export function WeekViewMultiDayEvent() {
   const { date } = useCalendar();
-  const { getMultipleDayEvents } = useEventStore();
+  const { getMultipleDayEvents, getAllDayEvents } = useEventStore();
+
   const multiDayEvents = getMultipleDayEvents(
     startOfWeek(date, { weekStartsOn: 1 }),
     endOfWeek(date, { weekStartsOn: 1 }),
   );
+
+  const allDayEvents = getAllDayEvents(
+    startOfWeek(date, { weekStartsOn: 1 }),
+    endOfWeek(date, { weekStartsOn: 1 }),
+  );
+
   const weekStart = startOfWeek(date, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(date, { weekStartsOn: 1 });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   const processedEvents = useMemo(() => {
-    return multiDayEvents
+    return [...multiDayEvents, ...allDayEvents]
       .map((event) => {
         const start = new Date(event.startDate);
         const end = new Date(event.endDate);
@@ -45,7 +52,7 @@ export function WeekViewMultiDayEvent() {
         if (startDiff !== 0) return startDiff;
         return b.endIndex - b.startIndex - (a.endIndex - a.startIndex);
       });
-  }, [multiDayEvents, weekStart, weekEnd]);
+  }, [multiDayEvents, allDayEvents, weekStart, weekEnd]);
 
   const eventRows = useMemo(() => {
     const rows: Array<typeof processedEvents> = [];
