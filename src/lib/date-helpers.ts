@@ -166,15 +166,17 @@ export function getCalendarCellsOfMonth(
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
-          day,
-          currentMonth: false,
-        }));
+        day,
+        currentMonth: false,
+      }));
 
   if (nextMonthObject) {
     return [...prevMonthObject, ...currentMonthObject, ...nextMonthObject];
   }
   return [...prevMonthObject, ...currentMonthObject];
 }
+export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;
+
 export function daysOfWeek(date: Date) {
   return eachDayOfInterval({
     start: startOfWeek(date, { weekStartsOn: 1 }),
@@ -224,4 +226,38 @@ export function positionEventsWeekDayView(
   const left = groupIndex * width;
 
   return { top, height, left, width };
+}
+export function maxNumberOfAllAndMultiEventsPerDay(
+  day: Date,
+  eventsOfWeek: Array<Event>,
+) {
+  const eventsPerDay = eventsOfWeek.filter((event) => {
+    return areIntervalsOverlapping(
+      { start: startOfDay(day), end: endOfDay(day) },
+      { start: event.startDate, end: event.endDate },
+    );
+  });
+  return eventsPerDay.length;
+}
+
+export function maxNumberOfAllAndMultiEventsPerWeek(
+  weekDays: Array<Date>,
+  eventsOfWeek: Array<Event>,
+) {
+  let maxEventNumberPerWeek = 0;
+
+  weekDays.forEach((day) => {
+    const eventsPerDay = eventsOfWeek.filter((event) => {
+      return areIntervalsOverlapping(
+        { start: startOfDay(day), end: endOfDay(day) },
+        { start: event.startDate, end: event.endDate },
+      );
+    });
+    maxEventNumberPerWeek = Math.max(
+      eventsPerDay.length,
+      maxEventNumberPerWeek,
+    );
+  });
+
+  return maxEventNumberPerWeek;
 }
