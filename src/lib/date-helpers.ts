@@ -1,6 +1,8 @@
 import type { Event } from "@/event-store.ts";
 import { differenceInMinutes } from "date-fns";
 
+export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;
+
 export function groupEvents(dayEvents: Array<Event>): Array<Array<Event>> {
   const sortedEvents = dayEvents.sort(
     (a, b) => a.startDate.getTime() - b.startDate.getTime(),
