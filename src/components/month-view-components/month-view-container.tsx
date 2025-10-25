@@ -1,5 +1,5 @@
+import { DATE_FORMAT } from "@/constants";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { DATE_FORMAT } from "@/helpers";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
 import { formatDate, isMonday, isToday } from "date-fns";
@@ -29,7 +29,7 @@ export function MonthViewContainer() {
           >
             <div
               className={clsx("h-6 px-1 text-xs font-semibold lg:px-2 ", {
-                "flex w-6 translate-x-1 items-center justify-center rounded-full bg-gray-900 text-gray-200 dark:bg-gray-200dark:text-gray-900 px-0 font-bold ":
+                "flex w-6 translate-x-1 items-center justify-center rounded-full bg-gray-900 text-gray-200 dark:bg-gray-200 dark:text-gray-900 px-0 font-bold ":
                   cell.currentMonth && isToday(cell.day),
               })}
             >

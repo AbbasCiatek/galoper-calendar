@@ -1,4 +1,4 @@
-import { WEEK_DAYS, capitalizeAndSlice } from "@/helpers.tsx";
+import { WEEK_DAYS } from "@/constants";
 import { motion } from "motion/react";
 export function WeekDaysDisplay() {
   return (
@@ -15,10 +15,10 @@ export function WeekDaysDisplay() {
               damping: 20,
               mass: 2,
             }}
-            className="text-center text-sm"
+            className="text-center capitalize text-sm"
             key={day}
           >
-            {capitalizeAndSlice(day, 3)}
+            {day.toLowerCase().slice(0, 3)}
           </motion.div>
         );
       })}
