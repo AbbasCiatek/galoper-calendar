@@ -26,8 +26,8 @@ export function WeekDaysDisplay() {
         >
           <div className="flex flex-col items-center text-xs font-medium">
             <div className="flex items-center gap-2">
-              <span className="leading-none">
-                {formatDate(day, DATE_FORMAT.shortWeekDay).toUpperCase()}
+              <span className="leading-none uppercase">
+                {formatDate(day, DATE_FORMAT.shortWeekDay)}
               </span>
               <span className=" leading-none font-bold">
                 {formatDate(day, DATE_FORMAT.dayOfMonth)}

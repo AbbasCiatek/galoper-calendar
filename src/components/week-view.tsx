@@ -6,11 +6,9 @@ export function WeekView() {
   return (
     <>
       <div className="flex flex-col border rounded-b-2xl">
-        <div>
-          <DateDisplayLayout>
-            <WeekDaysDisplay />
-          </DateDisplayLayout>
-        </div>
+        <DateDisplayLayout>
+          <WeekDaysDisplay />
+        </DateDisplayLayout>
         <WeekViewContainer />
       </div>
     </>
