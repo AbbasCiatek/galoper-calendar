@@ -39,7 +39,7 @@ export function MonthBadgeEvent({
           "w-[calc(100%_+_2px)] z-20": isFirstDay && !isLastDay,
           "border-l-0  rounded-l-none ml-0 ": !isFirstDay,
           "border-r-0  rounded-r-none mr-0 ": !isLastDay,
-          "z-20 w-[calc(100%_+_2px)]": isMiddleDay,
+          "z-20 w-[calc(100%_+_2px)]": isMiddleDay && !isLastCell,
         },
       )}
     >
