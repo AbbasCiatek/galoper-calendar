@@ -1,4 +1,4 @@
-import CustomDragLayer from "@/dnd/custom-drag-layer.tsx";
+import { CustomDragLayer } from "@/dnd/custom-drag-layer.tsx";
 import type { ReactNode } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
