@@ -9,8 +9,6 @@ import {
   startOfWeek,
 } from "date-fns";
 
-export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;
-
 export function daysOfWeek(date: Date) {
   return eachDayOfInterval({
     start: startOfWeek(date, { weekStartsOn: 1 }),

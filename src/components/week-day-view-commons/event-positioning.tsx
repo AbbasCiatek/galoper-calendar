@@ -1,5 +1,5 @@
+import { colorMap } from "@/constants";
 import type { Event } from "@/event-store.ts";
-import { colorMap } from "@/helpers";
 import { groupEvents, positionEventsWeekDayView } from "@/lib/date-helpers";
 import { clsx } from "clsx";
 import { areIntervalsOverlapping } from "date-fns";
