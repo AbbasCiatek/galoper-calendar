@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function AgendaDayGroup({ date, events, multiDayEvents }: Props) {
-  const sortedEvents = [...events].sort(
+  const sortedEvents = events.toSorted(
     (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
   );
 
