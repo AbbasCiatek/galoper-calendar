@@ -1,3 +1,4 @@
+import { useCalendar } from "@/context/calendar-context";
 import { type Event, useEventStore } from "@/event-store.ts";
 import { type EventFormData, eventSchema } from "@/schema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,17 +53,19 @@ export function AddEditEventDialog({
   endDate,
   event,
 }: AddEventDialogProps) {
-  const date = new Date(); // will be used for now but when implementing useCalendar hook get the date from it ...
+  const { date } = useCalendar();
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const onToggle = () => setIsOpen(!isOpen);
   const { addEvent, editEvent } = useEventStore();
   const oneHourAdded = addHours(date, 1);
+
   const startDateDefaults = startDate
     ? startDate
     : event
       ? event?.startDate
       : date;
+
   const endDateDefaults = endDate
     ? endDate
     : event
@@ -78,6 +81,7 @@ export function AddEditEventDialog({
       endDate: endDateDefaults,
     },
   });
+
   const onSubmit: SubmitHandler<EventFormData> = (eventData: EventFormData) => {
     try {
       if (isChecked) {

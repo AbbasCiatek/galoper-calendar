@@ -6,6 +6,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import { DATE_FORMAT } from "@/constants.ts";
 import type { Event } from "@/event-store.ts";
 import { formatDate } from "date-fns";
 import type { ReactNode } from "react";
@@ -23,7 +24,11 @@ export function EventListDialog({ children, events, date }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="mb-2 p-1 font-bold">
-            Events on {formatDate(date, "EEEE, MMMM d, yyyy")}
+            Events on{" "}
+            {formatDate(
+              date,
+              `${DATE_FORMAT.longWeekDay} , ${DATE_FORMAT.longMonth} ${DATE_FORMAT.dayOfMonth}, ${DATE_FORMAT.longYear}`,
+            )}
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-28 border border-gray-200 rounded-lg ">
@@ -35,7 +40,12 @@ export function EventListDialog({ children, events, date }: Props) {
                   className={`bg-${event.color}-300 w-full h-8 text-white flex flex-row justify-around `}
                 >
                   <span>{event.title}</span>
-                  <span>{formatDate(new Date(event.startDate), "hh mm")}</span>
+                  <span>
+                    {formatDate(
+                      new Date(event.startDate),
+                      DATE_FORMAT.timeFormat,
+                    )}
+                  </span>
                 </div>
               </EventDetailsDialog>
             ))}

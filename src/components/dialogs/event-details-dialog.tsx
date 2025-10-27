@@ -7,10 +7,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
+import { DATE_FORMAT } from "@/constants";
 import { type Event, useEventStore } from "@/event-store.ts";
 import { formatDate } from "date-fns";
 import { Calendar, Clock, Text } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AddEditEventDialog } from "./add-edit-event-dialog";
 
@@ -43,15 +44,18 @@ export function EventDetailsDialog({
   event,
 }: EventDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
+  const onClose = useCallback(() => setIsOpen(false), []);
   const onToggle = () => setIsOpen(!isOpen);
 
   const { removeEvent } = useEventStore();
-  const handleDeleteButton = (event: Event) => {
-    onClose();
-    removeEvent(event.id);
-    toast.error(` Event ${event.id} Deleted!`);
-  };
+  const handleDeleteButton = useCallback(
+    (event: Event) => {
+      onClose();
+      removeEvent(event.id);
+      toast.error(` Event ${event.id} Deleted!`);
+    },
+    [onClose, removeEvent],
+  );
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "Delete") {
@@ -79,7 +83,10 @@ export function EventDetailsDialog({
             <div>
               <p className="text-sm font-medium">Start Date</p>
               <p className="text-sm text-muted-foreground">
-                {formatDate(event.startDate, "MMM d, yyyy h:mm a")}
+                {formatDate(
+                  event.startDate,
+                  `${DATE_FORMAT.fullDate} ${DATE_FORMAT.timeFormat}`,
+                )}
               </p>
             </div>
           </div>
@@ -89,7 +96,10 @@ export function EventDetailsDialog({
             <div>
               <p className="text-sm font-medium">End Date</p>
               <p className="text-sm text-muted-foreground">
-                {formatDate(event.endDate, "MMM d, yyyy h:mm a")}
+                {formatDate(
+                  event.endDate,
+                  `${DATE_FORMAT.fullDate} ${DATE_FORMAT.timeFormat}`,
+                )}
               </p>
             </div>
           </div>

@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover.tsx";
+import { DATE_FORMAT } from "@/constants";
 import {
   formatDate,
   getHours,
@@ -70,8 +71,14 @@ export function DatePicker({
             >
               {isDate(value)
                 ? isThisYear(value)
-                  ? formatDate(value, "EEEE, MMMM d")
-                  : formatDate(value, "EEEE,  MMMM d, y ")
+                  ? formatDate(
+                      value,
+                      `${DATE_FORMAT.longWeekDay}, ${DATE_FORMAT.longMonth} ${DATE_FORMAT.dayOfMonth}`,
+                    )
+                  : formatDate(
+                      value,
+                      `${DATE_FORMAT.longWeekDay}, ${DATE_FORMAT.longMonth} ${DATE_FORMAT.dayOfMonth} , ${DATE_FORMAT.longYear}`,
+                    )
                 : "Select date"}
               <ChevronDownIcon />
             </Button>
