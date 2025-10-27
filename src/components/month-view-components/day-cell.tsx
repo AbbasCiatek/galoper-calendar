@@ -1,5 +1,5 @@
-import { MAX_EVENTS_PER_DAY } from "@/lib/date-helpers.ts";
-import type { Event } from "@/types";
+import { DATE_FORMAT, MAX_EVENTS_PER_DAY } from "@/constants";
+import type { Event } from "@/event-store";
 import { clsx } from "clsx";
 import { formatDate, isMonday, isToday } from "date-fns";
 import { motion } from "motion/react";
@@ -40,32 +40,18 @@ export function DayCell({
           />
         );
       }
-      //destructuring event object and taking only pure event attributes to pass to Event Details Dialog
-      // const { id, title, description, startDate, endDate, color, isAllDay } =
-      //   event;
-      // const pureEvent = {
-      //   id,
-      //   title,
-      //   description,
-      //   startDate,
-      //   endDate,
-      //   color,
-      //   isAllDay,
-      // };
       return (
         <>
           <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
             <EventBullet className="lg:hidden" color={event.color} />
           </div>
           <div className={clsx("hidden lg:flex lg:flex-col  ")}>
-            {/*<EventDetailsDialog event={pureEvent} />*/}
             <MonthBadgeEvent
               isFirstCell={isFirstCell}
               isLastCell={isLastCell}
               event={event}
               cell={cell}
             />
-            {/*</EventDetailsDialog>*/}
           </div>
         </>
       );
@@ -98,7 +84,7 @@ export function DayCell({
           isToday(cell.day) && "bg-primary font-bold text-primary-foreground",
         )}
       >
-        {formatDate(cell.day, "d")}
+        {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
       </span>
 
       <div
@@ -111,8 +97,6 @@ export function DayCell({
       </div>
       <div className="flex justify-center">
         {undisplayedEvents > 0 && (
-          // <EventListDialog events={events}>
-
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -130,7 +114,6 @@ export function DayCell({
               <span className="hidden lg:inline-block">more</span>
             </span>
           </motion.div>
-          // </EventListDialog>
         )}
       </div>
     </div>

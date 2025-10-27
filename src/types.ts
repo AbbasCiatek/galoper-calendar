@@ -7,13 +7,3 @@ export type COLORS =
   | "purple"
   | "orange"
   | "gray";
-
-export type Event = {
-  id: string;
-  title: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  color: COLORS;
-  isAllDay?: boolean;
-};

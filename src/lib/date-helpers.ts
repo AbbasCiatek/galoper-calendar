@@ -1,4 +1,5 @@
-import type { Event } from "@/types";
+import { MAX_EVENTS_PER_DAY } from "@/constants";
+import type { Event } from "@/event-store";
 import {
   addMonths,
   areIntervalsOverlapping,
@@ -12,7 +13,6 @@ import {
   startOfMonth,
   subMonths,
 } from "date-fns";
-export const MAX_EVENTS_PER_DAY = 3;
 
 export function getCalendarCellsOfMonth(
   date: Date,

@@ -1,6 +1,6 @@
-import { DayCell } from "@/components/month-view-components/day-cell.tsx";
+import { DATE_FORMAT } from "@/constants";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import { useEventStore } from "@/event-store.ts";
+import { type Event, useEventStore } from "@/event-store.ts";
 import {
   assignPositionForCellEvents,
   calculateEventPositionsPerDurations,
@@ -8,7 +8,6 @@ import {
   getCalendarCellsOfMonth,
   maxNumberOfEventsPerInterval,
 } from "@/lib/date-helpers.ts";
-import type { Event } from "@/types.ts";
 import {
   areIntervalsOverlapping,
   endOfDay,
@@ -82,7 +81,7 @@ export function MonthViewContainer() {
               maxEventsPerWeek={maxEventsPerWeek}
               isFirstCell={index === 0}
               isLastCell={index === 6}
-              key={formatDate(cell.day, "dd MMMM yyyy")}
+              key={formatDate(cell.day, DATE_FORMAT.fullDate)}
               cell={cell}
               cellEvents={cellEvents}
             />
