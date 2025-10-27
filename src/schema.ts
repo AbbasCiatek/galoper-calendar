@@ -23,8 +23,5 @@ export const eventSchema = z
       path: ["endDate"],
     },
   );
-// type InputType = z.input<typeof eventSchema>;
-//type OutputType =z.output<typeof eventSchema>;
 
 export type EventFormData = z.infer<typeof eventSchema>;
-//InputType | OutputType;

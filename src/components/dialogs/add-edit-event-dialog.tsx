@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { clsx } from "clsx";
 import { addHours } from "date-fns";
 import { CirclePlay, CircleStop } from "lucide-react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { DatePicker } from "../custom-ui/date-picker";
@@ -71,6 +71,16 @@ export function AddEditEventDialog({
     : event
       ? event?.endDate
       : oneHourAdded;
+
+  useEffect(() => {
+    form.reset({
+      title: event ? event.title : "",
+      description: event ? event.description : "",
+      startDate: startDateDefaults,
+      endDate: endDateDefaults,
+      color: event ? event.color : "blue",
+    });
+  }, [event, startDateDefaults, endDateDefaults]);
 
   const form = useForm<EventFormData>({
     resolver: zodResolver(eventSchema),
