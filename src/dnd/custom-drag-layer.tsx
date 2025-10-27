@@ -9,7 +9,7 @@ interface DragItem {
   height: number;
 }
 
-export default function CustomDragLayer() {
+export function CustomDragLayer() {
   const {
     isDragging,
     item,

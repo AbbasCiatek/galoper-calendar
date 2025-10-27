@@ -8,7 +8,7 @@ export const ItemTypes = {
   EVENT: "event",
 };
 
-export default function DraggableEvents({
+export function DraggableEvents({
   children,
   event,
 }: { children: ReactNode; event: Event }) {
