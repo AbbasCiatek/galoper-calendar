@@ -6,6 +6,7 @@ export const DATE_FORMAT = {
   shortWeekDay: "EE",
   dayOfMonth: "d",
   hours24Format: "HH",
+  timeFormat: "hh:mm a",
 };
 export const colorMap: Record<string, string> = {
   red: "bg-red-100 text-red-900 border border-red-400 ",
