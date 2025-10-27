@@ -1,5 +1,5 @@
-import { type Event, useEventStore } from "@/event-store.ts";
-import type { ViewTypes } from "@/types";
+import { DATE_FORMAT } from "@/constants.ts";
+import type { Event } from "@/event-store";
 import {
   addDays,
   addMonths,
@@ -281,7 +281,7 @@ export function mapAgendaEvents(events: Array<Event>, date: Date) {
     const eventDate = new Date(event.startDate);
     if (!isSameMonth(eventDate, date)) return;
 
-    const dateKey = formatDate(eventDate, Date_Format.fullDate);
+    const dateKey = formatDate(eventDate, DATE_FORMAT.fullDate);
 
     if (!allDates.has(dateKey)) {
       allDates.set(dateKey, {
@@ -303,7 +303,7 @@ export function mapAgendaEvents(events: Array<Event>, date: Date) {
 
     while (currentDate <= lastDate) {
       if (isSameMonth(currentDate, date)) {
-        const dateKey = formatDate(currentDate, Date_Format.fullDate);
+        const dateKey = formatDate(currentDate, DATE_FORMAT.fullDate);
 
         if (!allDates.has(dateKey)) {
           allDates.set(dateKey, {

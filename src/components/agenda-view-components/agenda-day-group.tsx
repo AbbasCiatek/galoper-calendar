@@ -1,6 +1,6 @@
 import { AgendaEventCard } from "@/components/agenda-view-components/agenda-event-card.tsx";
+import { DATE_FORMAT } from "@/constants.ts";
 import type { Event } from "@/event-store.ts";
-import { Date_Format } from "@/helpers";
 import { differenceInDays, formatDate, startOfDay } from "date-fns";
 
 interface Props {
@@ -18,7 +18,7 @@ export function AgendaDayGroup({ date, events, multiDayEvents }: Props) {
     <div>
       <div className="mt-4 mb-2">
         <p className="text-xs text-muted-foreground font-semibold  ">
-          {formatDate(date, Date_Format.fullDateWithWeek)}
+          {formatDate(date, DATE_FORMAT.fullDateWithWeek)}
         </p>
       </div>
 
