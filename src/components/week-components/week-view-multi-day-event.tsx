@@ -1,8 +1,8 @@
 import { MultiDayEventDisplay } from "@/components/week-day-view-commons/multi-day-event-display.tsx";
+import { MAX_ALL_AND_MULTI_DAY_EVENTS } from "@/constants";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import { useEventStore } from "@/event-store.ts";
 import {
-  MAX_ALL_AND_MULTI_DAY_EVENTS,
   maxNumberOfAllAndMultiEventsPerDay,
   maxNumberOfAllAndMultiEventsPerWeek,
 } from "@/lib/date-helpers.ts";
