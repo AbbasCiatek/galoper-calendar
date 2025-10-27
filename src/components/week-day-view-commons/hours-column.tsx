@@ -1,4 +1,4 @@
-import { DATE_FORMAT, HOURS } from "@/helpers.ts";
+import { DATE_FORMAT, HOURS } from "@/constants";
 import { formatDate } from "date-fns";
 
 export function HoursColumn() {
