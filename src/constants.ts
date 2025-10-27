@@ -6,6 +6,7 @@ export const DATE_FORMAT = {
   shortWeekDay: "EE",
   dayOfMonth: "d",
   hours24Format: "HH",
+  timeFormat: "hh mm a",
 };
 
 export const colorMap: Record<string, string> = {
@@ -17,3 +18,5 @@ export const colorMap: Record<string, string> = {
   purple: "bg-purple-100 text-purple-900 border border-purple-400 ",
   orange: "bg-orange-100 text-orange-900 border border-orange-400 ",
 };
+
+export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;

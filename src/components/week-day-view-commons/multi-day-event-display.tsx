@@ -1,5 +1,6 @@
+import { colorMap } from "@/constants";
 import type { Event } from "@/event-store.ts";
-import { colorMap } from "@/helpers.ts";
+import { clsx } from "clsx";
 
 interface Props {
   event: Event;
@@ -26,7 +27,11 @@ export function MultiDayEventDisplay({
 
   return (
     <div
-      className={`flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer  ${positionClasses} ${colorMap[event.color]} `}
+      className={clsx(
+        "flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer",
+        positionClasses,
+        colorMap[event.color],
+      )}
     >
       <p>
         {eventCurrentDay && (
