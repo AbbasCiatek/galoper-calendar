@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { clsx } from "clsx";
 import { addHours } from "date-fns";
 import { CirclePlay, CircleStop } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { DatePicker } from "../custom-ui/date-picker";
@@ -58,29 +58,15 @@ export function AddEditEventDialog({
   const onClose = () => setIsOpen(false);
   const onToggle = () => setIsOpen(!isOpen);
   const { addEvent, editEvent } = useEventStore();
-  const oneHourAdded = addHours(date, 1);
 
-  const startDateDefaults = startDate
-    ? startDate
-    : event
-      ? event?.startDate
-      : date;
+  const startDateDefaults = useMemo(() => {
+    return startDate ? startDate : event ? event?.startDate : date;
+  }, [event, startDate, date]);
 
-  const endDateDefaults = endDate
-    ? endDate
-    : event
-      ? event?.endDate
-      : oneHourAdded;
-
-  useEffect(() => {
-    form.reset({
-      title: event ? event.title : "",
-      description: event ? event.description : "",
-      startDate: startDateDefaults,
-      endDate: endDateDefaults,
-      color: event ? event.color : "blue",
-    });
-  }, [event, startDateDefaults, endDateDefaults]);
+  const endDateDefaults = useMemo(() => {
+    const oneHourAdded = addHours(date, 1);
+    return endDate ? endDate : event ? event?.endDate : oneHourAdded;
+  }, [event, endDate, date]);
 
   const form = useForm<EventFormData>({
     resolver: zodResolver(eventSchema),
@@ -91,6 +77,16 @@ export function AddEditEventDialog({
       endDate: endDateDefaults,
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      title: event ? event.title : "",
+      description: event ? event.description : "",
+      startDate: startDateDefaults,
+      endDate: endDateDefaults,
+      color: event ? event.color : "blue",
+    });
+  }, [event, startDateDefaults, endDateDefaults, form]);
 
   const onSubmit: SubmitHandler<EventFormData> = (eventData: EventFormData) => {
     try {
@@ -109,7 +105,7 @@ export function AddEditEventDialog({
         form.reset();
       }
     } catch (e) {
-      toast.error(`${e} failed to $event ? "edit event" : "add event"`);
+      toast.error(`${e} failed to ${event} ? "edit event" : "add event"`);
     }
   };
 
