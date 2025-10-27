@@ -1,7 +1,7 @@
 import { MultiDayEventDisplay } from "@/components/week-day-view-commons/multi-day-event-display.tsx";
+import { MAX_ALL_AND_MULTI_DAY_EVENTS } from "@/constants";
 import { useCalendar } from "@/context/calendar-context";
 import { type Event, useEventStore } from "@/event-store.ts";
-import { MAX_ALL_AND_MULTI_DAY_EVENTS } from "@/lib/date-helpers";
 import { differenceInDays, endOfDay, isSameDay, startOfDay } from "date-fns";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
