@@ -23,6 +23,7 @@ type DatePickerProps = {
   value?: Date;
   onSelect: (date: Date) => void;
   startMonth?: Date;
+  isChecked?: boolean;
 };
 
 export function DatePicker({
@@ -30,6 +31,7 @@ export function DatePicker({
   value,
   onSelect,
   startMonth,
+  isChecked,
 }: DatePickerProps) {
   const [open, setOpen] = useState(false);
   const defaultHours = isDate(value) ? getHours(value) : getHours(new Date());
@@ -86,16 +88,18 @@ export function DatePicker({
           </PopoverContent>
         </Popover>
       </div>
-      <div className="flex flex-col gap-3">
-        <Input
-          type="time"
-          id="time-picker"
-          step="60"
-          value={time}
-          onChange={(e) => handleTimeChanged(e.target.value)}
-          className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-        />
-      </div>
+      {!isChecked && (
+        <div className="flex flex-col gap-3">
+          <Input
+            type="time"
+            id="time-picker"
+            step="60"
+            value={time}
+            onChange={(e) => handleTimeChanged(e.target.value)}
+            className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+          />
+        </div>
+      )}
     </div>
   );
 }

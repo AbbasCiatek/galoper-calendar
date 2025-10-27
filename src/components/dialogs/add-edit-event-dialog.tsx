@@ -1,6 +1,7 @@
 import { type Event, useEventStore } from "@/event-store.ts";
 import { type EventFormData, eventSchema } from "@/schema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clsx } from "clsx";
 import { addHours } from "date-fns";
 import { CirclePlay, CircleStop } from "lucide-react";
 import { type ReactNode, useState } from "react";
@@ -8,6 +9,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { DatePicker } from "../custom-ui/date-picker";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -78,6 +80,10 @@ export function AddEditEventDialog({
   });
   const onSubmit: SubmitHandler<EventFormData> = (eventData: EventFormData) => {
     try {
+      if (isChecked) {
+        eventData.startDate.setHours(0, 0, 0, 0);
+        eventData.endDate.setHours(23, 59, 0, 0);
+      }
       eventData.startDate.setSeconds(0, 0);
       eventData.endDate.setSeconds(0, 0);
       if (event) {
@@ -93,17 +99,19 @@ export function AddEditEventDialog({
     }
   };
 
+  const [isChecked, setChecked] = useState<boolean>(false);
+
   return (
     <Dialog open={isOpen} onOpenChange={onToggle}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {event ? "Edit Event $event.title " : "Add Event"}{" "}
+            {event ? `Edit Event ${event.title} ` : "Add Event"}{" "}
           </DialogTitle>
           <DialogDescription>
             {event
-              ? "Modify your existing event"
+              ? `Modify ${event.title}`
               : "Create a new event for your calendar."}
           </DialogDescription>
         </DialogHeader>
@@ -128,55 +136,74 @@ export function AddEditEventDialog({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="startDate"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-2">
-                      <CirclePlay
-                        size={20}
-                        strokeWidth={1.5}
-                        absoluteStrokeWidth
-                      />
-                      <FormControl>
-                        <DatePicker
-                          id="startDate"
-                          value={field.value}
-                          onSelect={(date) => field.onChange(date as Date)}
-                          data-invalid={fieldState.invalid}
+              <div
+                className={clsx("flex gap-3", {
+                  "flex-row": isChecked,
+                  "flex-col": !isChecked,
+                })}
+              >
+                <FormField
+                  control={form.control}
+                  name="startDate"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2">
+                        <CirclePlay
+                          size={20}
+                          strokeWidth={1.5}
+                          absoluteStrokeWidth
                         />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-2">
-                      <CircleStop
-                        size={20}
-                        strokeWidth={1.5}
-                        absoluteStrokeWidth
-                      />
-                      <FormControl>
-                        <DatePicker
-                          id="endDate"
-                          value={field.value}
-                          onSelect={(date) => field.onChange(date as Date)}
-                          data-invalid={fieldState.invalid}
-                          startMonth={startDate}
+                        <FormControl>
+                          <DatePicker
+                            id="startDate"
+                            value={field.value}
+                            onSelect={(date) => field.onChange(date as Date)}
+                            data-invalid={fieldState.invalid}
+                            isChecked={isChecked}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2">
+                        <CircleStop
+                          size={20}
+                          strokeWidth={1.5}
+                          absoluteStrokeWidth
                         />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        <FormControl>
+                          <DatePicker
+                            id="endDate"
+                            value={field.value}
+                            onSelect={(date) => field.onChange(date as Date)}
+                            data-invalid={fieldState.invalid}
+                            startMonth={startDate}
+                            isChecked={isChecked}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="allDayCheckBox"
+                  checked={isChecked}
+                  onCheckedChange={(checked) => setChecked(!!checked)}
+                />
+                <label htmlFor="allDayCheckBox" className="text-sm font-medium">
+                  All Day
+                </label>
+              </div>
               <FormField
                 control={form.control}
                 name="color"
