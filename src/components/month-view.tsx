@@ -3,7 +3,7 @@ import { WeekDaysDisplay } from "@/components/month-view-components/week-days-di
 
 export function MonthView() {
   return (
-    <div className="border rounded-b-2xl">
+    <div className="border z-30 rounded-b-2xl">
       <WeekDaysDisplay />
       <MonthViewContainer />
     </div>

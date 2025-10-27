@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from "@/constants.ts";
+import { DATE_FORMAT ,MAX_EVENTS_PER_DAY } from "@/constants.ts";
 import { type Event, useEventStore } from "@/event-store";
 import type { ViewTypes } from "@/types.ts";
 import {

@@ -1,5 +1,5 @@
-import { colorMap } from "@/helpers";
-import type { Event } from "@/types";
+import { DATE_FORMAT, colorMap } from "@/constants";
+import type { Event } from "@/event-store";
 import { clsx } from "clsx";
 import { formatDate, isSameDay } from "date-fns";
 import { motion } from "motion/react";
@@ -35,15 +35,20 @@ export function MonthBadgeEvent({
       }}
       className={clsx(
         `flex justify-between cursor-pointer ${colorMap[event.color]} mx-1 px-1 h-6 items-center border truncate font-bold rounded text-xs`,
-        !isFirstDay && "border-l-0  rounded-l-none ml-0 ",
-        !isLastDay && "border-r-0  rounded-r-none mr-0 ",
-        isMiddleDay && "z-20 w-[calc(100%_+_2px)]",
+        {
+          "w-[calc(100%_+_2px)] z-20": isFirstDay && !isLastDay,
+          "border-l-0  rounded-l-none ml-0 ": !isFirstDay,
+          "border-r-0  rounded-r-none mr-0 ": !isLastDay,
+          "z-20 w-[calc(100%_+_2px)]": isMiddleDay,
+        },
       )}
     >
-      <span>{(isFirstDay || isFirstCell) && event.title}</span>
+      <span className="truncate">
+        {(isFirstDay || isFirstCell) && event.title}
+      </span>
       <span>
         {(isLastDay || isLastCell) &&
-          formatDate(new Date(event.startDate), "hh:mm")}
+          formatDate(new Date(event.startDate), DATE_FORMAT.timeFormat)}
       </span>
     </motion.div>
   );
