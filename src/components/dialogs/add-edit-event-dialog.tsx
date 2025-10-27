@@ -38,7 +38,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
-
 type AddEventDialogProps = {
   children: ReactNode;
   startDate?: Date;
@@ -64,8 +63,7 @@ export function AddEditEventDialog({
   }, [event, startDate, date]);
 
   const endDateDefaults = useMemo(() => {
-    const oneHourAdded = addHours(date, 1);
-    return endDate ? endDate : event ? event?.endDate : oneHourAdded;
+    return endDate ? endDate : event ? event?.endDate : addHours(date, 1);
   }, [event, endDate, date]);
 
   const form = useForm<EventFormData>({
