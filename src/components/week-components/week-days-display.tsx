@@ -22,7 +22,7 @@ export function WeekDaysDisplay() {
             damping: 20,
           }}
           key={day.toISOString()}
-          className={clsx("flex-1 py-1 px-2", index === 0 && "border-l")}
+          className={clsx("flex-1 py-1", { "border-l": index === 0 })}
         >
           <div className="flex flex-col items-center text-xs font-medium">
             <div className="flex items-center gap-2">
