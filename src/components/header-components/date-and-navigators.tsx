@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DATE_FORMAT } from "@/constants";
 import { useCalendar } from "@/context/calendar-context.tsx";
 import {
   DateAdderFunction,
@@ -47,7 +48,7 @@ export function DateAndNavigators() {
         className="flex flex-col size-16 border rounded-lg cursor-pointer font-bold hover:scale-105 transform transition-all duration-150"
       >
         <p className="text-gray-900 dark:bg-gray-900 dark:text-white p-0.5">
-          {formatDate(today, "MMM").toUpperCase()}
+          {formatDate(today, DATE_FORMAT.shortMonth).toUpperCase()}
         </p>
         <p className="grow text-center flex items-center justify-center bg-gray-900 rounded-b-lg  text-white dark:text-gray-900 dark:bg-white">
           {today.getDate()}
@@ -58,7 +59,7 @@ export function DateAndNavigators() {
       <div className="flex flex-col gap-1 justify-end ">
         <div className="flex flex-row gap-2 items-center">
           <p className="font-semibold text-gray-800 dark:text-white text-lg">
-            {formatDate(date, "MMMM yyyy")}
+            {formatDate(date, DATE_FORMAT.monthYear)}
           </p>
 
           <AnimatePresence mode="wait">
