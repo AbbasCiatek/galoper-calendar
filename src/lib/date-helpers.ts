@@ -1,3 +1,4 @@
+import { DATE_FORMAT } from "@/constants";
 import { useEventStore } from "@/event-store.ts";
 import type { ViewTypes } from "@/types.ts";
 import {
@@ -55,7 +56,6 @@ export function DateSubtracterFunction(view: ViewTypes, date: Date) {
 }
 
 export function rangeDisplayer(view: ViewTypes, date: Date) {
-  const formatString = "MMM d, yyyy";
   let start: Date;
   let end: Date;
 
@@ -77,12 +77,12 @@ export function rangeDisplayer(view: ViewTypes, date: Date) {
       end = endOfWeek(date, { weekStartsOn: 1 });
       break;
     case "day":
-      return formatDate(date, formatString);
+      return formatDate(date, DATE_FORMAT.monthDayYear);
     default:
       return "Error while formatting ";
   }
 
-  return `${formatDate(start, formatString)} - ${formatDate(end, formatString)}`;
+  return `${formatDate(start, DATE_FORMAT.monthDayYear)} - ${formatDate(end, DATE_FORMAT.monthDayYear)}`;
 }
 
 export function getNumberOfEvents(date: Date, view: ViewTypes) {
