@@ -15,7 +15,7 @@ interface Props {
 export function DroppableTimeCell({ date, hour, minute, children }: Props) {
   const { editEvent } = useEventStore();
 
-  const [drop] = useDrop(
+  const [_, drop] = useDrop(
     () => ({
       accept: ItemTypes.EVENT,
       drop: (item: { event: Event }) => {

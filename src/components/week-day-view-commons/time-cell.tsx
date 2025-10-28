@@ -1,5 +1,6 @@
 import { HOURS } from "@/constants";
-export function TimeCells() {
+import { DroppableTimeCell } from "@/dnd/droppable-time-cell.tsx";
+export function TimeCells({ date }: { date: Date }) {
   return (
     <>
       {HOURS.map((hour, index) => {
@@ -8,10 +9,13 @@ export function TimeCells() {
             {index !== 0 && (
               <div className="pointer-events-none absolute inset-x-0 top-0 border-b" />
             )}
-            <div className="absolute inset-x-0 top-0 h-12 hover:bg-accent" />
-
+            <DroppableTimeCell date={date} hour={hour} minute={0}>
+              <div className="absolute inset-x-0 top-0 h-12 hover:bg-accent" />
+            </DroppableTimeCell>
             <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b   border-dashed" />
-            <div className="absolute inset-x-0 top-12 h-12 hover:bg-accent" />
+            <DroppableTimeCell date={date} hour={hour} minute={30}>
+              <div className="absolute inset-x-0 top-12 h-12 hover:bg-accent" />
+            </DroppableTimeCell>
           </div>
         );
       })}
