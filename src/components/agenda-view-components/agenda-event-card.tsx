@@ -1,25 +1,27 @@
 import { DATE_FORMAT, colorMap } from "@/constants.ts";
 import type { Event } from "@/event-store.ts";
 import { clsx } from "clsx";
-import { formatDate, isSameDay } from "date-fns";
+import { differenceInCalendarDays, formatDate, isSameDay } from "date-fns";
 import { Clock, Text } from "lucide-react";
 
 export function AgendaEventCard({
   event,
-  eventCurrentDay,
-  eventTotalDays,
+  date,
 }: {
   event: Event;
-  eventCurrentDay?: number;
-  eventTotalDays?: number;
+  date: Date;
 }) {
-  const startDate = new Date(event.startDate);
-  const endDate = new Date(event.endDate);
+  const eventStart = new Date(event.startDate);
+  const eventEnd = new Date(event.endDate);
+
+  const eventTotalDays = differenceInCalendarDays(eventEnd, eventStart) + 1;
+  const eventCurrentDay = differenceInCalendarDays(date, eventStart) + 1;
+
   const timeDisplayed =
-    isSameDay(startDate, endDate) &&
-    endDate.getTime() - startDate.getTime() < 86340000
-      ? `${formatDate(startDate, DATE_FORMAT.timeFormat)}
-  ${formatDate(endDate, DATE_FORMAT.timeFormat)}`
+    isSameDay(eventStart, eventEnd) &&
+    eventEnd.getTime() - eventStart.getTime() < 86340000
+      ? `${formatDate(eventStart, DATE_FORMAT.timeFormat)}
+  ${formatDate(eventEnd, DATE_FORMAT.timeFormat)}`
       : "All Day Event";
 
   return (
@@ -33,7 +35,7 @@ export function AgendaEventCard({
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-1.5">
           <p className="font-medium">
-            {eventCurrentDay && eventTotalDays && (
+            {!isSameDay(eventStart, eventEnd) && (
               <span className="mr-1 text-xs">
                 Day {eventCurrentDay} of {eventTotalDays} •{" "}
               </span>
