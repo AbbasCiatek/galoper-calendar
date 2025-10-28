@@ -112,7 +112,7 @@ export function AddEditEventDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onToggle}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="data-[state=open]:slide-in-from-bottom-[50%]  data-[state=closed]:slide-out-to-top-[50%] duration-500  ">
         <DialogHeader>
           <DialogTitle>
             {event ? `Edit Event ${event.title} ` : "Add Event"}{" "}

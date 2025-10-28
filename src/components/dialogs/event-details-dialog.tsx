@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { DATE_FORMAT } from "@/constants";
 import { type Event, useEventStore } from "@/event-store.ts";
+import { clsx } from "clsx";
 import { formatDate } from "date-fns";
 import { Calendar, Clock, Text } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
@@ -69,8 +70,12 @@ export function EventDetailsDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onToggle}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-
-      <DialogContent className={detailsColorMap[event.color]}>
+      <DialogContent
+        className={clsx(
+          detailsColorMap[event.color],
+          "data-[state=open]:slide-in-from-bottom-[50%] data-[state=closed]:slide-out-to-top-[50%] duration-500",
+        )}
+      >
         <DialogHeader>
           <DialogTitle className={`${titleColorMap[event.color]} font-bold `}>
             {event.title}

@@ -21,7 +21,7 @@ export function EventListDialog({ children, events, date }: Props) {
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="data-[state=open]:slide-in-from-bottom-[50%] data-[state=closed]:slide-out-to-top-[50%] duration-500  ">
         <DialogHeader>
           <DialogTitle className="mb-2 p-1 font-bold">
             Events on{" "}
