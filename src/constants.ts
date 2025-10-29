@@ -19,7 +19,8 @@ export const DATE_FORMAT = {
   dayOfMonth: "d",
   shortWeekDay: "EE",
   hours24Format: "HH",
-  timeFormat: "hh mm a",
+  timeFormat: "hh:mm a",
+  fullDateAndTime: "dd MMM yyyy hh:mm a",
 };
 
 export const colorMap: Record<string, string> = {
