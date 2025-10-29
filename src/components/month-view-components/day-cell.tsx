@@ -1,4 +1,6 @@
 import { DATE_FORMAT, MAX_EVENTS_PER_DAY } from "@/constants";
+import { DraggableEvents } from "@/dnd/draggable-events";
+import { DroppableDayCell } from "@/dnd/droppable-day-cell";
 import type { Event } from "@/event-store";
 import { clsx } from "clsx";
 import { formatDate, isMonday, isToday } from "date-fns";
@@ -39,12 +41,14 @@ function RenderEventAtPosition({
         <EventBullet className="lg:hidden" color={event.color} />
       </div>
       <div className="hidden lg:flex lg:flex-col">
-        <MonthBadgeEvent
-          isFirstCell={isFirstCell}
-          isLastCell={isLastCell}
-          event={event}
-          cell={cell}
-        />
+        <DraggableEvents event={event}>
+          <MonthBadgeEvent
+            isFirstCell={isFirstCell}
+            isLastCell={isLastCell}
+            event={event}
+            cell={cell}
+          />
+        </DraggableEvents>
       </div>
     </>
   );
@@ -90,54 +94,56 @@ export function DayCell({
     positionArray.push(i);
   });
   return (
-    <div
-      className={clsx(
-        "flex flex-col lg:flex-grow border-l border-t h-full lg:min-h-36",
-        { "border-l-0": isMonday(cell.day) },
-      )}
-    >
-      <span
-        className={clsx(
-          "flex w-6 h-6 items-center justify-center rounded-full text-xs font-semibold",
-          {
-            "text-gray-800 dark:text-gray-200": cell.currentMonth,
-            "text-gray-400 dark:text-gray-500": !cell.currentMonth,
-            "bg-primary font-bold text-primary-foreground": isToday(cell.day),
-          },
-        )}
-      >
-        {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
-      </span>
-
+    <DroppableDayCell date={cell.day}>
       <div
-        className={clsx("flex lg:flex-grow gap-0.5 lg:flex-col", {
-          "opacity-50": !cell.currentMonth,
-        })}
-      >
-        {cellEvents.length > 0 && positionArray.map(renderEventAtPosition)}
-      </div>
-      <div className="flex justify-center">
-        {undisplayedEvents > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15 }}
-            className={clsx(
-              "border rounded-full border-gray-200 cursor-pointer text-xs font-semibold ",
-              {
-                "text-gray-500 dark:text-gray-300": cell.currentMonth,
-                "text-gray-500/50 dark:text-gray-300/50": !cell.currentMonth,
-              },
-            )}
-          >
-            <span>
-              {" "}
-              +{undisplayedEvents}{" "}
-              <span className="hidden lg:inline-block">more</span>
-            </span>
-          </motion.div>
+        className={clsx(
+          "flex flex-col lg:flex-grow border-l border-t h-full lg:min-h-36",
+          { "border-l-0": isMonday(cell.day) },
         )}
+      >
+        <span
+          className={clsx(
+            "flex w-6 h-6 items-center justify-center rounded-full text-xs font-semibold",
+            {
+              "text-gray-800 dark:text-gray-200": cell.currentMonth,
+              "text-gray-400 dark:text-gray-500": !cell.currentMonth,
+              "bg-primary font-bold text-primary-foreground": isToday(cell.day),
+            },
+          )}
+        >
+          {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
+        </span>
+
+        <div
+          className={clsx("flex lg:flex-grow gap-0.5 lg:flex-col", {
+            "opacity-50": !cell.currentMonth,
+          })}
+        >
+          {cellEvents.length > 0 && positionArray.map(renderEventAtPosition)}
+        </div>
+        <div className="flex justify-center">
+          {undisplayedEvents > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.15 }}
+              className={clsx(
+                "border rounded-full border-gray-200 cursor-pointer text-xs font-semibold ",
+                {
+                  "text-gray-500 dark:text-gray-300": cell.currentMonth,
+                  "text-gray-500/50 dark:text-gray-300/50": !cell.currentMonth,
+                },
+              )}
+            >
+              <span>
+                {" "}
+                +{undisplayedEvents}{" "}
+                <span className="hidden lg:inline-block">more</span>
+              </span>
+            </motion.div>
+          )}
+        </div>
       </div>
-    </div>
+    </DroppableDayCell>
   );
 }
