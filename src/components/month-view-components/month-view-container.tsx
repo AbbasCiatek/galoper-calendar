@@ -43,51 +43,89 @@ export function MonthViewContainer() {
   return (
     <div className="grid grid-cols-7 w-full h-full">
       {cellsDividedIntoWeeks.map((cells): ReactNode => {
-        //saving first and last day for event title and date to be displayed per line (week) if it is long event
-        const firstDayOfWeek = cells[0].day;
-        const lastDayOfWeek = cells.slice(-1)[0].day;
-        const eventPositions = useMemo(
-          () => calculateEventPositionsPerDurations(allMonthEvents, cells),
-          [cells],
+        return (
+          <WeekChunks
+            key={formatDate(cells[0].day, DATE_FORMAT.fullDate)}
+            cells={cells}
+            allMonthEvents={allMonthEvents}
+          />
         );
-        const eventsOfTheWeek = allMonthEvents.filter((event) => {
-          const eventStart = new Date(event.startDate);
-          const eventEnd = new Date(event.endDate);
-          return areIntervalsOverlapping(
-            { start: startOfDay(firstDayOfWeek), end: endOfDay(lastDayOfWeek) },
-            { start: eventStart, end: eventEnd },
-          );
-        });
-        //adding the position attribute to eact event of the week
-        const weekEventsPositioned = useMemo(
-          () => assignPositionForCellEvents(eventsOfTheWeek, eventPositions),
-          [eventsOfTheWeek, eventPositions],
-        );
-        const maxEventsPerWeek = maxNumberOfEventsPerInterval(
-          cells,
-          weekEventsPositioned,
-        );
-        return cells.map((cell, index) => {
-          const cellEvents = weekEventsPositioned.filter((event) => {
-            const eventStart = new Date(event.startDate);
-            const eventEnd = new Date(event.endDate);
-            return areIntervalsOverlapping(
-              { start: startOfDay(cell.day), end: endOfDay(cell.day) },
-              { start: eventStart, end: eventEnd },
-            );
-          });
-          return (
-            <DayCell
-              maxEventsPerWeek={maxEventsPerWeek}
-              isFirstCell={index === 0}
-              isLastCell={index === 6}
-              key={formatDate(cell.day, DATE_FORMAT.fullDate)}
-              cell={cell}
-              cellEvents={cellEvents}
-            />
-          );
-        });
       })}
     </div>
+  );
+}
+type WeekChunksProps = {
+  cells: Array<{
+    day: Date;
+    currentMonth: boolean;
+  }>;
+  allMonthEvents: Array<Event>;
+};
+function WeekChunks({ cells, allMonthEvents }: WeekChunksProps) {
+  //saving first and last day for event title and date to be displayed per line (week) if it is long event
+  const firstDayOfWeek = cells[0].day;
+  const lastDayOfWeek = cells.slice(-1)[0].day;
+  const eventPositions = useMemo(
+    () => calculateEventPositionsPerDurations(allMonthEvents, cells),
+    [cells, allMonthEvents],
+  );
+  const eventsOfTheWeek = allMonthEvents.filter((event) => {
+    const eventStart = new Date(event.startDate);
+    const eventEnd = new Date(event.endDate);
+    return areIntervalsOverlapping(
+      { start: startOfDay(firstDayOfWeek), end: endOfDay(lastDayOfWeek) },
+      { start: eventStart, end: eventEnd },
+    );
+  });
+  //adding the position attribute to eact event of the week
+  const weekEventsPositioned = useMemo(
+    () => assignPositionForCellEvents(eventsOfTheWeek, eventPositions),
+    [eventsOfTheWeek, eventPositions],
+  );
+  const maxEventsPerWeek = maxNumberOfEventsPerInterval(
+    cells,
+    weekEventsPositioned,
+  );
+  return cells.map((cell, index) => {
+    return (
+      <DividePerCell
+        key={formatDate(cell.day, DATE_FORMAT.fullDate)}
+        cell={cell}
+        index={index}
+        weekEventsPositioned={weekEventsPositioned}
+        maxEventsPerWeek={maxEventsPerWeek}
+      />
+    );
+  });
+}
+
+type DividePerCellProps = {
+  cell: { day: Date; currentMonth: boolean };
+  index: number;
+  weekEventsPositioned: Array<Event & { position: number }>;
+  maxEventsPerWeek: number;
+};
+function DividePerCell({
+  cell,
+  index,
+  weekEventsPositioned,
+  maxEventsPerWeek,
+}: DividePerCellProps) {
+  const cellEvents = weekEventsPositioned.filter((event) => {
+    const eventStart = new Date(event.startDate);
+    const eventEnd = new Date(event.endDate);
+    return areIntervalsOverlapping(
+      { start: startOfDay(cell.day), end: endOfDay(cell.day) },
+      { start: eventStart, end: eventEnd },
+    );
+  });
+  return (
+    <DayCell
+      maxEventsPerWeek={maxEventsPerWeek}
+      isFirstCell={index === 0}
+      isLastCell={index === 6}
+      cell={cell}
+      cellEvents={cellEvents}
+    />
   );
 }

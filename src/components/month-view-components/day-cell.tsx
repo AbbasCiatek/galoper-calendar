@@ -6,54 +6,80 @@ import { motion } from "motion/react";
 import { useCallback } from "react";
 import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
-type TProps = {
+type DayCellProps = {
   maxEventsPerWeek: number;
   isFirstCell: boolean;
   isLastCell: boolean;
   cell: { day: Date; currentMonth: boolean };
   cellEvents: Array<Event & { position: number }>;
 };
+
+type RenderEventProps = {
+  position: number;
+  cellEvents: Array<Event & { position: number }>;
+  cell: { day: Date; currentMonth: boolean };
+  isFirstCell: boolean;
+  isLastCell: boolean;
+};
+
+function RenderEventAtPosition({
+  position,
+  cellEvents,
+  cell,
+  isFirstCell,
+  isLastCell,
+}: RenderEventProps) {
+  const event = cellEvents.find((e) => e.position === position);
+  if (!event) {
+    return (
+      <motion.div
+        key={`empty-${position}`}
+        className=" h-[26px]"
+        initial={false}
+        animate={false}
+      />
+    );
+  }
+  return (
+    <>
+      <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
+        <EventBullet className="lg:hidden" color={event.color} />
+      </div>
+      <div className={clsx("hidden lg:flex lg:flex-col  ")}>
+        <MonthBadgeEvent
+          isFirstCell={isFirstCell}
+          isLastCell={isLastCell}
+          event={event}
+          cell={cell}
+        />
+      </div>
+    </>
+  );
+}
+
 export function DayCell({
   maxEventsPerWeek,
   isFirstCell,
   isLastCell,
   cell,
   cellEvents,
-}: TProps) {
+}: DayCellProps) {
   //calculates undisplayed events
-  let undisplayedEvents = 0;
-  for (const cell of cellEvents) {
-    if (cell.position === -1) undisplayedEvents++;
-  }
+  const undisplayedEvents = cellEvents.filter(
+    (cell) => cell.position === -1,
+  ).length;
 
   // returns events or empty div(if not event at the specific positions)
   const renderEventAtPosition = useCallback(
     (position: number) => {
-      const event = cellEvents.find((e) => e.position === position);
-      if (!event) {
-        return (
-          <motion.div
-            key={`empty-${position}`}
-            className=" h-[26px]"
-            initial={false}
-            animate={false}
-          />
-        );
-      }
       return (
-        <>
-          <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
-            <EventBullet className="lg:hidden" color={event.color} />
-          </div>
-          <div className={clsx("hidden lg:flex lg:flex-col  ")}>
-            <MonthBadgeEvent
-              isFirstCell={isFirstCell}
-              isLastCell={isLastCell}
-              event={event}
-              cell={cell}
-            />
-          </div>
-        </>
+        <RenderEventAtPosition
+          position={position}
+          cellEvents={cellEvents}
+          cell={cell}
+          isFirstCell={isFirstCell}
+          isLastCell={isLastCell}
+        />
       );
     },
     [cellEvents, cell, isFirstCell, isLastCell],
