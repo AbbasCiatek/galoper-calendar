@@ -1,5 +1,6 @@
 import { ItemTypes } from "@/dnd/draggable-events.tsx";
 import { type Event, useEventStore } from "@/event-store.ts";
+import { clsx } from "clsx";
 import { differenceInMilliseconds } from "date-fns";
 import type { ReactNode, RefObject } from "react";
 import { useDrop } from "react-dnd";
@@ -12,7 +13,7 @@ type Props = {
 export function DroppableDayCell({ date, children }: Props) {
   const { editEvent } = useEventStore();
 
-  const [drop] = useDrop(
+  const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: ItemTypes.EVENT,
       drop: (item: { event: Event }) => {
@@ -51,6 +52,11 @@ export function DroppableDayCell({ date, children }: Props) {
   );
 
   return (
-    <div ref={drop as unknown as RefObject<HTMLDivElement>}>{children}</div>
+    <div
+      ref={drop as unknown as RefObject<HTMLDivElement>}
+      className={clsx(isOver && canDrop && "bg-gray-100 dark:bg-gray-700")}
+    >
+      {children}
+    </div>
   );
 }

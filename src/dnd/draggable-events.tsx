@@ -11,7 +11,8 @@ export const ItemTypes = {
 export function DraggableEvents({
   children,
   event,
-}: { children: ReactNode; event: Event }) {
+  className,
+}: { children: ReactNode; event: Event; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -31,7 +32,7 @@ export function DraggableEvents({
   drag(ref);
 
   return (
-    <div ref={ref} className={clsx(isDragging && "opacity-40")}>
+    <div ref={ref} className={clsx(isDragging && "opacity-40", className)}>
       {children}
     </div>
   );
