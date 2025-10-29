@@ -1,5 +1,6 @@
 import { DayDisplay } from "./day-view-components/day-display";
 import { DayViewContainer } from "./day-view-components/day-view-container";
+import { DayViewMultiDayEvent } from "./day-view-components/day-view-multi-day-event";
 import { DateDisplayLayout } from "./week-day-view-commons/date-display-layout";
 
 export function DayView() {
@@ -8,6 +9,7 @@ export function DayView() {
       <DateDisplayLayout>
         <DayDisplay />
       </DateDisplayLayout>
+      <DayViewMultiDayEvent />
       <DayViewContainer />
     </div>
   );
