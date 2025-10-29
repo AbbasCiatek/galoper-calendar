@@ -53,9 +53,8 @@ export function AddEditEventDialog({
   event,
 }: AddEventDialogProps) {
   const { date } = useCalendar();
-  const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
-  const onToggle = () => setIsOpen(!isOpen);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const { addEvent, editEvent } = useEventStore();
 
   const startDateDefaults = useMemo(() => {
@@ -99,18 +98,15 @@ export function AddEditEventDialog({
       } else {
         addEvent(eventData);
         toast.success(`Event ${event ? "edited!" : "created! "}`);
-        onClose();
+        setIsOpen(false);
         form.reset();
       }
     } catch (e) {
       toast.error(`${e} failed to ${event} ? "edit event" : "add event"`);
     }
   };
-
-  const [isChecked, setChecked] = useState<boolean>(false);
-
   return (
-    <Dialog open={isOpen} onOpenChange={onToggle}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="data-[state=open]:slide-in-from-bottom-[50%]  data-[state=closed]:slide-out-to-top-[50%] duration-500  ">
         <DialogHeader>
@@ -165,7 +161,7 @@ export function AddEditEventDialog({
                           <DatePicker
                             id="startDate"
                             value={field.value}
-                            onSelect={(date) => field.onChange(date as Date)}
+                            onSelect={field.onChange}
                             data-invalid={fieldState.invalid}
                             isChecked={isChecked}
                           />
@@ -190,7 +186,7 @@ export function AddEditEventDialog({
                           <DatePicker
                             id="endDate"
                             value={field.value}
-                            onSelect={(date) => field.onChange(date as Date)}
+                            onSelect={field.onChange}
                             data-invalid={fieldState.invalid}
                             startMonth={startDate}
                             isChecked={isChecked}
@@ -206,7 +202,7 @@ export function AddEditEventDialog({
                 <Checkbox
                   id="allDayCheckBox"
                   checked={isChecked}
-                  onCheckedChange={(checked) => setChecked(!!checked)}
+                  onCheckedChange={() => setIsChecked((prev) => !prev)}
                 />
                 <label htmlFor="allDayCheckBox" className="text-sm font-medium">
                   All Day
