@@ -31,21 +31,14 @@ function RenderEventAtPosition({
 }: RenderEventProps) {
   const event = cellEvents.find((e) => e.position === position);
   if (!event) {
-    return (
-      <motion.div
-        key={`empty-${position}`}
-        className=" h-[26px]"
-        initial={false}
-        animate={false}
-      />
-    );
+    return <motion.div className=" h-[26px]" initial={false} animate={false} />;
   }
   return (
     <>
       <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
         <EventBullet className="lg:hidden" color={event.color} />
       </div>
-      <div className={clsx("hidden lg:flex lg:flex-col  ")}>
+      <div className="hidden lg:flex lg:flex-col">
         <MonthBadgeEvent
           isFirstCell={isFirstCell}
           isLastCell={isLastCell}
@@ -74,6 +67,7 @@ export function DayCell({
     (position: number) => {
       return (
         <RenderEventAtPosition
+          key={position}
           position={position}
           cellEvents={cellEvents}
           cell={cell}
@@ -92,32 +86,33 @@ export function DayCell({
       : MAX_EVENTS_PER_DAY;
 
   const positionArray: Array<number> = [];
-  for (let i = 0; i < renderingNumber; i++) positionArray.push(i);
-
+  Array.from({ length: renderingNumber }, (_, i) => {
+    positionArray.push(i);
+  });
   return (
     <div
       className={clsx(
         "flex flex-col lg:flex-grow border-l border-t h-full lg:min-h-36",
-        isMonday(cell.day) && "border-l-0",
+        { "border-l-0": isMonday(cell.day) },
       )}
     >
       <span
         className={clsx(
           "flex w-6 h-6 items-center justify-center rounded-full text-xs font-semibold",
-          cell.currentMonth
-            ? "text-gray-800 dark:text-gray-200"
-            : "text-gray-400 dark:text-gray-500",
-          isToday(cell.day) && "bg-primary font-bold text-primary-foreground",
+          {
+            "text-gray-800 dark:text-gray-200": cell.currentMonth,
+            "text-gray-400 dark:text-gray-500": !cell.currentMonth,
+            "bg-primary font-bold text-primary-foreground": isToday(cell.day),
+          },
         )}
       >
         {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
       </span>
 
       <div
-        className={clsx(
-          "flex lg:flex-grow gap-0.5 lg:flex-col",
-          !cell.currentMonth && "opacity-50",
-        )}
+        className={clsx("flex lg:flex-grow gap-0.5 lg:flex-col", {
+          "opacity-50": !cell.currentMonth,
+        })}
       >
         {cellEvents.length > 0 && positionArray.map(renderEventAtPosition)}
       </div>
@@ -129,9 +124,10 @@ export function DayCell({
             transition={{ delay: 0.15 }}
             className={clsx(
               "border rounded-full border-gray-200 cursor-pointer text-xs font-semibold ",
-              cell.currentMonth
-                ? "text-gray-500 dark:text-gray-300"
-                : "text-gray-500/50 dark:text-gray-300/50",
+              {
+                "text-gray-500 dark:text-gray-300": cell.currentMonth,
+                "text-gray-500/50 dark:text-gray-300/50": !cell.currentMonth,
+              },
             )}
           >
             <span>

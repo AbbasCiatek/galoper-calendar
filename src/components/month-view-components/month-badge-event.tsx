@@ -21,10 +21,17 @@ export function MonthBadgeEvent({
 }: TProps) {
   const isFirstDay = isSameDay(event.startDate, cell.day);
   const isLastDay = isSameDay(event.endDate, cell.day);
+  const isSingleDay = isFirstDay && isLastDay;
   const isMiddleDay = !isFirstDay && !isLastDay;
   return (
     <motion.div
-      key={event.id}
+      onClick={() =>
+        console.log(
+          event.title,
+          formatDate(event.startDate, "dd hh:mm a"),
+          formatDate(event.endDate, "dd hh:mm a"),
+        )
+      }
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
@@ -34,12 +41,15 @@ export function MonthBadgeEvent({
         damping: 20,
       }}
       className={clsx(
-        `flex justify-between cursor-pointer ${colorMap[event.color]} mx-1 px-1 h-6 items-center border truncate font-bold rounded text-xs`,
+        "flex justify-between cursor-pointer rounded h-6 items-center border truncate font-bold text-xs",
+        colorMap[event.color],
         {
-          "w-[calc(100%_+_2px)] z-20": isFirstDay && !isLastDay,
-          "border-l-0  rounded-l-none ml-0 ": !isFirstDay,
-          "border-r-0  rounded-r-none mr-0 ": !isLastDay,
-          "z-20 w-[calc(100%_+_2px)]": isMiddleDay && !isLastCell,
+          "px-1 mx-1 ": isSingleDay,
+          "rounded-l-none rounded-r-none border-x-0": isMiddleDay,
+          "pl-1 ml-1 border-r-0 rounded-r-none": isFirstDay && !isSingleDay,
+          "pr-1 mr-1 border-l-0 rounded-l-none": isLastDay && !isSingleDay,
+          "w-[calc(100%_+_2px)] z-30":
+            (isFirstDay || isMiddleDay) && !isLastCell && !isSingleDay,
         },
       )}
     >
