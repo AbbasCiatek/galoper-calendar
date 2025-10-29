@@ -2,12 +2,12 @@ import { colorMap } from "@/constants";
 import type { Event } from "@/event-store.ts";
 import { clsx } from "clsx";
 
-interface Props {
+type Props = {
   event: Event;
   eventCurrentDay?: number;
   eventTotalDays?: number;
   position?: "first" | "middle" | "last" | "none";
-}
+};
 
 export function MultiDayEventDisplay({
   event,
