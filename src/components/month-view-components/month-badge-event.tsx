@@ -25,13 +25,6 @@ export function MonthBadgeEvent({
   const isMiddleDay = !isFirstDay && !isLastDay;
   return (
     <motion.div
-      onClick={() =>
-        console.log(
-          event.title,
-          formatDate(event.startDate, "dd hh:mm a"),
-          formatDate(event.endDate, "dd hh:mm a"),
-        )
-      }
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
