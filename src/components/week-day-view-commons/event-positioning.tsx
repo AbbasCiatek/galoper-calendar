@@ -14,7 +14,7 @@ export function EventsPositioning({ singleDayEvents }: Props) {
   const groupedEvents = groupEvents(singleDayEvents);
   return groupedEvents.map((group, groupIndex) =>
     group.map((event) => {
-      let { top, height, left, width } = positionEventsWeekDayView(
+      const { top, height, left, width } = positionEventsWeekDayView(
         event,
         groupIndex,
         groupedEvents.length,
@@ -29,10 +29,6 @@ export function EventsPositioning({ singleDayEvents }: Props) {
             ),
           ),
       );
-      if (!isOverlap) {
-        width = 100;
-        left = 0;
-      }
       return (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -52,8 +48,8 @@ export function EventsPositioning({ singleDayEvents }: Props) {
           style={{
             top: `${top}px`,
             height: `${height}px`,
-            left: `${left}%`,
-            width: `${width - 0.15}%`,
+            left: isOverlap ? "0%" : `${left}%`,
+            width: isOverlap ? "99.85%" : `${width - 0.15}%`,
           }}
           key={event.id}
         >
