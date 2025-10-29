@@ -109,7 +109,8 @@ export function WeekViewMultiDayEvent() {
   if (!hasEventsInWeek) {
     return null;
   }
-
+  const undisplayedEventsCounter =
+    maxEventsPerWeek - MAX_ALL_AND_MULTI_DAY_EVENTS;
   return (
     <div className="flex">
       <AnimatePresence initial={false}>
@@ -119,7 +120,7 @@ export function WeekViewMultiDayEvent() {
           transition={{ duration: 0.4, ease: "easeInOut" }}
           className="flex w-18 justify-center items-end border-b"
         >
-          {maxEventsPerWeek - MAX_ALL_AND_MULTI_DAY_EVENTS && !showMore && (
+          {undisplayedEventsCounter > 0 && !showMore && (
             <motion.button
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -131,7 +132,7 @@ export function WeekViewMultiDayEvent() {
               <ChevronDown className="text-gray-700" />
             </motion.button>
           )}
-          {maxEventsPerWeek - MAX_ALL_AND_MULTI_DAY_EVENTS && showMore && (
+          {undisplayedEventsCounter > 0 && showMore && (
             <motion.button
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -156,6 +157,8 @@ export function WeekViewMultiDayEvent() {
                 day,
                 processedEvents,
               );
+              const undisplayedEventCounterPerDay =
+                maxEventsDay - MAX_ALL_AND_MULTI_DAY_EVENTS;
               return (
                 <div
                   key={day.toISOString()}
@@ -210,23 +213,22 @@ export function WeekViewMultiDayEvent() {
                       </motion.div>
                     );
                   })}
-                  {!showMore &&
-                    maxEventsDay - MAX_ALL_AND_MULTI_DAY_EVENTS > 0 && (
-                      <motion.button
-                        type="button"
-                        onClick={() => setShowMore(true)}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.15 }}
-                        className="flex justify-center rounded-full  text-gray-600 cursor-pointer text-xs font-semibold "
-                      >
-                        <span>
-                          {" "}
-                          +{maxEventsDay - MAX_ALL_AND_MULTI_DAY_EVENTS}{" "}
-                          <span className="hidden lg:inline-block">more</span>
-                        </span>
-                      </motion.button>
-                    )}
+                  {!showMore && undisplayedEventCounterPerDay > 0 && (
+                    <motion.button
+                      type="button"
+                      onClick={() => setShowMore(true)}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.15 }}
+                      className="flex justify-center rounded-full  text-gray-600 cursor-pointer text-xs font-semibold "
+                    >
+                      <span>
+                        {" "}
+                        +{undisplayedEventCounterPerDay}{" "}
+                        <span className="hidden lg:inline-block">more</span>
+                      </span>
+                    </motion.button>
+                  )}
                 </div>
               );
             })}
