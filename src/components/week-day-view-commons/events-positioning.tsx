@@ -49,8 +49,8 @@ export function EventsPositioning({ singleDayEvents }: Props) {
           style={{
             top: `${top}px`,
             height: `${height}px`,
-            left: isOverlap ? "0%" : `${left}%`,
-            width: isOverlap ? "99.85%" : `${width - 0.15}%`,
+            left: !isOverlap ? "0%" : `${left}%`,
+            width: !isOverlap ? "99.85%" : `${width - 0.15}%`,
           }}
           key={event.id}
         >
