@@ -46,12 +46,18 @@ export function MonthBadgeEvent({
         },
       )}
     >
-      <span className="truncate">
-        {(isFirstDay || isFirstCell) && event.title}
-      </span>
+      <div className="flex gap-1">
+        <span className="max-w-16 truncate">
+          {(isFirstDay || isFirstCell) && event.title}
+        </span>
+        <span>
+          {isFirstDay &&
+            formatDate(new Date(event.startDate), DATE_FORMAT.timeFormat)}
+        </span>
+      </div>
       <span>
-        {(isLastDay || isLastCell) &&
-          formatDate(new Date(event.startDate), DATE_FORMAT.timeFormat)}
+        {isLastDay &&
+          formatDate(new Date(event.endDate), DATE_FORMAT.timeFormat)}
       </span>
     </motion.div>
   );
