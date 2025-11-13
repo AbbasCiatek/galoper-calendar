@@ -22,13 +22,13 @@ type EventDetailsDialogProps = {
 };
 
 const colorMap = {
-  red: { title: "text-red-500", details: "text-red-300" },
-  green: { title: "text-red-500", details: "text-red-300" },
-  yellow: { title: "text-red-500", details: "text-red-300" },
-  blue: { title: "text-red-500", details: "text-red-300" },
-  purple: { title: "text-red-500", details: "text-red-300" },
-  orange: { title: "text-red-500", details: "text-red-300" },
-  gray: { title: "text-red-500", details: "text-red-300" },
+  red: { title: "text-red-500", details: "text-red-900" },
+  green: { title: "text-green-500", details: "text-green-900" },
+  yellow: { title: "text-yellow-500", details: "text-yellow-900" },
+  blue: { title: "text-blue-500", details: "text-blue-900" },
+  purple: { title: "text-purple-500", details: "text-purple-900" },
+  orange: { title: "text-orange-500", details: "text-orange-900" },
+  gray: { title: "text-gray-500", details: "text-gray-900" },
 };
 export function EventDetailsDialog({
   children,
@@ -41,10 +41,11 @@ export function EventDetailsDialog({
     (event: Event) => {
       setIsOpen(false);
       removeEvent(event.id);
-      toast.error(` Event ${event.id} Deleted!`);
+      toast.error(` Event ${event.title} Deleted!`);
     },
     [removeEvent],
   );
+  // TODO confirmation delete on "Delete" button press dialog
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "Delete") {
@@ -58,21 +59,14 @@ export function EventDetailsDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent
-        className={clsx(
-          colorMap[event.color].title,
-          "data-[state=open]:slide-in-from-bottom-[50%] data-[state=closed]:slide-out-to-top-[50%] duration-500",
-        )}
-      >
+      <DialogContent className="data-[state=open]:slide-in-from-bottom-[50%] data-[state=closed]:slide-out-to-top-[50%] duration-500">
         <DialogHeader>
-          <DialogTitle
-            className={`${colorMap[event.color].details} font-bold `}
-          >
+          <DialogTitle className={`${colorMap[event.color].title} font-bold `}>
             {event.title}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className={clsx(colorMap[event.color].details, "space-y-4")}>
           <div className="flex items-start gap-2">
             <Calendar className="mt-1 size-4 shrink-0" />
             <div>
@@ -98,7 +92,9 @@ export function EventDetailsDialog({
             <div>
               <p className="text-sm font-medium">Description</p>
               <p className="text-sm text-muted-foreground">
-                {event.description}
+                {event.description === ""
+                  ? "No Description"
+                  : event.description}
               </p>
             </div>
           </div>

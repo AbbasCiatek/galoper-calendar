@@ -7,6 +7,7 @@ import { mapAgendaEvents } from "@/lib/date-helpers";
 import { endOfMonth, formatDate, startOfMonth } from "date-fns";
 import { CalendarX2 } from "lucide-react";
 import { useMemo } from "react";
+import { AddEditEventDialog } from "./dialogs/add-edit-event-dialog";
 import { Button } from "./ui/button";
 import {
   Empty,
@@ -59,7 +60,9 @@ export function AgendaView() {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <Button>Create Event</Button>
+                <AddEditEventDialog>
+                  <Button>Create Event</Button>
+                </AddEditEventDialog>
               </EmptyContent>
             </Empty>
           </div>

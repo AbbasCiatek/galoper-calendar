@@ -5,6 +5,8 @@ import { type Event, useEventStore } from "@/event-store.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
 import { endOfMonth, formatDate, isSameDay, startOfMonth } from "date-fns";
+import { EventDetailsDialog } from "../dialogs/event-details-dialog";
+import { EventListDialog } from "../dialogs/event-list-dialog";
 
 export function DaysInMonth({ month }: { month: Date }) {
   const { date, setDate } = useCalendar();
@@ -47,18 +49,22 @@ export function DaysInMonth({ month }: { month: Date }) {
           >
             {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
             {cell.currentMonth && dayEvent.length > 1 ? (
-              <div className="flex flex-col justify-center items-center">
-                <EventBullet color={dayEvent[0].color} />
-                <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
-                  +{dayEvent.length - 1}
-                </span>
-              </div>
+              <EventListDialog events={dayEvent} date={cell.day}>
+                <div className="flex flex-col justify-center items-center">
+                  <EventBullet color={dayEvent[0].color} />
+                  <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
+                    +{dayEvent.length - 1}
+                  </span>
+                </div>
+              </EventListDialog>
             ) : (
               cell.currentMonth &&
               dayEvent.length > 0 && (
-                <div className="flex flex-col justify-center items-center">
-                  <EventBullet color={dayEvent[0].color} />
-                </div>
+                <EventDetailsDialog event={dayEvent[0]}>
+                  <div className="flex flex-col justify-center items-center">
+                    <EventBullet color={dayEvent[0].color} />
+                  </div>
+                </EventDetailsDialog>
               )
             )}
           </button>

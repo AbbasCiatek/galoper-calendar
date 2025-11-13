@@ -1,11 +1,15 @@
 import { DATE_FORMAT, MAX_EVENTS_PER_DAY } from "@/constants";
 import type { Event } from "@/event-store";
 import { clsx } from "clsx";
-import { formatDate, isMonday, isToday } from "date-fns";
+import { addDays, formatDate, isMonday, isToday } from "date-fns";
 import { motion } from "motion/react";
 import { useCallback } from "react";
+import { AddEditEventDialog } from "../dialogs/add-edit-event-dialog";
+import { EventDetailsDialog } from "../dialogs/event-details-dialog";
+import { EventListDialog } from "../dialogs/event-list-dialog";
 import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
+
 type DayCellProps = {
   maxEventsPerWeek: number;
   isFirstCell: boolean;
@@ -29,23 +33,46 @@ function RenderEventAtPosition({
   isFirstCell,
   isLastCell,
 }: RenderEventProps) {
+  const pureEvents: Array<Event> = cellEvents.map(
+    ({ id, title, startDate, endDate, color, description }) => ({
+      id,
+      title,
+      startDate,
+      endDate,
+      color,
+      description,
+    }),
+  );
   const event = cellEvents.find((e) => e.position === position);
   if (!event) {
     return <motion.div className=" h-[26px]" initial={false} animate={false} />;
   }
+  const { id, title, startDate, endDate, color, description } = event;
+  const pureEvent: Event = {
+    id,
+    title,
+    startDate,
+    endDate,
+    color,
+    description,
+  };
   return (
     <>
-      <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
-        <EventBullet className="lg:hidden" color={event.color} />
-      </div>
-      <div className="hidden lg:flex lg:flex-col">
-        <MonthBadgeEvent
-          isFirstCell={isFirstCell}
-          isLastCell={isLastCell}
-          event={event}
-          cell={cell}
-        />
-      </div>
+      <EventListDialog events={pureEvents} date={cell.day}>
+        <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
+          <EventBullet className="lg:hidden" color={event.color} />
+        </div>
+      </EventListDialog>
+      <EventDetailsDialog event={pureEvent}>
+        <div className="hidden lg:flex lg:flex-col">
+          <MonthBadgeEvent
+            isFirstCell={isFirstCell}
+            isLastCell={isLastCell}
+            event={event}
+            cell={cell}
+          />
+        </div>
+      </EventDetailsDialog>
     </>
   );
 }
@@ -89,6 +116,18 @@ export function DayCell({
   Array.from({ length: renderingNumber }, (_, i) => {
     positionArray.push(i);
   });
+
+  const pureEvents: Array<Event> = cellEvents.map(
+    ({ id, title, startDate, endDate, color, description }) => ({
+      id,
+      title,
+      startDate,
+      endDate,
+      color,
+      description,
+    }),
+  );
+
   return (
     <div
       className={clsx(
@@ -108,34 +147,37 @@ export function DayCell({
       >
         {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
       </span>
-
-      <div
-        className={clsx("flex lg:flex-grow gap-0.5 lg:flex-col", {
-          "opacity-50": !cell.currentMonth,
-        })}
-      >
-        {cellEvents.length > 0 && positionArray.map(renderEventAtPosition)}
-      </div>
+      <AddEditEventDialog startDate={cell.day} endDate={addDays(cell.day, 1)}>
+        <div
+          className={clsx("flex lg:flex-grow gap-0.5 lg:flex-col", {
+            "opacity-50": !cell.currentMonth,
+          })}
+        >
+          {cellEvents.length > 0 && positionArray.map(renderEventAtPosition)}
+        </div>
+      </AddEditEventDialog>
       <div className="flex justify-center">
         {undisplayedEvents > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15 }}
-            className={clsx(
-              "border rounded-full border-gray-200 cursor-pointer text-xs font-semibold ",
-              {
-                "text-gray-500 dark:text-gray-300": cell.currentMonth,
-                "text-gray-500/50 dark:text-gray-300/50": !cell.currentMonth,
-              },
-            )}
-          >
-            <span>
-              {" "}
-              +{undisplayedEvents}{" "}
-              <span className="hidden lg:inline-block">more</span>
-            </span>
-          </motion.div>
+          <EventListDialog events={pureEvents} date={cell.day}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.15 }}
+              className={clsx(
+                "border rounded-full border-gray-200 cursor-pointer text-xs font-semibold ",
+                {
+                  "text-gray-500 dark:text-gray-300": cell.currentMonth,
+                  "text-gray-500/50 dark:text-gray-300/50": !cell.currentMonth,
+                },
+              )}
+            >
+              <span>
+                {" "}
+                +{undisplayedEvents}{" "}
+                <span className="hidden lg:inline-block">more</span>
+              </span>
+            </motion.div>
+          </EventListDialog>
         )}
       </div>
     </div>

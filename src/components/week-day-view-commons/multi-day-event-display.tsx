@@ -1,6 +1,7 @@
 import { colorMap } from "@/constants";
 import type { Event } from "@/event-store.ts";
 import { clsx } from "clsx";
+import { EventDetailsDialog } from "../dialogs/event-details-dialog";
 
 type Props = {
   event: Event;
@@ -26,21 +27,23 @@ export function MultiDayEventDisplay({
   }[position];
 
   return (
-    <div
-      className={clsx(
-        "flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer",
-        positionClasses,
-        colorMap[event.color],
-      )}
-    >
-      <p>
-        {eventCurrentDay && (
-          <span className="text-xs">
-            Day {eventCurrentDay} of {eventTotalDays} •{" "}
-          </span>
+    <EventDetailsDialog event={event}>
+      <div
+        className={clsx(
+          "flex items-center h-6.5 px-2 text-[6px] font-thin sm:text-xs sm:font-medium truncate cursor-pointer",
+          positionClasses,
+          colorMap[event.color],
         )}
-        {position === "first" || position === "none" ? event.title : null}
-      </p>
-    </div>
+      >
+        <p>
+          {eventCurrentDay && (
+            <span className="text-xs">
+              Day {eventCurrentDay} of {eventTotalDays} •{" "}
+            </span>
+          )}
+          {position === "first" || position === "none" ? event.title : null}
+        </p>
+      </div>
+    </EventDetailsDialog>
   );
 }

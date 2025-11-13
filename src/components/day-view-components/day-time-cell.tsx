@@ -23,7 +23,7 @@ export function DayTimeCell() {
 
   return (
     <div className="relative flex-1 border-l bg-white">
-      <TimeCells />
+      <TimeCells date={date} />
       <EventsPositioning singleDayEvents={singleDayEvents} />
       {isToday(date) && <TimeLine />}
     </div>

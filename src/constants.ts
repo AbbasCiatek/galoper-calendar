@@ -13,11 +13,13 @@ export const WEEK_DAYS = [
 ] as const;
 
 export const DATE_FORMAT = {
+  shortWeekDay: "EE",
+  longWeekDay: "EEEE",
   longMonth: "MMMM",
+  longYear: "yyyy",
   fullDate: "dd MMM yyyy",
   fullDateWithWeek: "EEEE MMMM d yyyy",
   dayOfMonth: "d",
-  shortWeekDay: "EE",
   hours24Format: "HH",
   timeFormat: "hh:mm a",
   fullDateAndTime: "dd MMM yyyy hh:mm a",
