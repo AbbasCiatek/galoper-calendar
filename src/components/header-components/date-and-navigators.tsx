@@ -1,9 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCalendar } from "@/context/calendar-context.tsx";
-import {
+import DateSubtracterFunction, {
   DateAdderFunction,
-  DateSubtracterFunction,
   getNumberOfEvents,
   rangeDisplayer,
 } from "@/lib/date-helpers.ts";

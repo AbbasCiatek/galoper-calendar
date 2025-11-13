@@ -1,17 +1,23 @@
-import { useEventStore } from "@/event-store.ts";
+import { DATE_FORMAT } from "@/constants.ts";
+import { type Event, useEventStore } from "@/event-store";
 import type { ViewTypes } from "@/types.ts";
 import {
   addDays,
   addMonths,
   addWeeks,
   addYears,
+  areIntervalsOverlapping,
+  differenceInMinutes,
+  eachDayOfInterval,
   endOfDay,
   endOfMonth,
-  getDay,
-  setDate,
   endOfWeek,
   endOfYear,
   formatDate,
+  getDay,
+  isSameDay,
+  isSameMonth,
+  setDate,
   startOfDay,
   startOfMonth,
   startOfWeek,
@@ -21,36 +27,6 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-
-export function numberOfDisplayedDaysOfNextMonth(
-  daysOfCurrentMonth: Array<Date>,
-  indexOfCurrentMonthInWeekdays: number,
-) {
-  const lengthOfCurrentMonth = daysOfCurrentMonth.length;
-  if (lengthOfCurrentMonth + indexOfCurrentMonthInWeekdays > 35)
-    return 42 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
-  return 35 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
-}
-
-export function arrayOfDaysOfNextMonth(date: Date) {
-  const nextMonth = addMonths(date, 1);
-  return daysInMonth(nextMonth);
-}
-export function arrayOfDaysOfPrevMonth(date: Date) {
-  const prevMonth = subMonths(date, 1);
-  return daysInMonth(prevMonth);
-}
-
-export function numberOfDisplayedDaysOfPrevMonth(
-  currentDate: Date,
-  indexOfCurrentMonthInWeekdays: number,
-) {
-  return (
-    arrayOfDaysOfPrevMonth(currentDate).daysInMonth.length -
-    indexOfCurrentMonthInWeekdays
-  );
-}
-
 export function DateAdderFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
@@ -68,7 +44,7 @@ export function DateAdderFunction(view: ViewTypes, date: Date) {
   }
 }
 
-export function DateSubtracterFunction(view: ViewTypes, date: Date) {
+function DateSubtracterFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
       return subMonths(date, 1);
@@ -84,6 +60,8 @@ export function DateSubtracterFunction(view: ViewTypes, date: Date) {
       return subMonths(date, 1);
   }
 }
+
+export default DateSubtracterFunction;
 
 export function rangeDisplayer(view: ViewTypes, date: Date) {
   const formatString = "MMM d, yyyy";
@@ -132,25 +110,15 @@ export function getNumberOfEvents(date: Date, view: ViewTypes) {
       ).length;
     case "day":
       return getEventsByDateRange(startOfDay(date), endOfDay(date)).length;
-
-    export function daysInMonth(date: Date) {
-      const firstDayOfMonth = startOfMonth(date);
-      const lastDayOfMonth = endOfMonth(date);
-      const indexOfFirstDay = (getDay(firstDayOfMonth) + 6) % 7;
-      const daysInMonth = eachDayOfInterval({
-        start: firstDayOfMonth,
-        end: lastDayOfMonth,
-      });
-
-      return { daysInMonth, indexOfFirstDay };
-    }
-
+  }
+}
 export function getArrayOfMonthsOfYear(date: Date) {
   const year = startOfYear(date);
   const months: Array<Date> = [];
   Array.from({ length: 12 }, (_, i) => {
     months.push(addMonths(year, i));
   });
+
   return months;
 }
 
@@ -210,4 +178,151 @@ export function getCalendarCellsOfMonth(
     return [...prevMonthObject, ...currentMonthObject, ...nextMonthObject];
   }
   return [...prevMonthObject, ...currentMonthObject];
+}
+
+export function daysOfWeek(date: Date) {
+  return eachDayOfInterval({
+    start: startOfWeek(date, { weekStartsOn: 1 }),
+    end: endOfWeek(date, { weekStartsOn: 1 }),
+  });
+}
+
+export function groupEvents(dayEvents: Array<Event>): Array<Array<Event>> {
+  const sortedEvents = dayEvents.sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+  );
+  const groups: Array<Array<Event>> = [];
+
+  for (const event of sortedEvents) {
+    const eventStart = event.startDate;
+    let placed = false;
+
+    for (const group of groups) {
+      const lastEventInGroup = group[group.length - 1];
+      const lastEventEnd = lastEventInGroup.endDate;
+
+      if (eventStart >= lastEventEnd) {
+        group.push(event);
+        placed = true;
+        break;
+      }
+    }
+
+    if (!placed) groups.push([event]);
+  }
+
+  return groups;
+}
+
+export function positionEventsWeekDayView(
+  event: Event,
+  groupIndex: number,
+  groupsSize: number,
+) {
+  const startMinutes =
+    event.startDate.getMinutes() + event.startDate.getHours() * 60;
+  const durationMinutes = differenceInMinutes(event.endDate, event.startDate);
+  const containerPx = 24 * 96;
+  const top = (startMinutes / 1440) * containerPx;
+  const height = (durationMinutes / 1440) * containerPx;
+  const width = 100 / groupsSize;
+  const left = groupIndex * width;
+
+  return { top, height, left, width };
+}
+export function maxNumberOfAllAndMultiEventsPerDay(
+  day: Date,
+  eventsOfWeek: Array<Event>,
+) {
+  const eventsPerDay = eventsOfWeek.filter((event) => {
+    return areIntervalsOverlapping(
+      { start: startOfDay(day), end: endOfDay(day) },
+      { start: event.startDate, end: event.endDate },
+    );
+  });
+  return eventsPerDay.length;
+}
+
+export function maxNumberOfAllAndMultiEventsPerWeek(
+  weekDays: Array<Date>,
+  eventsOfWeek: Array<Event>,
+) {
+  let maxEventNumberPerWeek = 0;
+
+  weekDays.forEach((day) => {
+    const eventsPerDay = eventsOfWeek.filter((event) => {
+      return areIntervalsOverlapping(
+        { start: startOfDay(day), end: endOfDay(day) },
+        { start: event.startDate, end: event.endDate },
+      );
+    });
+    maxEventNumberPerWeek = Math.max(
+      eventsPerDay.length,
+      maxEventNumberPerWeek,
+    );
+  });
+
+  return maxEventNumberPerWeek;
+}
+
+export function mapAgendaEvents(events: Array<Event>, date: Date) {
+  const singleDayEvents = events.filter((event: Event) =>
+    isSameDay(new Date(event.startDate), new Date(event.endDate)),
+  );
+
+  const multiDayEvents = events.filter(
+    (event: Event) =>
+      !isSameDay(new Date(event.startDate), new Date(event.endDate)),
+  );
+
+  const allDates = new Map<
+    string,
+    { date: Date; events: Array<Event>; multiDayEvents: Array<Event> }
+  >();
+
+  singleDayEvents.forEach((event) => {
+    const eventDate = new Date(event.startDate);
+    if (!isSameMonth(eventDate, date)) return;
+
+    const dateKey = formatDate(eventDate, DATE_FORMAT.fullDate);
+
+    if (!allDates.has(dateKey)) {
+      allDates.set(dateKey, {
+        date: startOfDay(eventDate),
+        events: [],
+        multiDayEvents: [],
+      });
+    }
+
+    allDates.get(dateKey)?.events.push(event);
+  });
+
+  multiDayEvents.forEach((event) => {
+    const eventStart = new Date(event.startDate);
+    const eventEnd = new Date(event.endDate);
+
+    let currentDate = startOfDay(eventStart);
+    const lastDate = endOfDay(eventEnd);
+
+    while (currentDate <= lastDate) {
+      if (isSameMonth(currentDate, date)) {
+        const dateKey = formatDate(currentDate, DATE_FORMAT.fullDate);
+
+        if (!allDates.has(dateKey)) {
+          allDates.set(dateKey, {
+            date: new Date(currentDate),
+            events: [],
+            multiDayEvents: [],
+          });
+        }
+
+        allDates.get(dateKey)?.multiDayEvents.push(event);
+      }
+      currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+    }
+  });
+
+  return Array.from(allDates.values()).sort(
+    (a, b) => a.date.getTime() - b.date.getTime(),
+  );
 }
