@@ -5,6 +5,7 @@ import {
   addMonths,
   addWeeks,
   addYears,
+  areIntervalsOverlapping,
   differenceInMinutes,
   eachDayOfInterval,
   endOfDay,
@@ -175,6 +176,7 @@ export function getCalendarCellsOfMonth(
   }
   return [...prevMonthObject, ...currentMonthObject];
 }
+
 export function daysOfWeek(date: Date) {
   return eachDayOfInterval({
     start: startOfWeek(date, { weekStartsOn: 1 }),
@@ -224,4 +226,38 @@ export function positionEventsWeekDayView(
   const left = groupIndex * width;
 
   return { top, height, left, width };
+}
+export function maxNumberOfAllAndMultiEventsPerDay(
+  day: Date,
+  eventsOfWeek: Array<Event>,
+) {
+  const eventsPerDay = eventsOfWeek.filter((event) => {
+    return areIntervalsOverlapping(
+      { start: startOfDay(day), end: endOfDay(day) },
+      { start: event.startDate, end: event.endDate },
+    );
+  });
+  return eventsPerDay.length;
+}
+
+export function maxNumberOfAllAndMultiEventsPerWeek(
+  weekDays: Array<Date>,
+  eventsOfWeek: Array<Event>,
+) {
+  let maxEventNumberPerWeek = 0;
+
+  weekDays.forEach((day) => {
+    const eventsPerDay = eventsOfWeek.filter((event) => {
+      return areIntervalsOverlapping(
+        { start: startOfDay(day), end: endOfDay(day) },
+        { start: event.startDate, end: event.endDate },
+      );
+    });
+    maxEventNumberPerWeek = Math.max(
+      eventsPerDay.length,
+      maxEventNumberPerWeek,
+    );
+  });
+
+  return maxEventNumberPerWeek;
 }
