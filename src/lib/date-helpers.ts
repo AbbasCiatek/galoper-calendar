@@ -5,6 +5,7 @@ import {
   addMonths,
   addWeeks,
   addYears,
+  areIntervalsOverlapping,
   differenceInMinutes,
   eachDayOfInterval,
   endOfDay,
@@ -166,16 +167,15 @@ export function getCalendarCellsOfMonth(
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
-        day,
-        currentMonth: false,
-      }));
+          day,
+          currentMonth: false,
+        }));
 
   if (nextMonthObject) {
     return [...prevMonthObject, ...currentMonthObject, ...nextMonthObject];
   }
   return [...prevMonthObject, ...currentMonthObject];
 }
-export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;
 
 export function daysOfWeek(date: Date) {
   return eachDayOfInterval({
