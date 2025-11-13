@@ -1,10 +1,11 @@
-import { type Event,useEventStore } from "@/event-store.ts";
+import { type Event, useEventStore } from "@/event-store.ts";
 import type { ViewTypes } from "@/types";
 import {
   addDays,
   addMonths,
   addWeeks,
   addYears,
+  differenceInMinutes,
   eachDayOfInterval,
   endOfDay,
   endOfMonth,
@@ -21,8 +22,6 @@ import {
   subMonths,
   subWeeks,
   subYears,
-  areIntervalsOverlapping,
-  differenceInMinutes,
 } from "date-fns";
 export function DateAdderFunction(view: ViewTypes, date: Date) {
   switch (view) {
@@ -167,9 +166,9 @@ export function getCalendarCellsOfMonth(
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
-        day,
-        currentMonth: false,
-      }));
+          day,
+          currentMonth: false,
+        }));
 
   if (nextMonthObject) {
     return [...prevMonthObject, ...currentMonthObject, ...nextMonthObject];

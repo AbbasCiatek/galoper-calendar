@@ -1,3 +1,4 @@
+import { DayView } from "@/components/day-view.tsx";
 import { MonthView } from "@/components/month-view.tsx";
 import { YearView } from "@/components/year-view.tsx";
 import { useCalendar } from "@/context/calendar-context.tsx";
@@ -8,6 +9,7 @@ export function Views() {
     <>
       {view === "year" && <YearView />}
       {view === "month" && <MonthView />}
+      {view === "day" && <DayView />}
     </>
   );
 }
