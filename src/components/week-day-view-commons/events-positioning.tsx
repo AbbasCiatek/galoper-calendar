@@ -4,6 +4,7 @@ import { groupEvents, positionEventsWeekDayView } from "@/lib/date-helpers";
 import { clsx } from "clsx";
 import { areIntervalsOverlapping } from "date-fns";
 import { motion } from "motion/react";
+import { EventDetailsDialog } from "../dialogs/event-details-dialog";
 import { EventBlock } from "./event-block";
 
 type Props = {
@@ -31,31 +32,32 @@ export function EventsPositioning({ singleDayEvents }: Props) {
       );
 
       return (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.2,
-            delay: 0.1 * groupIndex,
-            type: "spring",
-            stiffness: 200,
-            damping: 20,
-            mass: 2,
-          }}
-          className={clsx(
-            "border-1 rounded-md text-xs cursor-pointer absolute overflow-hidden",
-            colorMap[event.color],
-          )}
-          style={{
-            top: `${top}px`,
-            height: `${height}px`,
-            left: !isOverlap ? "0%" : `${left}%`,
-            width: !isOverlap ? "99.85%" : `${width - 0.15}%`,
-          }}
-          key={event.id}
-        >
-          <EventBlock event={event} />
-        </motion.div>
+        <EventDetailsDialog key={event.id} event={event}>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.2,
+              delay: 0.1 * groupIndex,
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+              mass: 2,
+            }}
+            className={clsx(
+              "border-1 rounded-md text-xs cursor-pointer absolute overflow-hidden",
+              colorMap[event.color],
+            )}
+            style={{
+              top: `${top}px`,
+              height: `${height}px`,
+              left: !isOverlap ? "0%" : `${left}%`,
+              width: !isOverlap ? "99.85%" : `${width - 0.15}%`,
+            }}
+          >
+            <EventBlock event={event} />
+          </motion.div>
+        </EventDetailsDialog>
       );
     }),
   );

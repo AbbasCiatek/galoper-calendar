@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
+import { AddEditEventDialog } from "../dialogs/add-edit-event-dialog";
 
 const views: Array<{ name: string; value: ViewTypes; icon: LucideIcon }> = [
   {
@@ -120,10 +121,12 @@ export function ViewChangerCreateEventButton() {
         })}
       </div>
       {/*<!--Add Event Button-->*/}
-      <Button className="font-semibold max-md:w-28" variant="default">
-        {" "}
-        <PlusIcon /> Add Event
-      </Button>
+      <AddEditEventDialog>
+        <Button className="font-semibold max-md:w-28" variant="default">
+          {" "}
+          <PlusIcon /> Add Event
+        </Button>
+      </AddEditEventDialog>
     </motion.div>
   );
 }

@@ -14,7 +14,7 @@ export function WeekTimeCells() {
         {weekDays.map((day) => {
           return (
             <div key={day.toISOString()} className="relative">
-              <TimeCells />
+              <TimeCells date={day} />
               <EventPerDay day={day} />
               {isToday(day) && <TimeLine />}
             </div>

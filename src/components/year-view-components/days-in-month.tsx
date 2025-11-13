@@ -1,13 +1,23 @@
+import { EventBullet } from "@/components/events/event-bullet.tsx";
 import { DATE_FORMAT, WEEK_DAYS } from "@/constants";
 import { useCalendar } from "@/context/calendar-context";
+import { type Event, useEventStore } from "@/event-store.ts";
 import { getCalendarCellsOfMonth } from "@/lib/date-helpers.ts";
 import { clsx } from "clsx";
-import { formatDate, isSameDay } from "date-fns";
+import { endOfMonth, formatDate, isSameDay, startOfMonth } from "date-fns";
+import { EventDetailsDialog } from "../dialogs/event-details-dialog";
+import { EventListDialog } from "../dialogs/event-list-dialog";
 
 export function DaysInMonth({ month }: { month: Date }) {
   const { date, setDate } = useCalendar();
   // option to path if week start at monday or sunday bool (if needed)
   const cells = getCalendarCellsOfMonth(month, true);
+
+  const { getEventsByDateRange } = useEventStore();
+  const monthlyEvents: Array<Event> = getEventsByDateRange(
+    startOfMonth(month),
+    endOfMonth(month),
+  );
 
   return (
     <div className="grid grid-cols-7 gap-6 p-4">
@@ -22,6 +32,9 @@ export function DaysInMonth({ month }: { month: Date }) {
         );
       })}
       {cells.map((cell) => {
+        const dayEvent = monthlyEvents.filter((event: Event) =>
+          isSameDay(new Date(event.startDate), cell.day),
+        );
         return (
           <button
             type={"button"}
@@ -31,9 +44,29 @@ export function DaysInMonth({ month }: { month: Date }) {
               "text-gray-800 dark:text-gray-200": cell.currentMonth,
               "text-gray-400 dark:text-gray-500": !cell.currentMonth,
               "bg-gray-300": isSameDay(date, cell.day) && cell.currentMonth,
+              "size-5": dayEvent.length === 0,
             })}
           >
             {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
+            {cell.currentMonth && dayEvent.length > 1 ? (
+              <EventListDialog events={dayEvent} date={cell.day}>
+                <div className="flex flex-col justify-center items-center">
+                  <EventBullet color={dayEvent[0].color} />
+                  <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
+                    +{dayEvent.length - 1}
+                  </span>
+                </div>
+              </EventListDialog>
+            ) : (
+              cell.currentMonth &&
+              dayEvent.length > 0 && (
+                <EventDetailsDialog event={dayEvent[0]}>
+                  <div className="flex flex-col justify-center items-center">
+                    <EventBullet color={dayEvent[0].color} />
+                  </div>
+                </EventDetailsDialog>
+              )
+            )}
           </button>
         );
       })}

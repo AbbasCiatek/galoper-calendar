@@ -13,12 +13,16 @@ export const WEEK_DAYS = [
 ] as const;
 
 export const DATE_FORMAT = {
-  longMonth: "MMMM",
-  fullDate: "dd MMM yyyy",
-  dayOfMonth: "d",
   shortWeekDay: "EE",
+  longWeekDay: "EEEE",
+  longMonth: "MMMM",
+  longYear: "yyyy",
+  fullDate: "dd MMM yyyy",
+  fullDateWithWeek: "EEEE MMMM d yyyy",
+  dayOfMonth: "d",
   hours24Format: "HH",
-  timeFormat: "hh mm a",
+  timeFormat: "hh:mm a",
+  fullDateAndTime: "dd MMM yyyy hh:mm a",
 };
 
 export const colorMap: Record<string, string> = {
@@ -32,3 +36,4 @@ export const colorMap: Record<string, string> = {
 };
 
 export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;
+export const MAX_EVENTS_PER_DAY = 4;
