@@ -1,5 +1,6 @@
 import { DATE_FORMAT } from "@/constants.ts";
-import type { Event } from "@/event-store";
+import { type Event, useEventStore } from "@/event-store";
+import type { ViewTypes } from "@/types.ts";
 import {
   addDays,
   addMonths,
@@ -14,6 +15,8 @@ import {
   endOfYear,
   formatDate,
   getDay,
+  isSameDay,
+  isSameMonth,
   setDate,
   startOfDay,
   startOfMonth,
@@ -167,9 +170,9 @@ export function getCalendarCellsOfMonth(
     prevMonthObject.length + currentMonthObject.length === 35
       ? null
       : displayedDaysInNextMonth.map((day) => ({
-        day,
-        currentMonth: false,
-      }));
+          day,
+          currentMonth: false,
+        }));
 
   if (nextMonthObject) {
     return [...prevMonthObject, ...currentMonthObject, ...nextMonthObject];

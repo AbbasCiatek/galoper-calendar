@@ -1,3 +1,4 @@
+import { AgendaView } from "@/components/agenda-view.tsx";
 import { DayView } from "@/components/day-view.tsx";
 import { MonthView } from "@/components/month-view.tsx";
 import { WeekView } from "@/components/week-view.tsx";
@@ -12,6 +13,7 @@ export function Views() {
       {view === "month" && <MonthView />}
       {view === "week" && <WeekView />}
       {view === "day" && <DayView />}
+      {view === "agenda" && <AgendaView />}
     </>
   );
 }
