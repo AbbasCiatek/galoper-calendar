@@ -15,6 +15,7 @@ export const WEEK_DAYS = [
 export const DATE_FORMAT = {
   longMonth: "MMMM",
   fullDate: "dd MMM yyyy",
+  fullDateWithWeek: "EEEE MMMM d yyyy",
   dayOfMonth: "d",
   shortWeekDay: "EE",
   hours24Format: "HH",
