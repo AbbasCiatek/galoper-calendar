@@ -33,3 +33,4 @@ export const colorMap: Record<string, string> = {
 };
 
 export const MAX_ALL_AND_MULTI_DAY_EVENTS = 2;
+export const MAX_EVENTS_PER_DAY = 4;
