@@ -34,7 +34,7 @@ export function AgendaView() {
 
   const hasEvents = events.length > 0;
   return (
-    <div className="h-[800px] border border-t-0 rounded-b-2xl ">
+    <div className="h-[800px] border rounded-b-2xl ">
       <ScrollArea className="h-full" type="always">
         {hasEvents &&
           eventsByDay.map((dayGroup) => (
