@@ -73,7 +73,7 @@ export function ViewChangerCreateEventButton() {
       initial={{ x: 20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 200, damping: 18 }}
-      className="flex flex-row items-center gap-4"
+      className="flex md:flex-row flex-col md:items-center gap-4"
     >
       <div className="flex gap-4 text-sm font-semibold w-60 text-gray-500 dark:text-gray-300 ">
         {/*<!--View Changers-->*/}
@@ -120,7 +120,7 @@ export function ViewChangerCreateEventButton() {
         })}
       </div>
       {/*<!--Add Event Button-->*/}
-      <Button className="font-semibold" variant="default">
+      <Button className="font-semibold max-md:w-28" variant="default">
         {" "}
         <PlusIcon /> Add Event
       </Button>

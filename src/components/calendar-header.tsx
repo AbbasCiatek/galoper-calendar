@@ -3,9 +3,9 @@ import { ViewChangerCreateEventButton } from "@/components/header-components/vie
 
 export function CalendarHeader() {
   return (
-    <div className="flex items-center justify-around border dark:border-gray-200 p-5 border-b-0 rounded-t-2xl">
+    <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between border dark:border-gray-200 p-5 border-b-0 rounded-t-2xl">
       <DateAndNavigators />
       <ViewChangerCreateEventButton />
     </div>
-  )
+  );
 }
