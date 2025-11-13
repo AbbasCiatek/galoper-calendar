@@ -1,17 +1,18 @@
 import { useEventStore } from "@/event-store.ts";
-import type { ViewTypes } from "@/types.ts";
+import type { ViewTypes } from "@/types";
 import {
   addDays,
   addMonths,
   addWeeks,
   addYears,
+  eachDayOfInterval,
   endOfDay,
   endOfMonth,
-  getDay,
-  setDate,
   endOfWeek,
   endOfYear,
   formatDate,
+  getDay,
+  setDate,
   startOfDay,
   startOfMonth,
   startOfWeek,
@@ -21,36 +22,6 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-
-export function numberOfDisplayedDaysOfNextMonth(
-  daysOfCurrentMonth: Array<Date>,
-  indexOfCurrentMonthInWeekdays: number,
-) {
-  const lengthOfCurrentMonth = daysOfCurrentMonth.length;
-  if (lengthOfCurrentMonth + indexOfCurrentMonthInWeekdays > 35)
-    return 42 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
-  return 35 - lengthOfCurrentMonth - indexOfCurrentMonthInWeekdays;
-}
-
-export function arrayOfDaysOfNextMonth(date: Date) {
-  const nextMonth = addMonths(date, 1);
-  return daysInMonth(nextMonth);
-}
-export function arrayOfDaysOfPrevMonth(date: Date) {
-  const prevMonth = subMonths(date, 1);
-  return daysInMonth(prevMonth);
-}
-
-export function numberOfDisplayedDaysOfPrevMonth(
-  currentDate: Date,
-  indexOfCurrentMonthInWeekdays: number,
-) {
-  return (
-    arrayOfDaysOfPrevMonth(currentDate).daysInMonth.length -
-    indexOfCurrentMonthInWeekdays
-  );
-}
-
 export function DateAdderFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
@@ -68,7 +39,7 @@ export function DateAdderFunction(view: ViewTypes, date: Date) {
   }
 }
 
-export function DateSubtracterFunction(view: ViewTypes, date: Date) {
+function DateSubtracterFunction(view: ViewTypes, date: Date) {
   switch (view) {
     case "agenda":
       return subMonths(date, 1);
@@ -84,6 +55,8 @@ export function DateSubtracterFunction(view: ViewTypes, date: Date) {
       return subMonths(date, 1);
   }
 }
+
+export default DateSubtracterFunction;
 
 export function rangeDisplayer(view: ViewTypes, date: Date) {
   const formatString = "MMM d, yyyy";
@@ -132,25 +105,15 @@ export function getNumberOfEvents(date: Date, view: ViewTypes) {
       ).length;
     case "day":
       return getEventsByDateRange(startOfDay(date), endOfDay(date)).length;
-
-    export function daysInMonth(date: Date) {
-      const firstDayOfMonth = startOfMonth(date);
-      const lastDayOfMonth = endOfMonth(date);
-      const indexOfFirstDay = (getDay(firstDayOfMonth) + 6) % 7;
-      const daysInMonth = eachDayOfInterval({
-        start: firstDayOfMonth,
-        end: lastDayOfMonth,
-      });
-
-      return { daysInMonth, indexOfFirstDay };
-    }
-
+  }
+}
 export function getArrayOfMonthsOfYear(date: Date) {
   const year = startOfYear(date);
   const months: Array<Date> = [];
   Array.from({ length: 12 }, (_, i) => {
     months.push(addMonths(year, i));
   });
+
   return months;
 }
 

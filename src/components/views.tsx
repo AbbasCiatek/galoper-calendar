@@ -1,0 +1,7 @@
+import { YearView } from "@/components/year-view.tsx";
+import { useCalendar } from "@/context/calendar-context.tsx";
+
+export function Views() {
+  const { view } = useCalendar();
+  return <>{view === "year" && <YearView />}</>;
+}
