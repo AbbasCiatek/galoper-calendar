@@ -71,14 +71,8 @@ export function DatePicker({
             >
               {isDate(value)
                 ? isThisYear(value)
-                  ? formatDate(
-                      value,
-                      `${DATE_FORMAT.longWeekDay}, ${DATE_FORMAT.longMonth} ${DATE_FORMAT.dayOfMonth}`,
-                    )
-                  : formatDate(
-                      value,
-                      `${DATE_FORMAT.longWeekDay}, ${DATE_FORMAT.longMonth} ${DATE_FORMAT.dayOfMonth} , ${DATE_FORMAT.longYear}`,
-                    )
+                  ? formatDate(value, DATE_FORMAT.fullDateWithWeekWithOutYear)
+                  : formatDate(value, DATE_FORMAT.fullDateWithWeek)
                 : "Select date"}
               <ChevronDownIcon />
             </Button>
