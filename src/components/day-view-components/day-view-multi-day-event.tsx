@@ -2,6 +2,7 @@ import { MultiDayEventDisplay } from "@/components/week-day-view-commons/multi-d
 import { MAX_ALL_AND_MULTI_DAY_EVENTS } from "@/constants";
 import { useCalendar } from "@/context/calendar-context";
 import { type Event, useEventStore } from "@/event-store.ts";
+import { clsx } from "clsx";
 import { differenceInDays, endOfDay, isSameDay, startOfDay } from "date-fns";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -44,13 +45,15 @@ export function DayViewMultiDayEvent() {
     multiDayEvents.length + allDayEvents.length - MAX_ALL_AND_MULTI_DAY_EVENTS;
 
   return (
-    <div className="flex border-b">
+    <div className="flex">
       <AnimatePresence initial={false}>
         <motion.div
           key="content"
           animate={{ maxHeight: showMore ? 128 : 85 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="flex w-18 justify-center items-end "
+          className={clsx("flex w-18 justify-center items-end ", {
+            "border-b": !!memoizedEvents.length,
+          })}
         >
           {undisplayedEvents > 0 && !showMore && (
             <motion.button
@@ -64,27 +67,36 @@ export function DayViewMultiDayEvent() {
               <ChevronDown className="text-gray-700" />
             </motion.button>
           )}
-          {multiDayEvents.length +
-            allDayEvents.length -
-            MAX_ALL_AND_MULTI_DAY_EVENTS >
-            0 &&
-            showMore && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                className="flex items-center justify-center size-10 rounded-full hover:bg-gray-200"
-                type="button"
-                onClick={() => setShowMore(!showMore)}
-              >
-                <ChevronUp className="text-gray-700" />
-              </motion.button>
-            )}
+          {undisplayedEvents > 0 && showMore && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              className="flex items-center justify-center size-10 rounded-full hover:bg-gray-200"
+              type="button"
+              onClick={() => setShowMore(!showMore)}
+            >
+              <ChevronUp className="text-gray-700" />
+            </motion.button>
+          )}
         </motion.div>
-        <ScrollArea className=" flex-1 border-l w-full max-h-32 ">
-          <div className="flex flex-col gap-1 py-1">
+        <ScrollArea
+          className={clsx(" flex-1 border-l w-full max-h-32 ", {
+            "border-b": !!memoizedEvents.length,
+          })}
+        >
+          <motion.div
+            key="content"
+            animate={{ maxHeight: showMore ? 128 : 85 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="flex flex-col"
+          >
             {memoizedEvents.map((event, index) => {
-              return <NamingEvent event={event} index={index} key={event.id} />;
+              return (
+                <div key={event.id} className={"py-1"}>
+                  <NamingEvent event={event} index={index} />
+                </div>
+              );
             })}
             {!showMore && undisplayedEvents > 0 && (
               <motion.button
@@ -102,7 +114,7 @@ export function DayViewMultiDayEvent() {
                 </span>
               </motion.button>
             )}
-          </div>
+          </motion.div>
         </ScrollArea>
       </AnimatePresence>
     </div>

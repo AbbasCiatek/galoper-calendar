@@ -8,6 +8,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { DATE_FORMAT } from "@/constants.ts";
 import type { Event } from "@/event-store.ts";
+import { clsx } from "clsx";
 import { formatDate } from "date-fns";
 import type { ReactNode } from "react";
 import { EventDetailsDialog } from "./event-details-dialog";
@@ -17,13 +18,24 @@ type Props = {
   events: Array<Event>;
   date: Date;
 };
+
+const colorMap = {
+  red: "bg-red-500",
+  green: "bg-green-500",
+  yellow: "bg-yellow-500",
+  blue: "bg-blue-500",
+  purple: "bg-purple-500",
+  gray: "bg-gray-500",
+  orange: "bg-orange-500",
+};
+
 export function EventListDialog({ children, events, date }: Props) {
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="data-[state=open]:slide-in-from-bottom-[50%] data-[state=closed]:slide-out-to-top-[50%] duration-500  ">
         <DialogHeader>
-          <DialogTitle className="mb-2 p-1 font-bold">
+          <DialogTitle className="font-bold">
             Events on{" "}
             {formatDate(
               date,
@@ -31,13 +43,15 @@ export function EventListDialog({ children, events, date }: Props) {
             )}
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="h-28 border border-gray-200 rounded-lg ">
-          <div className="flex flex-col gap-2">
+        <ScrollArea scrollHideDelay={1} className=" max-h-40 rounded-md ">
+          <div className="flex flex-col gap-0.5 rounded-md">
             {events.map((event) => (
               <EventDetailsDialog key={event.id} event={event}>
                 <div
-                  key={event.id}
-                  className={`bg-${event.color}-300 w-full h-8 text-white flex flex-row justify-around `}
+                  className={clsx(
+                    colorMap[event.color],
+                    "w-full h-10 border text-gray-100 flex flex-row items-center justify-between",
+                  )}
                 >
                   <span>{event.title}</span>
                   <span>

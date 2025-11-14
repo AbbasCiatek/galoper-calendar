@@ -5,7 +5,6 @@ import { addDays, formatDate, isMonday, isToday } from "date-fns";
 import { motion } from "motion/react";
 import { useCallback } from "react";
 import { AddEditEventDialog } from "../dialogs/add-edit-event-dialog";
-import { EventDetailsDialog } from "../dialogs/event-details-dialog";
 import { EventListDialog } from "../dialogs/event-list-dialog";
 import { EventBullet } from "../events/event-bullet";
 import { MonthBadgeEvent } from "./month-badge-event";
@@ -47,32 +46,33 @@ function RenderEventAtPosition({
   if (!event) {
     return <motion.div className=" h-[26px]" initial={false} animate={false} />;
   }
-  const { id, title, startDate, endDate, color, description } = event;
-  const pureEvent: Event = {
-    id,
-    title,
-    startDate,
-    endDate,
-    color,
-    description,
-  };
+
   return (
     <>
-      <EventListDialog events={pureEvents} date={cell.day}>
-        <div className="max-lg:flex max-lg:flex-row max-lg:flex-1">
-          <EventBullet className="lg:hidden" color={event.color} />
-        </div>
-      </EventListDialog>
-      <EventDetailsDialog event={pureEvent}>
-        <div className="hidden lg:flex lg:flex-col">
-          <MonthBadgeEvent
-            isFirstCell={isFirstCell}
-            isLastCell={isLastCell}
-            event={event}
-            cell={cell}
-          />
-        </div>
-      </EventDetailsDialog>
+      <button
+        type={"button"}
+        onClick={(e) => e.stopPropagation()}
+        className="max-lg:flex max-lg:flex-row max-lg:flex-1"
+      >
+        <EventListDialog events={pureEvents} date={cell.day}>
+          <button type="button" onClick={(e) => e.stopPropagation()}>
+            <EventBullet className="lg:hidden" color={event.color} />
+          </button>
+        </EventListDialog>
+      </button>
+
+      <button
+        type={"button"}
+        onClick={(e) => e.stopPropagation()}
+        className="hidden lg:flex lg:flex-col"
+      >
+        <MonthBadgeEvent
+          isFirstCell={isFirstCell}
+          isLastCell={isLastCell}
+          event={event}
+          cell={cell}
+        />
+      </button>
     </>
   );
 }
@@ -147,6 +147,7 @@ export function DayCell({
       >
         {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
       </span>
+
       <AddEditEventDialog startDate={cell.day} endDate={addDays(cell.day, 1)}>
         <div
           className={clsx("flex lg:flex-grow gap-0.5 lg:flex-col", {

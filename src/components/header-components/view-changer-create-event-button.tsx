@@ -47,6 +47,13 @@ export function ViewChangerCreateEventButton() {
   const { view, setView } = useCalendar();
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
+      const openDialog = !!document.querySelector('[role="dialog"]');
+      if (openDialog) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
       switch (event.key) {
         case "a":
           setView("agenda");
@@ -102,7 +109,9 @@ export function ViewChangerCreateEventButton() {
                     " hover:scale-105 transform transition-all duration-200",
                 )}
               >
-                <Icon className="size-5" />
+                <motion.span transition={{ duration: 0.5, ease: "easeIn" }}>
+                  <Icon className="size-5 shrink-0" />
+                </motion.span>
                 <AnimatePresence initial={false}>
                   {isActive && (
                     <motion.span

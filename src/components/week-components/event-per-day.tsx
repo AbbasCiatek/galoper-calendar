@@ -1,4 +1,4 @@
-import { EventsPositioning } from "@/components/week-day-view-commons/event-positioning.tsx";
+import { EventsPositioning } from "@/components/week-day-view-commons/events-positioning.tsx";
 import { type Event, useEventStore } from "@/event-store.ts";
 import { endOfDay, startOfDay } from "date-fns";
 

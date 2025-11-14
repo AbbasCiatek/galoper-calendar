@@ -50,7 +50,7 @@ export function DaysInMonth({ month }: { month: Date }) {
             {formatDate(cell.day, DATE_FORMAT.dayOfMonth)}
             {cell.currentMonth && dayEvent.length > 1 ? (
               <EventListDialog events={dayEvent} date={cell.day}>
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-row justify-center items-center">
                   <EventBullet color={dayEvent[0].color} />
                   <span className="text-[0.6rem] text-gray-800 dark:text-gray-200 ">
                     +{dayEvent.length - 1}

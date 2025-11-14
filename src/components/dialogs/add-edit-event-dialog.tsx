@@ -105,6 +105,7 @@ export function AddEditEventDialog({
       toast.error(`${e} failed to ${event} ? "edit event" : "add event"`);
     }
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
